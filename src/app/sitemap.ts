@@ -7,7 +7,7 @@ const contentTypes: ContentType[] = ['tutorials', 'guides', 'blog'];
 const staticPages = ['', '/tutorials', '/guides', '/blog', '/learning-path', '/faq', '/about', '/contact', '/privacy', '/terms'];
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
+  const now = new Date().toISOString();
   const entries: MetadataRoute.Sitemap = [];
 
   for (const locale of locales) {
