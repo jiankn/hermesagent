@@ -1,124 +1,137 @@
 ---
-title: "Day 6: Scheduled Workflows (Cron & CI/CD)"
-titleZh: "Day 6: 自动化引擎 - 让它在你睡觉时工作"
+title: "Day 6: Give Stable Workflows a Schedule"
+titleZh: "Day 6：把稳定流程交给时间"
 slug: "day-6-automation"
-description: "Turn one repeated task into a scheduled Hermes workflow with retry, review, and delivery rules."
-descriptionZh: "把一个重复任务变成可调度的 Hermes 工作流，带重试、复查和投递规则。"
+description: "Design scheduled Hermes workflows with triggers, saved inputs, idempotent delivery, logs, and rollback."
+descriptionZh: "设计带触发器、输入产物、幂等投递、日志和回滚的 Hermes 定时工作流。"
 author: "HermesAgent Community"
 publishedAt: "2026-04-18"
 updatedAt: "2026-04-18"
 category: "bootcamp"
-tags: ["automation", "cron", "ci-cd", "scheduling", "intermediate"]
-difficulty: "intermediate"
-readingTime: 15
+tags: ["automation", "cron", "logs", "daily-report", "workflow"]
+difficulty: "advanced"
+readingTime: 14
 series: "7-day-bootcamp"
 seriesOrder: 6
-featured: true
+featured: false
 ---
-## Automation starts when the second run is cheaper than the first
+## Automation is not a prompt taped to cron
 
-A scheduled agent workflow should not be a prompt taped to cron. It needs inputs, retries, logs, and a delivery rule that says where the final artifact goes.
+The strongest product examples are daily reports, website monitoring, price alerts, and backups. These are valuable not because AI is involved, but because they are repeated, low-risk, and reviewable. Hermes helps connect collection, reasoning, formatting, and delivery.
 
-Today you turn one repeated job into a dependable workflow: collect signals, summarize the useful changes, and deliver the result without waking you up.
+Day 6 is not about an impressive demo. It is about one workflow you might still trust tomorrow morning.
 
 ![Diagram of a Hermes Agent scheduled workflow with retries and logs](/images/bootcamp/day-6-automation.svg)
 
-## What you will have working today
+## What belongs on a schedule
 
-- One cron-ready workflow with a clear trigger and output artifact.
-- A retry policy that does not duplicate external actions.
-- A morning digest or maintenance report delivered to a chosen channel.
+Good candidates:
 
-## Why this step matters
+- A weekday morning brief from GitHub issues, calendar events, and notes.
+- Nightly backup of Hermes config and memory.
+- Hourly website availability check.
+- Weekly memory and Skill review.
+- Daily digest from fixed information sources.
 
-Automation saves time only when failures are boring. If every failed run requires detective work, the workflow becomes another thing to babysit.
+Bad candidates:
 
-The clean pattern is collect first, summarize second, deliver last. That separation lets you retry delivery without re-querying every source or regenerating a different answer.
+- Outputs that can directly harm users or customers.
+- Tasks requiring fresh human judgment every time.
+- Workflows that have not passed manual runs.
+- Jobs where failure cannot be diagnosed.
 
-## Hands-on workflow
+The product rule is simple: run manually three times before giving it a schedule.
 
-1. Choose one repeated task that is frequent, low-risk, and easy to review.
-2. Define the input window and write raw collected data to a stable artifact.
-3. Ask Hermes to summarize from that artifact, not from live systems directly.
-4. Deliver the final output to chat, email, or a file.
-5. Log success, failure, duration, and the artifact path.
+## Split the workflow into four parts
 
-## Copy-ready commands or config
+Do not let one step collect data, summarize it, and send it externally. Split:
 
-```cron
-0 8 * * 1-5 cd /opt/hermes-workflows && npm run daily-digest >> logs/daily-digest.log 2>&1
-```
+1. Collect: gather raw data and save it.
+2. Summarize: produce a summary from the saved data.
+3. Deliver: send or store the final output.
+4. Log: record start time, end time, input path, output path, and failure reason.
 
-## Implementation notes
+This separation lets you retry delivery without collecting different data or generating a different answer.
 
-Automation should make the second run cheaper than the first. If every scheduled job requires manual cleanup, it has not become automation; it has become a calendar reminder with extra steps. Start with workflows that are frequent, low-risk, and easy to review.
-
-Separate collection, reasoning, and delivery. Collection writes a raw artifact. Reasoning reads that artifact and creates a summary. Delivery sends or stores the final output. This separation lets you retry a failed delivery without collecting different data or generating a different answer.
-
-Every scheduled workflow needs a boring failure mode. The log should say when it ran, what input window it used, where artifacts were written, how long it took, and whether delivery succeeded. The goal is not zero failures; the goal is failures that are obvious.
-
-### Handoff artifact
-
-Before leaving this lesson, keep a handoff artifact that another teammate could understand without reading the chat transcript. It does not need to be long, but it must connect Trigger, Input artifact, Retry policy, Delivery. If any part exists only in your memory, the workflow is still fragile.
-
-The value of the artifact is lower restart cost. When you return tomorrow, you should not have to ask what was configured yesterday. You should open the note and see the inputs, boundaries, commands, logs, and review items immediately.
-
-Treat the artifact as the input to later lessons. Day 2 reads the permission boundary from day 1, day 6 depends on the tool and data contracts from earlier days, and day 7 uses these small artifacts as handoff material for specialist agents.
+## A daily brief template
 
 ```yaml
-lesson: "day-6-automation"
-owner: "your name or team"
-inputs: ["files, messages, or APIs used in this lesson"]
-permissions: ["read-only", "approval-required writes"]
-outputs: ["saved note, log, config, or result file"]
-review: ["items to check before the next lesson"]
+name: daily-ops-brief
+trigger: "weekday 08:30"
+collect:
+  - github_issues
+  - calendar_events
+  - yesterday_notes
+summarize_from: "artifacts/daily/raw.json"
+deliver_to: "Feishu / Telegram / file"
+approval_required: false
+log_file: "logs/daily-ops-brief.log"
+retry:
+  collect: "no automatic retry if API auth fails"
+  deliver: "retry twice, no duplicate message"
 ```
 
-### Upgrade path
+The key is `summarize_from`. Hermes should summarize from a saved artifact, not from a live system that changes on every retry.
 
-Do not rush to turn this lesson into platform code. First make it stable as a Markdown note, JSON file, log entry, or small script. A low-tech artifact is easier to inspect, easier to share, and easier to roll back when the workflow is still young.
+## Logs are a product feature
 
-After the workflow produces reviewable results three times in a row, promote it into a template, skill, or scheduled job. The order matters: prove the workflow deserves reuse before productizing the mechanism around it.
+Logs are not developer decoration. They are part of the automation experience. If the morning brief does not arrive, the user should be able to see:
 
-If the artifact is hard to write, the problem is usually not documentation. It usually means the boundary is still fuzzy. Return to the decision list and make the input, permission, output, and owner concrete before moving to the next day.
+- whether the job started;
+- which inputs were read;
+- which step failed;
+- whether retries happened;
+- whether delivery succeeded.
 
-### Decisions to write down
+If the user cannot see this, automation becomes another thing to babysit.
 
-- What trigger starts the workflow?
-- Where is the raw input artifact stored?
-- Which steps are safe to retry automatically?
-- Who receives the output and who owns failures?
+## Ship this artifact
 
-### Review drill
+Create `hermes-day-6-automation.md`:
 
-1. Run the workflow manually with a narrow input window.
-2. Force a delivery failure and confirm no duplicate external message is sent.
-3. Rerun from the saved artifact instead of collecting fresh data.
-4. Read the log and confirm a teammate could debug it.
+```yaml
+workflow: "daily-ops-brief"
+manual_runs_passed: 3
+trigger: "weekday 08:30"
+raw_artifact: "artifacts/daily/raw.json"
+final_artifact: "artifacts/daily/brief.md"
+delivery: "chat or file"
+idempotency_rule: "never send duplicate message on retry"
+owner: "you"
+rollback: "disable schedule and run manually"
+```
 
-### What to measure
-
-- Manual minutes saved after reviewing the output.
-- Number of successful reruns from saved artifacts.
-- Failure rate and average time to understand the failure.
-
-## Acceptance checklist
-
-- The workflow can be rerun without sending duplicate messages.
-- Raw input and final output are both saved.
-- Failures are visible in logs with enough context to debug.
-
-## Common failure modes
-
-- Letting the send step regenerate the summary after a delivery failure.
-- Scheduling high-risk write actions before the manual version is trusted.
-- Using “every minute” schedules for workflows that humans review once a day.
+Tomorrow is multi-agent orchestration. Scheduling solves repetition; multi-agent solves parallel responsibility. Neither should exist just to look advanced.
 
 ## Next step
 
-- **[Day 7: Multi-Agent Orchestration](/en/tutorials/bootcamp/day-7-multi-agent)** - split bigger work across agents.
-- **[5 AI Workflow Automation Recipes](/en/guides/resources/automation-recipes)** - choose your next automated workflow.
+- **[Day 7: Multi-agent is division of labor, not group chat](/en/tutorials/bootcamp/day-7-multi-agent)** - split responsibilities, not noise.
+- **[5 AI Workflow Automation Recipes](/en/guides/resources/automation-recipes)** - choose your next scheduled workflow.
 
----
+## Run It Again From The User Side
 
-*Last updated: April 18, 2026 · Hermes Agent v0.8 content track*
+On Day 6, users want Hermes to run by itself. That desire is reasonable, but automation is not mainly about saving clicks. It is about handing a proven workflow to time. Without a stable manual workflow, scheduling only makes mistakes arrive on time.
+
+Many tutorials frame this step as “follow these commands.” Real users need more than commands. They need a repeatable judgment process: why this step matters, what signal to watch when it fails, and what evidence proves it worked. The warning signs are clear: inputs change shape every day, nobody reads the output, failures are silent, repeated runs create side effects, or external delivery happens without approval.
+
+### Field Checks
+
+- Can a user repeat this step without rereading the chat transcript?
+- Is there a file, log, screenshot, config fragment, or artifact to inspect?
+- When the step fails, does the user know where to stop instead of adding more configuration?
+- Are sensitive data, write permissions, and external delivery handled separately?
+- Could another person continue tomorrow from the artifact you leave today?
+
+### Product Manager Lens
+
+Design the manual version first, then the scheduled version. A trigger starts the job, but it does not define input quality, permission boundaries, or failure handling for you.
+
+From a product perspective, each bootcamp day should reduce a real source of friction. The user should move from guessing to judging, from inspiration to process, and from one-off success to reviewable operation. The test is three consecutive runs: the same input produces explainable output, failures stop cleanly, and retries do not pollute data.
+
+Good training material should still be useful when the user fails. Even if the workflow does not fully run, the user should know whether they are stuck on environment, permissions, inputs, model behavior, tool access, or collaboration boundaries. That turns the second attempt into a narrower investigation instead of another round of luck.
+
+### What Carries Into Tomorrow
+
+Leave with an automation run card: trigger time, input source, saved snapshot, output location, notification target, failure policy, and pause switch.
+
+Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.

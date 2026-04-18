@@ -1,129 +1,147 @@
 ---
-title: "Day 7: Multi-Agent Orchestration (Swarm)"
-titleZh: "Day 7: 终极形态 - 组建你的 AI 团队"
+title: "Day 7: Multi-Agent Is Division of Labor, Not Group Chat"
+titleZh: "Day 7：多 Agent 不是群聊，是分工"
 slug: "day-7-multi-agent"
-description: "Coordinate specialist Hermes agents for research, drafting, review, and delivery without losing control of the final decision."
-descriptionZh: "协调研究、写作、复核和交付型 Hermes Agent，同时保留最终决策权。"
+description: "Use multi-agent orchestration only when responsibilities are independent: researcher, operator, reviewer, and final owner."
+descriptionZh: "只在职责真的独立时使用多 Agent：研究、执行、复核和最终负责人必须清楚。"
 author: "HermesAgent Community"
 publishedAt: "2026-04-18"
 updatedAt: "2026-04-18"
 category: "bootcamp"
-tags: ["multi-agent", "orchestration", "swarm", "advanced"]
+tags: ["multi-agent", "subagent", "orchestration", "handoff", "advanced"]
 difficulty: "advanced"
-readingTime: 15
+readingTime: 14
 series: "7-day-bootcamp"
 seriesOrder: 7
-featured: true
+featured: false
 ---
-## A team of agents needs a manager, not a megaphone
+## Do not use multi-agent because it sounds cool
 
-Multi-agent work is not about making five models talk at once for spectacle. It is about splitting responsibility so each worker has a narrow job, bounded context, and a clear handoff.
+Multi-agent orchestration is the easiest topic to turn into science fiction: a researcher, writer, reviewer, and operator all working at once. It sounds powerful. From a product perspective, the first-principles question is simpler: does it reduce the total cost of finishing the task?
 
-The human remains the owner of the outcome. Hermes can delegate research, drafting, testing, and review, but the final merge should be explicit.
+If not, it only splits one confusing problem into several confusing problems.
 
 ![Diagram of Hermes Agent multi-agent handoffs and final synthesis](/images/bootcamp/day-7-multi-agent.svg)
 
-## What you will have working today
+## When the split is worth it
 
-- A simple multi-agent plan with researcher, writer, reviewer, and operator roles.
-- A handoff contract that keeps outputs comparable.
-- A final review step where the host agent synthesizes instead of blindly concatenating.
+A task is a good candidate when:
 
-## Why this step matters
+1. Subtasks are genuinely independent.
+2. Each subtask has clear input and output.
+3. A final owner must synthesize the result, not paste it together.
 
-Parallelism helps only when tasks are genuinely independent. Delegating the next blocking step creates waiting, confusion, and duplicated work.
+Good examples:
 
-Good orchestration starts with ownership: who reads sources, who drafts, who checks risk, and who turns the work into one final artifact.
+- Competitive analysis: one agent researches sources, one compares features, one reviews risk.
+- Code review: one reads the diff, one runs tests, one checks security.
+- Content production: one gathers material, one drafts, one checks facts and tone.
+- Incident review: one reads logs, one checks deployments, one builds a timeline.
 
-## Hands-on workflow
+Bad examples:
 
-1. Define the outcome and the decision criteria before spawning agents.
-2. Split work by responsibility, not by arbitrary file count.
-3. Give each worker a short contract: inputs, output shape, constraints, and deadline.
-4. Collect outputs and ask the host agent to compare conflicts.
-5. Approve the final artifact manually before publishing or executing high-impact changes.
+- The goal is still vague.
+- The next step depends on the previous result.
+- Every agent is doing the same work.
+- Nobody owns the final decision.
 
-## Copy-ready commands or config
+## The host agent has a real job
 
-```json
-{
-  "goal": "prepare a competitive analysis brief",
-  "agents": ["researcher", "writer", "risk-reviewer"],
-  "handoff": "bullets with sources, assumptions, and open questions",
-  "finalOwner": "human"
-}
-```
+The host is not a clipboard. It must:
 
-## Implementation notes
+- assign responsibilities;
+- give every worker an output contract;
+- compare conflicts;
+- decide what to accept, reject, or investigate.
 
-Multi-agent work only helps when the split is real. If two workers read the same sources, answer the same question, and produce incompatible formats, the host agent has created more coordination work. Split by responsibility: research, draft, test, review, or operate.
+The human remains the final owner. Sending messages, changing files, deploying services, and spending money should not be delegated to a sub-agent without approval.
 
-The host remains accountable for the final result. Sub-agents can search, summarize, write, and verify, but they should not publish or execute high-impact changes directly. The final synthesis step should compare conflicts, name assumptions, and ask for human approval when needed.
-
-A good handoff contract is short. Give each worker the input, the output shape, the constraints, and the deadline. Require assumptions and open questions. This makes the outputs comparable and prevents the final answer from becoming a pasted stack of unrelated notes.
-
-### Handoff artifact
-
-Before leaving this lesson, keep a handoff artifact that another teammate could understand without reading the chat transcript. It does not need to be long, but it must connect Plan, Delegate, Compare, Synthesize. If any part exists only in your memory, the workflow is still fragile.
-
-The value of the artifact is lower restart cost. When you return tomorrow, you should not have to ask what was configured yesterday. You should open the note and see the inputs, boundaries, commands, logs, and review items immediately.
-
-Treat the artifact as the input to later lessons. Day 2 reads the permission boundary from day 1, day 6 depends on the tool and data contracts from earlier days, and day 7 uses these small artifacts as handoff material for specialist agents.
+## A three-agent template
 
 ```yaml
-lesson: "day-7-multi-agent"
-owner: "your name or team"
-inputs: ["files, messages, or APIs used in this lesson"]
-permissions: ["read-only", "approval-required writes"]
-outputs: ["saved note, log, config, or result file"]
-review: ["items to check before the next lesson"]
+goal: "evaluate whether the Day 1 tutorial is beginner-friendly"
+agents:
+  researcher:
+    job: "read tutorial and source material, list user questions"
+    output: "bullets with evidence"
+  operator:
+    job: "follow the tutorial commands and record friction"
+    output: "steps passed / failed"
+  reviewer:
+    job: "check privacy, permissions, dead links, and misleading language"
+    output: "risks with severity"
+host:
+  job: "merge conflicts and produce final edits"
+human_approval:
+  - publish
+  - delete files
+  - push changes
 ```
 
-### Upgrade path
+The important part is that every agent has a different responsibility and comparable output.
 
-Do not rush to turn this lesson into platform code. First make it stable as a Markdown note, JSON file, log entry, or small script. A low-tech artifact is easier to inspect, easier to share, and easier to roll back when the workflow is still young.
+## Common failures
 
-After the workflow produces reviewable results three times in a row, promote it into a template, skill, or scheduled job. The order matters: prove the workflow deserves reuse before productizing the mechanism around it.
+- Giving the same prompt to three agents and receiving three duplicate answers.
+- Not requiring evidence or assumptions.
+- Letting sub-agents execute high-risk actions.
+- Host agent pastes instead of judges.
+- Parallelism creates more waiting and coordination than it removes.
 
-If the artifact is hard to write, the problem is usually not documentation. It usually means the boundary is still fuzzy. Return to the decision list and make the input, permission, output, and owner concrete before moving to the next day.
+## Ship this artifact
 
-### Decisions to write down
+Create `hermes-day-7-orchestration.md`:
 
-- Which parts of the task are genuinely independent?
-- What output format must every sub-agent use?
-- Which agent owns conflict resolution?
-- What actions remain human-only at the end?
+```yaml
+task: "your real multi-step task"
+split_reason: "parallel research / independent checks / separate expertise"
+roles:
+  - researcher
+  - operator
+  - reviewer
+handoff_format:
+  - findings
+  - evidence
+  - assumptions
+  - open_questions
+final_owner: "human"
+do_not_delegate:
+  - publish
+  - spend money
+  - delete files
+```
 
-### Review drill
-
-1. Create a three-agent plan for one real but low-risk task.
-2. Give each agent a different responsibility and the same output shape.
-3. Compare the outputs for conflicts and missing assumptions.
-4. Write a final synthesis that chooses, rejects, or merges each recommendation.
-
-### What to measure
-
-- Wall-clock time saved without lowering review quality.
-- Number of duplicated findings across sub-agents.
-- Number of conflicts surfaced before final approval.
-
-## Acceptance checklist
-
-- Every sub-agent has a distinct responsibility.
-- Outputs include assumptions and open questions.
-- The final answer resolves conflicts instead of hiding them.
-
-## Common failure modes
-
-- Spawning agents before the goal is clear.
-- Delegating overlapping work and then trying to merge duplicates.
-- Letting a sub-agent publish directly without host review.
+The seven-day path now has a product loop: run Hermes, give it durable context, put it where requests happen, process real material, capture repeatable workflows, schedule stable work, and finally split complex work across specialists.
 
 ## Next step
 
-- **[Top 10 Hermes Skills](/en/guides/resources/best-skills)** - extend the team with reusable skills.
-- **[Hermes vs OpenClaw](/en/guides/comparisons/hermes-vs-openclaw)** - see the strategic positioning.
+- **[Top 10 Hermes Skills](/en/guides/resources/best-skills)** - extend Hermes with low-risk Skills first.
+- **[Hermes vs OpenClaw](/en/guides/comparisons/hermes-vs-openclaw)** - understand the positioning difference.
 
----
+## Run It Again From The User Side
 
-*Last updated: April 18, 2026 · Hermes Agent v0.8 content track*
+Day 7 is easy to distort because “multi-agent” sounds exciting. The user does not need a room full of assistants talking at once. They need complex work split across responsibilities, then merged by one owner who can make tradeoffs.
+
+Many tutorials frame this step as “follow these commands.” Real users need more than commands. They need a repeatable judgment process: why this step matters, what signal to watch when it fails, and what evidence proves it worked. The failure signals are familiar: everyone analyzes and nobody owns the conclusion, every agent can modify things and no one resolves conflicts, or the system produces many messages but no deliverable.
+
+### Field Checks
+
+- Can a user repeat this step without rereading the chat transcript?
+- Is there a file, log, screenshot, config fragment, or artifact to inspect?
+- When the step fails, does the user know where to stop instead of adding more configuration?
+- Are sensitive data, write permissions, and external delivery handled separately?
+- Could another person continue tomorrow from the artifact you leave today?
+
+### Product Manager Lens
+
+Split by responsibility before splitting by model count. One agent gathers, one executes, one reviews, and one lead chooses what to ship.
+
+From a product perspective, each bootcamp day should reduce a real source of friction. The user should move from guessing to judging, from inspiration to process, and from one-off success to reviewable operation. The core test is handoff quality. Every delegated task needs inputs, boundaries, artifacts, and an exit condition. Otherwise parallelism only creates more context to manage.
+
+Good training material should still be useful when the user fails. Even if the workflow does not fully run, the user should know whether they are stuck on environment, permissions, inputs, model behavior, tool access, or collaboration boundaries. That turns the second attempt into a narrower investigation instead of another round of luck.
+
+### What Carries Into Tomorrow
+
+Leave with an orchestration blueprint: roles, inputs, blocked actions, deliverables, merge order, and human decision points.
+
+Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.

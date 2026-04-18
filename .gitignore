@@ -24,6 +24,11 @@
 .DS_Store
 *.pem
 
+# local research exports and Codex workspace instructions; never commit these
+/AGENTS.md
+/agents.md
+/wechat/
+
 # debug
 npm-debug.log*
 yarn-debug.log*

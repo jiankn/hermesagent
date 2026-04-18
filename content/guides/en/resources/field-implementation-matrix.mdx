@@ -1,0 +1,107 @@
+---
+title: "Hermes Agent Field Implementation Matrix"
+titleZh: "Hermes Agent 实战素材归类矩阵"
+slug: "field-implementation-matrix"
+description: "A practical matrix for turning Hermes Agent deployment notes, messaging channels, memory, skills, automation, and multi-agent lessons into a safe rollout plan."
+descriptionZh: "把部署笔记、消息通道、记忆、Skills、自动化和多 Agent 素材归类成可执行上线计划。"
+author: "HermesAgent 101 Team"
+publishedAt: "2026-04-19"
+updatedAt: "2026-04-19"
+category: "resources"
+tags: ["implementation", "resources", "field-notes", "playbook", "rollout"]
+difficulty: "intermediate"
+readingTime: 14
+featured: true
+---
+## Why a field matrix helps
+
+Real users do not learn Hermes Agent in documentation order. They arrive through a concrete need: running an always-on assistant on a cloud machine, connecting a messaging channel, making the agent remember work preferences, or handing recurring reports and research cleanup to it.
+
+Those needs look scattered, but they follow one product path: make the system run, put it where requests happen, process real material, then turn repeated work into Skills, schedules, and responsible multi-agent handoffs.
+
+This matrix turns raw implementation notes into a rollout plan. It is not a copied article collection and it is not a feature list. It is a judgment tool: where should each source bucket live, which user problem does it solve, and what reviewable artifact should it leave behind?
+
+## The matrix
+
+| Material bucket | Real user question | Best site location | Artifact |
+| --- | --- | --- | --- |
+| Setup and deployment | Can I make it run first? Local or cloud? | Bootcamp Day 1, deployment guide | startup card, environment checklist, rollback path |
+| Model configuration | Why did install succeed but answers fail? Where does the key go? | Day 1, model guide | provider, model, secret location, test prompt |
+| Messaging channels | Can I reach it from phone or team chat? | Day 3, messaging playbook | allowed users, default workspace, blocked actions, logs |
+| Memory | What should it remember and forget? | Day 2, memory governance guide | memory contract, expiry rules, deletion path |
+| Files and data | Can it handle notes, CSV files, and web pages? | Day 4, data bench guide | raw/working/output layout, schema, review checklist |
+| Skills and MCP | How do repeated workflows become reusable? | Day 5, Skills directory | skill card, input/output contract, permission level |
+| Automation | Which jobs deserve a schedule? What happens on failure? | Day 6, automation recipes | run card, saved snapshot, logs, pause switch |
+| Multi-agent | When should work be parallelized? | Day 7, orchestration guide | roles, handoff format, final owner |
+
+## Product lens: ask why the user opened the article
+
+Content that only answers “what command should I run?” tends to become a command pile. A better entry point is user motivation.
+
+Setup content reduces uncertainty. The reader needs to know whether to use WSL2, a normal terminal, or a cloud machine, and whether a failure belongs to environment, model, or path setup.
+
+Messaging content reduces reach cost. Users are not connecting a channel for the thrill of authentication. They want to send real work from phone, team chat, or an office tool. The easier the entry point becomes, the more explicit authorization, logging, and approval must be.
+
+Memory content reduces repeated explanation. Users want Hermes to stop asking the same background questions, but they do not want temporary tasks, verification codes, emotional labels, or stale rules saved forever.
+
+Automation content reduces repeated execution. The common mistake is scheduling a workflow that has not worked manually. The right order is manual success three times, then schedule.
+
+Multi-agent content reduces the total cost of complex work. More agents are not automatically better. Clearer responsibility is better.
+
+## Editorial rules for source material
+
+Use a five-step process before turning outside material into site content:
+
+1. Remove identity markers, follow prompts, QR codes, donation prompts, outbound service links, and personal service offers.
+2. Extract user pain, not personal storytelling.
+3. Rewrite command steps as a decision flow: why this step, what failure signal to watch, and what artifact proves success.
+4. Replace slogans with artifacts: cards, checklists, logs, schemas, runbooks, and handoff formats.
+5. Add safety boundaries: secrets, write permissions, external delivery, spending, and deployment all need approval rules.
+
+After that treatment, the material is no longer a patchwork of articles. It becomes a product knowledge base that supports the site architecture.
+
+## Recommended site distribution
+
+- Bootcamp owns the learning path: setup, memory, entry points, data, Skills, automation, and multi-agent work.
+- Guides own reusable operating manuals: deployment, messaging, memory governance, automation templates.
+- Resources own matrices and checklists: Skills, automation recipes, source classification, launch review.
+- Blog owns field observations: user mistakes and product opportunities derived from implementation notes.
+
+## Copy-ready editorial template
+
+```md
+User question:
+- Why would a reader open this article?
+
+Use case:
+- When should the reader follow it?
+- When should they avoid it?
+
+Workflow:
+1. Minimal working version
+2. Permissions and secret boundary
+3. Acceptance test
+4. Failure handling
+5. Artifact
+
+Safety boundary:
+- Which actions require approval?
+- Which facts should not enter long-term memory?
+- Which outputs should not be sent automatically?
+
+Next step:
+- Link to the matching Bootcamp / Guide / Resource page
+```
+
+## Acceptance checklist
+
+- Every source bucket has a site destination instead of being dumped into Bootcamp.
+- Every article answers one real user problem.
+- No external author names, account IDs, QR codes, follow prompts, or copied passages remain.
+- Every tutorial leaves a reviewable artifact.
+- High-risk actions have approval rules or a stop line.
+
+## Next step
+
+- **[Messaging Channel Playbook](/en/guides/resources/messaging-channel-playbook)** - turn chat access into a safe product surface.
+- **[7-Day Bootcamp](/en/tutorials/bootcamp/day-1-setup)** - start from the minimal working path.

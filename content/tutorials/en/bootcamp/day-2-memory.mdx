@@ -1,128 +1,147 @@
 ---
-title: "Day 2: Context & Memory (System Prompts)"
-titleZh: "Day 2: 赋予记忆 - 让它真正懂你"
+title: "Day 2: Treat Memory Like a Product Feature"
+titleZh: "Day 2：把记忆当成产品功能"
 slug: "day-2-memory"
-description: "Design a practical system prompt and memory contract so Hermes can remember preferences without becoming unpredictable."
-descriptionZh: "设计可维护的 System Prompt 与记忆契约，让 Hermes 记住偏好，同时保持边界清晰。"
+description: "Design Hermes memory as a reviewed contract: stable preferences, project rules, session search, and cleanup."
+descriptionZh: "把 Hermes 记忆设计成可复查的契约：长期偏好、项目规则、会话搜索和定期清理。"
 author: "HermesAgent Community"
 publishedAt: "2026-04-18"
 updatedAt: "2026-04-18"
 category: "bootcamp"
-tags: ["memory", "system-prompt", "context", "beginner"]
+tags: ["memory", "context", "session-search", "profile", "beginner"]
 difficulty: "beginner"
-readingTime: 13
+readingTime: 12
 series: "7-day-bootcamp"
 seriesOrder: 2
-featured: true
+featured: false
 ---
-## Memory is a contract, not a magic drawer
+## Memory is not a dumping ground
 
-A useful assistant should not ask the same background questions every morning. It should remember your role, preferred output style, recurring projects, and the boundaries that should not be crossed.
+The promise that Hermes gets more useful the longer it runs is genuinely attractive, but it is also easy to misuse. New users hear “memory” and want every conversation saved forever. A product manager should worry immediately. Unbounded memory becomes noise, privacy risk, and a source of stale decisions.
 
-The trick is to make memory explicit. Hermes should store stable facts and reviewed preferences, not every raw sentence from every conversation.
+Day 2 is about a smaller and more useful promise: Hermes should remember only what saves work next time.
 
 ![Diagram of Hermes Agent memory rules and restart checks](/images/bootcamp/day-2-memory.svg)
 
-## What you will have working today
+## What deserves long-term memory
 
-- A short assistant profile that defines role, tone, tools, and approval rules.
-- A memory policy that separates durable facts from temporary task context.
-- A restart test where Hermes can recover your preferred working style.
+Long-term memory should store stable facts.
 
-## Why this step matters
+Good examples:
 
-The system prompt is the operating manual for your worker. If it is vague, the model improvises. If it is too long, important instructions disappear into noise.
+- You prefer concise Chinese output unless English is requested.
+- The project does not allow file deletion without approval.
+- A repository uses tabs and a 120-character line width.
+- A server runs Debian and Docker commands do not need sudo.
+- Weekly reports always include progress, risks, and next-week plans.
 
-Good memory design also improves safety. A remembered preference such as “ask before deleting files” is more valuable than a long transcript full of stale details.
+These facts appear repeatedly. Saving them reduces coordination cost.
 
-## Hands-on workflow
+Bad memory candidates:
 
-1. Write a one-page profile: who you are, what you build, how you like answers, and which actions require approval.
-2. Create a memory rule: save stable preferences only after the user confirms them.
-3. Run a short conversation where you teach Hermes your role and preferred format.
-4. Restart the session and ask Hermes to summarize what it remembers.
-5. Remove anything that is too personal, too vague, or not useful for future work.
+- The bug you happen to be fixing today.
+- Temporary accounts, one-time links, or verification codes.
+- Guesses that have not been checked.
+- Emotional labels such as “this solution is terrible.”
+- Meeting details from a closed task.
 
-## Copy-ready commands or config
+Those belong in the session, log, or task artifact, not in long-term memory.
+
+## Memory and session search do different jobs
+
+Many beginner guides blur memory and history search. A useful split is:
+
+Memory is the employee handbook. It tells Hermes who you are, how work should be done, and what is not allowed.
+
+Session search is the archive room. It helps Hermes find old conversations, but old conversations should not automatically become permanent rules.
+
+So today you design two layers:
+
+1. Save stable preferences into memory.
+2. Keep project details in sessions and documents, then search them when needed.
+
+## Memory needs an acceptance test
+
+Do not configure memory and simply trust it. Run a restart test:
+
+1. Teach Hermes one durable preference, such as “tutorial content should be practical, not promotional.”
+2. Give it one temporary task, such as “today only inspect Day 1 files.”
+3. Ask Hermes which one should be remembered and which one should expire.
+4. Start a fresh session and ask what it remembers.
+5. If the temporary task became permanent memory, clean it immediately.
+
+This test matters more than whether the answer sounds smart. It verifies the boundary.
+
+## A copy-ready memory policy
 
 ```md
-Role: You are my AI operations assistant.
-Style: Be concise, specific, and action-oriented.
-Default output: checklist first, explanation second.
-Approval: Ask before deleting files, spending money, or contacting people.
-Memory: Store stable preferences only after I say "remember this".
+Memory policy:
+- Save only stable preferences, long-term project rules, and explicit approval boundaries.
+- Temporary tasks, one-time links, and unchecked guesses do not enter long-term memory.
+- Ask before deleting files, sending external messages, spending money, or deploying services.
+- Review memory every two weeks: merge duplicates and delete stale entries.
 ```
 
-## Implementation notes
+## Product metrics for memory
 
-Memory is most valuable when it is boring and explicit. Store stable preferences such as output format, approval rules, recurring projects, and vocabulary. Do not store every clever instruction from a single session, because short-lived context becomes stale faster than it becomes useful.
+Do not measure the number of saved memories. That is the wrong metric.
 
-A good Hermes profile has three layers. The first layer describes the user and the work. The second layer describes how answers should look. The third layer lists actions that require approval. Keeping these layers separate prevents a style preference from hiding an operational rule.
+Better metrics:
 
-The restart test matters because it exposes false confidence. If Hermes behaves well only while the current chat is warm, you do not have a memory system yet. You have a long prompt. A real memory setup survives restart and remains easy to inspect.
+- How many repeated background explanations disappeared this week?
+- Does Hermes misuse old project rules less often?
+- Can the user read and manually edit memory?
+- After deleting a memory entry, is behavior still predictable?
 
-### Handoff artifact
+If users are afraid to edit memory, the product is not transparent enough. If Hermes keeps citing outdated facts, memory lacks lifecycle management.
 
-Before leaving this lesson, keep a handoff artifact that another teammate could understand without reading the chat transcript. It does not need to be long, but it must connect Profile, Durable facts, Approval rules, Restart test. If any part exists only in your memory, the workflow is still fragile.
+## Ship this artifact
 
-The value of the artifact is lower restart cost. When you return tomorrow, you should not have to ask what was configured yesterday. You should open the note and see the inputs, boundaries, commands, logs, and review items immediately.
-
-Treat the artifact as the input to later lessons. Day 2 reads the permission boundary from day 1, day 6 depends on the tool and data contracts from earlier days, and day 7 uses these small artifacts as handoff material for specialist agents.
+Create `hermes-day-2-memory.md`:
 
 ```yaml
-lesson: "day-2-memory"
-owner: "your name or team"
-inputs: ["files, messages, or APIs used in this lesson"]
-permissions: ["read-only", "approval-required writes"]
-outputs: ["saved note, log, config, or result file"]
-review: ["items to check before the next lesson"]
+stable_preferences:
+  - "tutorial writing should be practical, not promotional"
+approval_rules:
+  - "confirm before deleting files"
+do_not_remember:
+  - "one-time verification code"
+  - "today's temporary task"
+review_cadence: "every two weeks"
+restart_test: "passed / needs cleanup"
 ```
 
-### Upgrade path
-
-Do not rush to turn this lesson into platform code. First make it stable as a Markdown note, JSON file, log entry, or small script. A low-tech artifact is easier to inspect, easier to share, and easier to roll back when the workflow is still young.
-
-After the workflow produces reviewable results three times in a row, promote it into a template, skill, or scheduled job. The order matters: prove the workflow deserves reuse before productizing the mechanism around it.
-
-If the artifact is hard to write, the problem is usually not documentation. It usually means the boundary is still fuzzy. Return to the decision list and make the input, permission, output, and owner concrete before moving to the next day.
-
-### Decisions to write down
-
-- Which facts are durable enough to remember?
-- Which facts should expire at the end of the current task?
-- Who is allowed to promote a conversation detail into memory?
-- How often will you review and delete stale memory entries?
-
-### Review drill
-
-1. Teach Hermes one stable preference and one temporary task detail.
-2. Ask it to explain which item should be remembered and which should not.
-3. Restart the session and check whether only the stable preference remains.
-4. Edit the memory note manually so the boundary is visible.
-
-### What to measure
-
-- Repeated background questions removed per week.
-- Number of stale or vague memory entries after review.
-- Whether approval rules are stated as rules, not implied habits.
-
-## Acceptance checklist
-
-- Hermes can describe your role and preferred response style after restart.
-- Temporary task details do not get promoted into long-term memory.
-- Approval boundaries are written as rules, not implied by vibes.
-
-## Common failure modes
-
-- Putting every preference into one giant prompt.
-- Letting raw chat logs become memory without review.
-- Using memory to hide unclear instructions instead of clarifying them.
+Tomorrow you move Hermes into a messaging channel. The point is not scanning a QR code; the point is creating a low-risk work entry point.
 
 ## Next step
 
-- **[Day 3: Team Integration](/en/tutorials/bootcamp/day-3-integration)** - bring Hermes into your message channels.
-- **[Best Skills Directory](/en/guides/resources/best-skills)** - choose safe extensions after the bootcamp.
+- **[Day 3: Put Hermes where requests happen](/en/tutorials/bootcamp/day-3-integration)** - connect chat without widening permissions too fast.
+- **[Best Skills Directory](/en/guides/resources/best-skills)** - extend capability after memory is under control.
 
----
+## Run It Again From The User Side
 
-*Last updated: April 18, 2026 · Hermes Agent v0.8 content track*
+On Day 2, users start wanting Hermes to understand them like a coworker. This is also where memory can go wrong. More memory is not automatically better. Useful memory is reviewed, durable, and connected to future decisions.
+
+Many tutorials frame this step as “follow these commands.” Real users need more than commands. They need a repeatable judgment process: why this step matters, what signal to watch when it fails, and what evidence proves it worked. Bad memory has three early signals: Hermes cannot explain where a fact came from, the user cannot remove it, and temporary task context gets treated like a permanent preference.
+
+### Field Checks
+
+- Can a user repeat this step without rereading the chat transcript?
+- Is there a file, log, screenshot, config fragment, or artifact to inspect?
+- When the step fails, does the user know where to stop instead of adding more configuration?
+- Are sensitive data, write permissions, and external delivery handled separately?
+- Could another person continue tomorrow from the artifact you leave today?
+
+### Product Manager Lens
+
+Turn memory into product rules: what may be saved, what requires confirmation, how often it is reviewed, and what never belongs in long-term memory.
+
+From a product perspective, each bootcamp day should reduce a real source of friction. The user should move from guessing to judging, from inspiration to process, and from one-off success to reviewable operation. The test is recovery. After a restart, Hermes should remember how to work with the user, not recite a pile of stale chat fragments.
+
+Good training material should still be useful when the user fails. Even if the workflow does not fully run, the user should know whether they are stuck on environment, permissions, inputs, model behavior, tool access, or collaboration boundaries. That turns the second attempt into a narrower investigation instead of another round of luck.
+
+### What Carries Into Tomorrow
+
+Leave with a memory contract: stable preferences, project facts, privacy exclusions, expiry rules, and the deletion path.
+
+Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.

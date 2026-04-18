@@ -1,129 +1,162 @@
 ---
-title: "Day 4: Data Processing (API & JSON)"
-titleZh: "Day 4: 赋予双手 - 处理文件与数据"
+title: "Day 4: Make Hermes Handle Files and Data"
+titleZh: "Day 4：让 Hermes 处理文件和数据"
 slug: "day-4-data"
-description: "Let Hermes process files, JSON, and CSV data with explicit input contracts and reviewable output artifacts."
-descriptionZh: "让 Hermes 处理文件、JSON 和 CSV，同时用输入契约和可复查产物控制质量。"
+description: "Turn Hermes into a reviewable data worker with raw folders, schemas, validation notes, and safe file permissions."
+descriptionZh: "用 raw 文件夹、schema、验证记录和权限边界，把 Hermes 变成可复查的数据员工。"
 author: "HermesAgent Community"
 publishedAt: "2026-04-18"
 updatedAt: "2026-04-18"
 category: "bootcamp"
-tags: ["data", "csv", "json", "files", "intermediate"]
+tags: ["data", "files", "schema", "validation", "artifacts"]
 difficulty: "intermediate"
-readingTime: 14
+readingTime: 13
 series: "7-day-bootcamp"
 seriesOrder: 4
-featured: true
+featured: false
 ---
-## Useful agents turn messy inputs into reviewable artifacts
+## Chat is the doorway; files are the work
 
-Chat is only the beginning. The moment Hermes can inspect a file, normalize rows, call an API, and hand you back a clean artifact, it starts feeling like a worker instead of a chatbot.
+Users feel the value of an agent when it can handle messy inputs: meeting notes, CSV files, web pages, requirements documents, and rough research material. Daily reports, website monitoring, data extraction, and content rewriting all share the same product motion: turn messy input into a structured artifact that a human can review.
 
-The rule for day four is simple: never ask an agent to “handle the data” without first defining what the input is, what output shape you expect, and how you will review it.
+Day 4 is your first reviewable data task.
 
 ![Diagram of the Hermes Agent data processing workspace](/images/bootcamp/day-4-data.svg)
 
-## What you will have working today
+## Create a workspace before handing over files
 
-- A small data workspace with raw input, normalized output, and notes.
-- A JSON contract that tells Hermes exactly what to produce.
-- A review step where you compare the final artifact against the original input.
+“Process this file” is too vague. It does not say whether the source can be changed, what the output should look like, or how errors will be found.
 
-## Why this step matters
+Create a small workspace:
 
-Data tasks fail quietly when the output format is vague. A polished paragraph can hide missing rows, changed units, or invented fields.
+```text
+hermes-data-task/
+  raw/
+  working/
+  output/
+  notes.md
+  schema.json
+```
 
-Structured output gives you leverage. You can diff it, validate it, feed it into another tool, and ask Hermes to explain only the rows that changed.
+The rules:
 
-## Hands-on workflow
+- `raw/` stores original files and is read-only.
+- `working/` stores intermediate material.
+- `output/` stores final artifacts.
+- `notes.md` records prompts, decisions, and anomalies.
+- `schema.json` defines the output shape.
 
-1. Put raw files in a dedicated input folder and keep originals untouched.
-2. Define the output schema before asking Hermes to transform anything.
-3. Run the transformation on a small sample first.
-4. Validate counts, column names, and suspicious values.
-5. Save the final artifact with a timestamp and short explanation.
+This looks slower than dropping files into chat. It saves time when something goes wrong.
 
-## Copy-ready commands or config
+## Choose the right first task
+
+Start with a low-risk task that is real and easy to inspect.
+
+Good Day 4 tasks:
+
+- Classify 20 user feedback items by theme.
+- Extract tasks, owners, and deadlines from meeting notes.
+- Turn a tool list into JSON.
+- Summarize pain points from article titles.
+- Convert website monitoring logs into an incident note.
+
+Bad Day 4 tasks:
+
+- Editing a production database.
+- Sending messages to customers.
+- Processing the only copy of an important file.
+- Letting Hermes decide the schema from scratch.
+
+## Define the schema
+
+If you want action items, do not ask it to “organize this.” Ask for a shape:
 
 ```json
 {
-  "source": "leads.csv",
-  "output": "qualified-leads.json",
-  "fields": ["company", "contact", "priority", "reason"],
-  "rules": ["do not invent missing emails", "mark uncertain rows"]
+  "items": [
+    {
+      "task": "string",
+      "owner": "string | unknown",
+      "deadline": "YYYY-MM-DD | unknown",
+      "source_quote": "string",
+      "confidence": "high | medium | low",
+      "needs_review": true
+    }
+  ]
 }
 ```
 
-## Implementation notes
+`source_quote` lets you check whether Hermes invented anything. `needs_review` turns uncertainty into data instead of hiding it inside a polished paragraph.
 
-Data work is where agents become useful and dangerous at the same time. A fluent summary can hide missing rows, changed units, or invented fields. The antidote is a workspace that preserves raw input, declares the output schema, and keeps review artifacts next to the result.
+## The prompt to use
 
-Do not start with the largest file. Pick a representative sample that includes normal rows, missing values, odd formatting, and at least one edge case. A sample run lets you fix the prompt, schema, and validation rules before the full batch creates noise.
-
-Hermes should explain uncertainty as data, not as an apology. Add fields such as confidence, reason, and needs_review when the transformation involves judgment. That turns ambiguity into something you can sort, filter, and audit.
-
-### Handoff artifact
-
-Before leaving this lesson, keep a handoff artifact that another teammate could understand without reading the chat transcript. It does not need to be long, but it must connect Raw input, Schema, Transform, Review artifact. If any part exists only in your memory, the workflow is still fragile.
-
-The value of the artifact is lower restart cost. When you return tomorrow, you should not have to ask what was configured yesterday. You should open the note and see the inputs, boundaries, commands, logs, and review items immediately.
-
-Treat the artifact as the input to later lessons. Day 2 reads the permission boundary from day 1, day 6 depends on the tool and data contracts from earlier days, and day 7 uses these small artifacts as handoff material for specialist agents.
-
-```yaml
-lesson: "day-4-data"
-owner: "your name or team"
-inputs: ["files, messages, or APIs used in this lesson"]
-permissions: ["read-only", "approval-required writes"]
-outputs: ["saved note, log, config, or result file"]
-review: ["items to check before the next lesson"]
+```md
+Read only the raw/ folder. Do not modify source files.
+Use schema.json and write the result to output/tasks.json.
+If owner or deadline is unclear, write unknown and set needs_review to true.
+Append notes to notes.md: files read, anomalies found, and fields I should review.
 ```
 
-### Upgrade path
+This prompt is plain, but it works like a job instruction. A useful agent does not need praise; it needs inputs, outputs, and acceptance criteria.
 
-Do not rush to turn this lesson into platform code. First make it stable as a Markdown note, JSON file, log entry, or small script. A low-tech artifact is easier to inspect, easier to share, and easier to roll back when the workflow is still young.
+## Acceptance check
 
-After the workflow produces reviewable results three times in a row, promote it into a template, skill, or scheduled job. The order matters: prove the workflow deserves reuse before productizing the mechanism around it.
+Before moving on, check:
 
-If the artifact is hard to write, the problem is usually not documentation. It usually means the boundary is still fuzzy. Return to the decision list and make the input, permission, output, and owner concrete before moving to the next day.
+1. Raw files were not changed.
+2. Output can be parsed as JSON.
+3. Counts and required fields look reasonable.
+4. Low-confidence items are marked for review.
 
-### Decisions to write down
+If these fail, fix the schema and task instruction first.
 
-- What is the immutable raw input location?
-- Which fields are allowed in the output schema?
-- What validation should run before a result is trusted?
-- Which rows require human review before downstream use?
+## Ship this artifact
 
-### Review drill
+Create `hermes-day-4-data.md`:
 
-1. Run the transformation on five rows with known expected output.
-2. Compare row counts, required fields, and suspicious values.
-3. Ask Hermes to explain only the uncertain rows.
-4. Save raw input, output, validation notes, and prompt version together.
+```yaml
+task: "meeting notes to action items"
+input_folder: "raw/"
+output_file: "output/tasks.json"
+schema_file: "schema.json"
+validation:
+  - raw unchanged
+  - json parses
+  - uncertain fields marked
+  - notes written
+```
 
-### What to measure
-
-- Row count difference between input and output.
-- Number of records flagged for review.
-- Time saved after validation, not before validation.
-
-## Acceptance checklist
-
-- Raw files remain unchanged.
-- Output has a declared schema and can be validated.
-- Hermes explains uncertainty instead of hiding it.
-
-## Common failure modes
-
-- Letting the agent overwrite the only copy of a file.
-- Requesting a prose summary when you actually need structured data.
-- Skipping sample runs and discovering format errors after a full batch.
+Tomorrow is Skills and MCP. Today you created a repeatable workflow; tomorrow you decide whether it deserves to become a reusable capability.
 
 ## Next step
 
-- **[Day 5: Tool Calling & MCP](/en/tutorials/bootcamp/day-5-skills)** - connect data work to external tools.
-- **[Automation Recipes](/en/guides/resources/automation-recipes)** - reuse this pattern in repeatable workflows.
+- **[Day 5: Turn repeat work into a Skill](/en/tutorials/bootcamp/day-5-skills)** - move from one task to reusable capability.
+- **[Automation Recipes](/en/guides/resources/automation-recipes)** - compare more repeatable workflow patterns.
 
----
+## Run It Again From The User Side
 
-*Last updated: April 18, 2026 · Hermes Agent v0.8 content track*
+By Day 4, users usually want more than conversation. They hand Hermes files, web pages, tables, and rough notes, then expect something usable in return. The key is not a prettier answer. The key is whether the input, judgment, and output can be reviewed.
+
+Many tutorials frame this step as “follow these commands.” Real users need more than commands. They need a repeatable judgment process: why this step matters, what signal to watch when it fails, and what evidence proves it worked. The dangerous signal is a smooth summary with no trail: no line reference, no anomaly list, and no marker showing which conclusions are uncertain.
+
+### Field Checks
+
+- Can a user repeat this step without rereading the chat transcript?
+- Is there a file, log, screenshot, config fragment, or artifact to inspect?
+- When the step fails, does the user know where to stop instead of adding more configuration?
+- Are sensitive data, write permissions, and external delivery handled separately?
+- Could another person continue tomorrow from the artifact you leave today?
+
+### Product Manager Lens
+
+Design the data task as a pipeline: raw material stays read-only, intermediate files may be discarded, and final output must carry fields, sources, and confidence.
+
+From a product perspective, each bootcamp day should reduce a real source of friction. The user should move from guessing to judging, from inspiration to process, and from one-off success to reviewable operation. The skill being trained is auditability. A slower output with traceable evidence is more product-ready than a polished summary nobody can verify.
+
+Good training material should still be useful when the user fails. Even if the workflow does not fully run, the user should know whether they are stuck on environment, permissions, inputs, model behavior, tool access, or collaboration boundaries. That turns the second attempt into a narrower investigation instead of another round of luck.
+
+### What Carries Into Tomorrow
+
+Leave with a data bench spec: folder structure, naming rules, output schema, low-confidence markers, and a human review checklist.
+
+Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.

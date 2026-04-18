@@ -1,132 +1,124 @@
 ---
-title: "Day 1: Local Setup & Privacy (Ollama + Docker)"
-titleZh: "Day 1: 唤醒助理 - 极简安装与第一声问候"
+title: "Day 1: Make Hermes Run Before You Make It Clever"
+titleZh: "Day 1：先跑起来，再谈聪明"
 slug: "day-1-setup"
-description: "Install Hermes Agent with the least moving parts, choose a private local-first setup, and complete the first useful conversation."
-descriptionZh: "用最少的配置跑起 Hermes Agent，理解本地优先的隐私边界，并完成第一次真正有用的对话。"
+description: "A practical first-day setup guide: choose local or cloud, configure a model, run doctor, and keep secrets out of the chat."
+descriptionZh: "从用户真实启动成本出发，完成本地或云端安装、模型配置、doctor 检查和第一条安全对话。"
 author: "HermesAgent Community"
 publishedAt: "2026-04-18"
 updatedAt: "2026-04-18"
 category: "bootcamp"
-tags: ["setup", "privacy", "ollama", "docker", "beginner"]
+tags: ["setup", "privacy", "model", "doctor", "beginner"]
 difficulty: "beginner"
-readingTime: 12
+readingTime: 13
 series: "7-day-bootcamp"
 seriesOrder: 1
 featured: true
 ---
-## Start with a working assistant, not a perfect lab
+## Do not start with every feature
 
-The first day is about momentum. A new AI agent project becomes real only when you can talk to it, give it a tiny job, and see it answer from your own environment.
+Most Hermes tutorials rush toward the exciting parts: cloud deployment, WeChat or Feishu, Skills, automation, and multi-agent workflows. That is exactly how beginners lose the first hour. The shell says command not found. The model key goes into the wrong file. Windows users mix PowerShell and WSL2. The bot starts once but nobody knows how to start it again tomorrow.
 
-This bootcamp uses a local-first mental model: keep your workspace under your control, understand which model endpoint receives prompts, and avoid granting broad file access before you need it.
+Day 1 has one job: make Hermes run in an environment you understand. Not “installed successfully” in a vague way, but three concrete answers: where is it running, which model endpoint is it using, and what is it allowed to touch?
 
 ![Diagram of the Day 1 local setup path for Hermes Agent](/images/bootcamp/day-1-setup.svg)
 
-## What you will have working today
+## Local or cloud is a product decision
 
-- A Hermes Agent workspace that starts from the terminal.
-- A clear decision between local model, hosted API, or hybrid mode.
-- A first conversation where Hermes introduces itself and explains what it can safely do.
+From a product manager’s point of view, installation is not a technical preference. It is a usage decision.
 
-## Why this step matters
+If you are evaluating Hermes or you care most about privacy, start locally. macOS and Linux can use the terminal directly. Windows users should use WSL2 instead of fighting native path and dependency issues. The goal is to reduce startup friction, not prove that every environment can be forced to work.
 
-Most failed installs are not caused by one hard command. They fail because users mix model setup, shell setup, permissions, and expectations into one foggy step. Separate those pieces and the whole system becomes easier to trust.
+If you want a 24-hour assistant reachable from your phone, cloud deployment makes sense. That is why so many Chinese walkthroughs lead with “ten-minute cloud setup”: always-on access is the first value ordinary users can feel. But cloud also means you must care about secrets, ports, user permissions, and logs.
 
-Privacy also starts here. Local execution does not automatically mean private if you send prompts to a hosted model, and hosted models are not automatically bad if you know what data leaves your machine.
+The conservative choice is simple: prove the CLI locally first; move to cloud when you have a clear mobile or unattended-workflow reason.
 
-## Hands-on workflow
+## The setup order that avoids most pain
 
-1. Create a clean project folder and confirm Node, Git, and your package manager work before touching Hermes.
-2. Choose your model path: Ollama for local experimentation, a hosted OpenAI-compatible endpoint for speed, or a hybrid setup for day-to-day work.
-3. Install dependencies and start Hermes with the smallest set of environment variables.
-4. Ask Hermes to describe the current workspace, then ask it to make one harmless local observation.
-5. Write down which directories and external APIs Hermes is allowed to use during the rest of the bootcamp.
+1. Check the base environment. On Windows, prepare WSL2. On macOS or Linux, use the normal terminal.
+2. Install Hermes with the official installer first. Use manual clone only if network or package setup fails.
+3. Reload the shell. A surprising number of “install failures” are just stale shell paths.
+4. Run `hermes doctor`. Do this before searching random errors.
+5. Run `hermes setup`. Configure the model first. Skip messaging channels if you are not ready.
+6. Run `hermes model` to confirm the active provider and model.
+7. Start a first low-risk conversation and ask Hermes to explain its boundaries.
 
-## Copy-ready commands or config
+## Your first prompt should not be “who are you?”
 
-```bash
-node --version
-git --version
-npm --version
+Ask for an operational check instead:
 
-# Example local model check
-ollama list
-
-# Start with the repo command documented by your Hermes install
-npm run dev
+```md
+Do not modify files yet. Inspect only the current runtime context.
+Tell me: 1. whether Hermes is running correctly; 2. whether a model provider appears configured;
+3. the minimum permissions you recommend next; 4. which actions must require my approval.
 ```
 
-## Implementation notes
+This turns Hermes from a chatbot into a reviewable work entry point. On day one you are not trying to feel amazed. You are trying to see the boundary.
 
-Treat the first install as an operations exercise, not a feature tour. The useful question is not how many plugins Hermes can run on day one; it is whether you can start it, stop it, explain the model endpoint, and reproduce the same result tomorrow.
+## Secrets and privacy start today
 
-Create a small setup note beside the project. Record the shell, Node version, model provider, and the exact command that starts Hermes. When something breaks later, this note becomes the baseline instead of forcing you to reconstruct the environment from memory.
+Local execution does not automatically mean private. If you use a hosted model API, prompts leave your machine. Cloud deployment is not automatically unsafe either, if you know exactly which data leaves the box.
 
-For privacy, write a one-line data policy before your first real prompt. A good first policy is simple: private documents stay out of prompts unless explicitly selected, secrets live only in environment variables, and file access starts read-only until the workflow needs more.
+Write these rules into your setup note:
 
-### Handoff artifact
+- API keys live in environment variables or Hermes config, never inside chat.
+- Private folders are off-limits unless explicitly selected.
+- File deletion, external messages, spending money, and deployments require confirmation.
 
-Before leaving this lesson, keep a handoff artifact that another teammate could understand without reading the chat transcript. It does not need to be long, but it must connect Environment, Model endpoint, Permission boundary, First prompt. If any part exists only in your memory, the workflow is still fragile.
+## Where people usually get stuck
 
-The value of the artifact is lower restart cost. When you return tomorrow, you should not have to ask what was configured yesterday. You should open the note and see the inputs, boundaries, commands, logs, and review items immediately.
+- Windows users stay in PowerShell and hit Linux dependency problems. Use WSL2.
+- `hermes` is not found after install. Reload the shell or open a fresh terminal.
+- Users compare model intelligence before confirming the shell works. Pick one model you already have access to.
+- Messaging, cloud, and automation are configured together. Resist that. First prove the CLI.
 
-Treat the artifact as the input to later lessons. Day 2 reads the permission boundary from day 1, day 6 depends on the tool and data contracts from earlier days, and day 7 uses these small artifacts as handoff material for specialist agents.
+## Ship this artifact
+
+Create `hermes-day-1.md`:
 
 ```yaml
-lesson: "day-1-setup"
-owner: "your name or team"
-inputs: ["files, messages, or APIs used in this lesson"]
-permissions: ["read-only", "approval-required writes"]
-outputs: ["saved note, log, config, or result file"]
-review: ["items to check before the next lesson"]
+where_it_runs: "local WSL2 / Mac / cloud VM"
+model_provider: "your chosen provider"
+start_command: "hermes"
+health_check: "hermes doctor passed / needs action"
+secrets_location: "~/.hermes/.env or provider console"
+first_boundary:
+  - no file deletion without approval
+  - no external messages without approval
+  - no secret pasted into chat
 ```
 
-### Upgrade path
-
-Do not rush to turn this lesson into platform code. First make it stable as a Markdown note, JSON file, log entry, or small script. A low-tech artifact is easier to inspect, easier to share, and easier to roll back when the workflow is still young.
-
-After the workflow produces reviewable results three times in a row, promote it into a template, skill, or scheduled job. The order matters: prove the workflow deserves reuse before productizing the mechanism around it.
-
-If the artifact is hard to write, the problem is usually not documentation. It usually means the boundary is still fuzzy. Return to the decision list and make the input, permission, output, and owner concrete before moving to the next day.
-
-### Decisions to write down
-
-- Which model endpoint will handle normal learning tasks?
-- Which folders may Hermes inspect during this bootcamp?
-- Which actions require manual approval even if Hermes suggests them?
-- Where will you keep setup notes, logs, and small test artifacts?
-
-### Review drill
-
-1. Restart the terminal and start Hermes from the documented command.
-2. Ask Hermes to summarize the workspace without opening sensitive files.
-3. Switch to a second harmless prompt and confirm the answer still references the current environment.
-4. Close the session, reopen it, and confirm you can reproduce the same start sequence.
-
-### What to measure
-
-- Time from new terminal to first useful answer.
-- Number of manual steps that are not yet documented.
-- Whether the model endpoint and privacy boundary are obvious to another user.
-
-## Acceptance checklist
-
-- You can start and stop Hermes without changing unrelated system settings.
-- You know whether prompts are staying local or going to a remote model API.
-- Your first prompt produces a useful answer instead of a generic model greeting.
-
-## Common failure modes
-
-- Installing every optional integration on day one.
-- Granting whole-disk file access before understanding the permission model.
-- Debugging model quality before confirming the shell and environment are stable.
+Tomorrow is memory. The goal is not to make Hermes remember everything; it is to stop repeating the same background every morning.
 
 ## Next step
 
-- **[Day 2: Context & Memory](/en/tutorials/bootcamp/day-2-memory)** - teach Hermes who it is working for.
-- **[Privacy Policy](/en/privacy)** - review how this learning site handles analytics and cookies.
+- **[Day 2: Treat memory like a product feature](/en/tutorials/bootcamp/day-2-memory)** - save only the facts that reduce future work.
+- **[Privacy Policy](/en/privacy)** - review how this site handles cookies and analytics.
 
----
+## Run It Again From The User Side
 
-*Last updated: April 18, 2026 · Hermes Agent v0.8 content track*
+The real Day 1 user is not trying to prove that they can install another tool. They are deciding whether this agent deserves a week of attention. The best start is one repeatable small win: Hermes launches, answers from the right environment, and explains what it is allowed to touch.
+
+Many tutorials frame this step as “follow these commands.” Real users need more than commands. They need a repeatable judgment process: why this step matters, what signal to watch when it fails, and what evidence proves it worked. If the user installs dependencies, switches models, enables messaging, and edits permissions in the same sitting, every failure looks like one blurry failure called “Hermes is unstable.”
+
+### Field Checks
+
+- Can a user repeat this step without rereading the chat transcript?
+- Is there a file, log, screenshot, config fragment, or artifact to inspect?
+- When the step fails, does the user know where to stop instead of adding more configuration?
+- Are sensitive data, write permissions, and external delivery handled separately?
+- Could another person continue tomorrow from the artifact you leave today?
+
+### Product Manager Lens
+
+Split setup into four checkpoints: environment, model, startup, and boundary. Each checkpoint needs evidence, such as a version output, model name, launch command, or permission note.
+
+From a product perspective, each bootcamp day should reduce a real source of friction. The user should move from guessing to judging, from inspiration to process, and from one-off success to reviewable operation. The review question is not whether the demo was exciting. It is whether another person can repeat the same start path tomorrow.
+
+Good training material should still be useful when the user fails. Even if the workflow does not fully run, the user should know whether they are stuck on environment, permissions, inputs, model behavior, tool access, or collaboration boundaries. That turns the second attempt into a narrower investigation instead of another round of luck.
+
+### What Carries Into Tomorrow
+
+Leave with a startup card: runtime environment, model endpoint, launch command, readable folders, and actions Hermes must never perform without approval.
+
+Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.

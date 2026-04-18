@@ -1,0 +1,147 @@
+---
+title: "Hermes Messaging Channel Launch Playbook"
+titleZh: "Hermes 消息通道上线 Playbook"
+slug: "messaging-channel-playbook"
+description: "A launch checklist for connecting Hermes Agent to chat channels without widening permissions too quickly."
+descriptionZh: "把 Hermes 接入聊天入口前，用上线清单控制授权、日志、附件、写操作和失败处理。"
+author: "HermesAgent 101 Team"
+publishedAt: "2026-04-19"
+updatedAt: "2026-04-19"
+category: "resources"
+tags: ["messaging", "gateway", "feishu", "wechat", "operations"]
+difficulty: "intermediate"
+readingTime: 13
+featured: true
+---
+## A messaging channel is more than a successful login
+
+Once Hermes enters chat, the product becomes easier to feel. Users can reach it from a phone, pass context inside a team thread, and ask for meeting cleanup two minutes after a call ends.
+
+That convenience also widens risk. Terminal users behave cautiously because commands feel operational. Chat users behave casually. A channel without an allowlist, default workspace, approval rules, and logs quickly becomes a surface where nobody knows who asked Hermes to do what.
+
+This playbook launches a low-risk, reviewable chat entry point.
+
+## Make three decisions before launch
+
+### 1. Choose one primary entry point
+
+Do not connect every platform on the first day. Pick the place where real requests already happen.
+
+- Personal mobile work: a phone-first channel is natural.
+- Team collaboration: an office IM or team chat works better.
+- Global developer teams: Telegram, Discord, and Slack are often smoother.
+- China-focused teams: Feishu, WeCom, and WeChat-style channels fit daily habits better.
+
+The decision is not which tutorial has the most screenshots. It is where users will actually send tasks.
+
+### 2. Define the default workspace
+
+Every channel needs a default directory or project. Otherwise “please organize this” becomes dangerous: Hermes does not know where to read from or what to avoid.
+
+For version one, allow only a learning folder or a test repository. Expand after the channel proves stable.
+
+### 3. List risky actions
+
+These actions should require approval by default:
+
+- delete, overwrite, or move files;
+- send external or group messages;
+- create tickets, submit PRs, or push code;
+- spend money, call paid APIs, or deploy services;
+- save secrets, verification codes, or account details from chat.
+
+## Safe launch flow
+
+1. Update Hermes and read the current gateway documentation.
+2. Configure one channel only.
+3. Set allowed users or pairing.
+4. Set the default workspace.
+5. Start read-only: summarize, search, draft, and queue.
+6. Send the first low-risk test message.
+7. Check logs and session ownership.
+8. Test refusal paths: unknown user, file deletion, external send.
+
+## First test message
+
+```md
+Do only a read-only check. Do not modify files or send external messages.
+Tell me:
+1. which channel received this message;
+2. what the default workspace is;
+3. which read-only tasks you can do now;
+4. which actions require my confirmation.
+```
+
+This validates the channel, session ownership, default workspace, and approval boundary.
+
+## Attachment rules
+
+Once chat supports files, users will upload screenshots, PDFs, CSVs, meeting notes, and web snippets. Version one should not let Hermes write attachments directly into the real project directory.
+
+Recommended structure:
+
+```text
+inbox/
+  raw/
+  working/
+  output/
+  logs/
+```
+
+- `raw/` stores original attachments and stays read-only.
+- `working/` stores parsing and intermediate results.
+- `output/` stores final summaries, tables, or task lists.
+- `logs/` records source, processing time, and failure reason.
+
+## Group chat boundaries
+
+Group chat should be conservative. Hermes should not respond to everyone by default and should not publish conclusions without clear context.
+
+Recommended first version:
+
+- respond only to allowlisted users;
+- summarize and draft in groups, but do not perform write actions;
+- require sender approval before external delivery;
+- reject long-term memory for secrets or private data;
+- label outputs with input source and time range.
+
+## Launch run card
+
+```yaml
+channel: "Feishu / WeChat-style / Telegram / Discord / Slack"
+owner: "person responsible for this channel"
+allowed_users:
+  - "primary operator"
+default_workspace: "path/to/safe/workspace"
+allowed_intents:
+  - summarize
+  - search approved docs
+  - draft reply
+  - queue task
+approval_required:
+  - send external message
+  - write outside output folder
+  - delete or overwrite files
+  - create tickets or PRs
+logs:
+  - gateway status
+  - message source
+  - output path
+stop_line:
+  - unknown user
+  - missing default workspace
+  - request contains secrets
+```
+
+## Acceptance checklist
+
+- Unauthorized users cannot trigger Hermes.
+- Hermes can state the current channel and default workspace.
+- Write actions, external delivery, deployment, and spending require approval.
+- Attachments use raw/working/output/logs.
+- The gateway recovers after restart and failures leave logs.
+
+## Next step
+
+- **[Day 3: Put Hermes where requests happen](/en/tutorials/bootcamp/day-3-integration)** - learn the minimal channel pattern.
+- **[Automation Recipes](/en/guides/resources/automation-recipes)** - deliver scheduled work only after the channel is stable.

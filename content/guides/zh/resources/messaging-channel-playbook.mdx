@@ -1,0 +1,147 @@
+---
+title: "Hermes Messaging Channel Launch Playbook"
+titleZh: "Hermes 消息通道上线 Playbook"
+slug: "messaging-channel-playbook"
+description: "A launch checklist for connecting Hermes Agent to chat channels without widening permissions too quickly."
+descriptionZh: "把 Hermes 接入聊天入口前，用上线清单控制授权、日志、附件、写操作和失败处理。"
+author: "HermesAgent 101 Team"
+publishedAt: "2026-04-19"
+updatedAt: "2026-04-19"
+category: "resources"
+tags: ["messaging", "gateway", "feishu", "wechat", "operations"]
+difficulty: "intermediate"
+readingTime: 13
+featured: true
+---
+## 消息通道不是“扫码成功”这么简单
+
+Hermes 接入聊天工具后，用户感知会立刻变强：手机上能喊它，群聊里能丢上下文，会议结束后能马上让它整理纪要。这也是很多人真正理解 Agent 价值的时刻。
+
+但入口变方便，风险也会变大。终端里的用户通常会谨慎；聊天里的用户更随手。一个消息通道如果没有白名单、默认目录、危险动作审批和日志，很快会从“顺手”变成“不知道谁让它做了什么”。
+
+这份 Playbook 的目标是上线一个低风险、可复查的聊天入口。
+
+## 上线前先做三个决定
+
+### 1. 选一个主入口
+
+不要第一天同时接多个平台。先选真实工作流最常发生的地方。
+
+- 个人移动场景：适合手机消息入口。
+- 团队协作场景：适合办公 IM 或团队聊天工具。
+- 海外开发团队：Telegram、Discord、Slack 通常更顺。
+- 国内办公团队：飞书、企业微信、微信类入口更贴近日常。
+
+判断标准不是“教程里哪个截图多”，而是用户会不会真的在这里发任务。
+
+### 2. 定义默认工作空间
+
+每个消息通道都应该有默认目录或默认项目。否则一句“帮我整理一下”会变得很危险：Hermes 不知道该读哪里，也不知道不该读哪里。
+
+建议第一版只允许访问一个学习目录或测试仓库。等入口稳定后，再逐步扩大范围。
+
+### 3. 把危险动作列出来
+
+下面这些动作默认需要审批：
+
+- 删除、覆盖、移动文件。
+- 发送外部消息或群消息。
+- 创建工单、提交 PR、推送代码。
+- 花钱、调用付费 API、部署服务。
+- 保存聊天里的密钥、验证码或账号信息。
+
+## 安全上线流程
+
+1. 更新 Hermes 到当前版本，并查看官方 gateway 文档。
+2. 只选择一个通道进行配置。
+3. 配置授权用户或配对机制。
+4. 设置默认工作目录。
+5. 先开启只读能力：总结、搜索、草稿、排队。
+6. 发送第一条低风险测试消息。
+7. 检查日志和会话归属。
+8. 再测试拒绝路径：未知用户、删除文件、外部发送。
+
+## 第一条测试消息
+
+```md
+请只做只读检查，不要修改文件，也不要向外发送消息。
+请告诉我：
+1. 你通过哪个通道收到这条消息；
+2. 当前默认工作目录是什么；
+3. 你现在允许做哪些只读任务；
+4. 哪些动作必须先向我确认。
+```
+
+这条消息能验证四件事：通道是否通、会话是否归属正确、默认目录是否明确、审批边界是否存在。
+
+## 附件规则
+
+聊天入口一旦支持文件，用户会自然上传截图、PDF、CSV、会议纪要和网页片段。第一版不要让 Hermes 直接把附件写进正式项目目录。
+
+建议结构：
+
+```text
+inbox/
+  raw/
+  working/
+  output/
+  logs/
+```
+
+- `raw/` 保存原始附件，只读。
+- `working/` 放解析和中间结果。
+- `output/` 放最终摘要、表格或任务清单。
+- `logs/` 记录来源、处理时间和失败原因。
+
+## 群聊里的边界
+
+群聊场景要更保守。Hermes 不应该默认响应所有人，也不应该在没有明确上下文时替用户发结论。
+
+第一版建议：
+
+- 只响应白名单用户。
+- 群聊里只做摘要和草稿，不直接执行写操作。
+- 对外发送前必须让发起人确认。
+- 对含有隐私或密钥的内容直接拒绝长期保存。
+- 结果要标明输入来源和时间范围。
+
+## 上线 Run Card
+
+```yaml
+channel: "Feishu / WeChat-style / Telegram / Discord / Slack"
+owner: "person responsible for this channel"
+allowed_users:
+  - "primary operator"
+default_workspace: "path/to/safe/workspace"
+allowed_intents:
+  - summarize
+  - search approved docs
+  - draft reply
+  - queue task
+approval_required:
+  - send external message
+  - write outside output folder
+  - delete or overwrite files
+  - create tickets or PRs
+logs:
+  - gateway status
+  - message source
+  - output path
+stop_line:
+  - unknown user
+  - missing default workspace
+  - request contains secrets
+```
+
+## 验收清单
+
+- 未授权用户不能触发 Hermes。
+- Hermes 能说明当前通道和默认工作目录。
+- 写操作、外部发送、部署和花钱都会要求审批。
+- 附件有 raw/working/output/logs 结构。
+- gateway 重启后仍能恢复，失败时能看到日志。
+
+## 下一步
+
+- **[Day 3：把 Hermes 放到消息发生的地方](/zh/tutorials/bootcamp/day-3-integration)** - 学习最小消息入口。
+- **[自动化方案库](/zh/guides/resources/automation-recipes)** - 通道稳定后再投递定时任务。

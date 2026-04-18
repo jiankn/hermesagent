@@ -1,134 +1,156 @@
 ---
-title: "Day 5: Tool Calling & MCP Integration"
-titleZh: "Day 5: 装备技能 - 安装社区超能力"
+title: "Day 5: Turn Repeat Work Into a Skill"
+titleZh: "Day 5：把重复流程沉淀成 Skill"
 slug: "day-5-skills"
-description: "Add practical skills and MCP-style tool contracts without turning Hermes into an uncontrolled shell."
-descriptionZh: "给 Hermes 增加实用技能和 MCP 工具契约，同时避免变成失控 Shell。"
+description: "Use Skills and MCP as a productized workflow layer: when to create a Skill, how to define contracts, and how to avoid tool sprawl."
+descriptionZh: "把 Skills 和 MCP 当成工作流产品化层：什么时候该沉淀、如何定义契约、如何避免工具泛滥。"
 author: "HermesAgent Community"
 publishedAt: "2026-04-18"
 updatedAt: "2026-04-18"
 category: "bootcamp"
-tags: ["skills", "mcp", "tools", "integrations", "intermediate"]
+tags: ["skills", "mcp", "tools", "workflow", "contracts"]
 difficulty: "intermediate"
 readingTime: 14
 series: "7-day-bootcamp"
 seriesOrder: 5
-featured: true
+featured: false
 ---
-## 工具有用的前提，是契约看得见
+## Skill 不是“高级 Prompt”
 
-裸模型可以推理、写草稿、做总结。会调用工具的 Agent 可以拉 PR、查知识库、读日历、准备部署清单。
+很多中文文章会把 Skill 写得很玄：会自我进化、会从经验里长出能力。这个方向没错，但用户真正需要先理解的是：Skill 是把一个重复流程产品化。
 
-有用和危险之间的分界线，是工具契约：它做什么、接收哪些参数、需要什么权限、什么时候必须停下来等你审批。
+如果你每周都让 Hermes 做同一类事，比如整理周报、审查 PR、处理用户反馈、生成内容草稿，那就不该每次重新写 prompt。你应该把流程、输入、输出、注意事项和验收标准沉淀下来。
 
 ![Hermes Agent 第 5 天 Skills、Tool Calling 和 MCP 权限示意图](/images/bootcamp/day-5-skills.svg)
 
-## 今天你会做成什么
+## 什么流程值得写成 Skill
 
-- 一份最先安装的 2-3 个高价值技能清单。
-- 一个 MCP 或本地工具集成的契约模板。
-- 一次安全测试：Hermes 调用只读工具并解释结果。
+用三个问题判断：
 
-## 为什么这一步重要
+1. 这个任务是否重复出现？
+2. 每次输入是否长得差不多？
+3. 产物是否有固定验收标准？
 
-工具泛滥会毁掉信任。如果 Hermes 任何时候都能调用任何东西，每个答案都会变得难审计。
+三个都是“是”，就可以考虑 Skill。
 
-先从只读工具开始，因为它们能快速创造价值，又不会产生外部副作用。写操作放到明确审批之后。
+比如 Day 4 的“会议纪要提取待办”就很适合。输入是会议记录，输出是 JSON 或 Markdown 清单，验收标准也明确。
 
-## 实操流程
+不适合写成 Skill 的情况：
 
-1. 选择一个信息查询工具、一个格式化工具、一个工作流工具。
-2. 为每个工具记录输入、输出、权限级别和失败模式。
-3. 用最窄的接口安装或暴露工具。
-4. 先跑只读测试，检查 Hermes 传了哪些参数。
-5. 启用写操作前增加审批门。
+- 一次性探索任务。
+- 连用户自己都没想清楚的目标。
+- 高风险、强依赖人工判断的动作。
+- 只是为了看起来厉害。
 
-## 可直接复制的命令或配置
+## Skill 文件应该写什么
 
-```json
-{
-  "tool": "github_fetch_pr",
-  "permission": "read-only",
-  "inputs": ["repo_full_name", "pr_number"],
-  "outputs": ["title", "status", "changed_files"],
-  "approvalRequired": false
-}
+一个好 Skill 不需要复杂，但必须清楚：
+
+```md
+# meeting-action-extractor
+
+When to use:
+Use this when the user provides meeting notes and wants tasks, owners, deadlines, and review flags.
+
+Inputs:
+- Markdown, transcript, or plain text meeting notes.
+
+Output:
+- A task list with owner, deadline, source quote, confidence, and needs_review.
+
+Rules:
+- Do not invent missing owners.
+- Keep source_quote short.
+- Mark uncertain fields as unknown.
+- Ask before sending tasks to external tools.
 ```
 
-## 落地细节
+这不是文学创作，是 SOP。它要让 Hermes 在下次遇到类似任务时少猜一点。
 
-Skill 不只是一个聪明 prompt。在可靠的 Hermes 工作流里，skill 是一个小契约：接受什么输入，需要什么权限，返回什么输出，以及绝对不能做什么。这个契约让工具调用变得可复查。
+## MCP 是工具边界，不是万能插座
 
-先安装只读 skill，再安装可写 skill。搜索、总结、检查仓库、获取 issue、读取日历都适合早期使用，因为最坏结果通常只是噪音。发送消息、改文件、建工单、花钱这类动作应该后置，并加审批闸门。
+MCP 的价值在于让模型以统一方式调用外部工具。中文技术文章里常见的“感知层、决策层、执行层”可以这样落到 Hermes 上：
 
-MCP server 强大，是因为它把工具访问标准化；但它也扩大了助理的边界。为每个 server、token、权限范围和 owner 建一份清单。如果一个工具没人负责，Hermes 就不应该在生产流程里依赖它。
+- 感知层：读取文件、消息、网页、RSS、Issue。
+- 决策层：判断任务类型，选择 Skill 或工具。
+- 执行层：写文件、查 API、发消息、生成报告。
 
-### 交接产物
+但工具越多，边界越重要。第一批工具建议只读：搜索、读取仓库、抓取网页、读取日历、读取 Issue。写操作后置，并且必须审批。
 
-离开这一课之前，最好留下一份别人能读懂的交接产物。它不需要很长，但必须把 Read-only first、MCP server、Tool call log、Rollback rule 串起来。只要其中任何一项只存在于聊天记录或你的记忆里，这个流程就还不够稳。
+## 今天做一个最小 Skill
 
-交接产物的价值在于减少下一次启动成本。明天你回来时，不应该重新问“昨天到底配置了什么”。你应该打开这份记录，直接知道输入、边界、命令、日志和待复查事项。
+把 Day 4 的数据任务沉淀成 Skill：
 
-把这份产物当成后续课程的输入。第 2 天会读取第 1 天的权限边界，第 6 天会依赖前面几天的工具和数据契约，第 7 天的多 Agent 编排也需要这些小产物作为交接材料。
+1. 新建 Skill 目录。
+2. 写 `SKILL.md`。
+3. 明确触发条件。
+4. 明确输入输出。
+5. 写出禁止事项。
+6. 用 3 个样本测试。
+7. 记录失败案例。
 
-```yaml
-lesson: "day-5-skills"
-owner: "你的名字或团队"
-inputs: ["本课用到的文件、消息或 API"]
-permissions: ["只读", "需要审批的写操作"]
-outputs: ["保存的笔记、日志、配置或结果文件"]
-review: ["下一天开始前必须检查的事项"]
-```
-
-### 升级路径
-
-不要急着把本课流程做成平台功能。先让它以一份 Markdown、一个 JSON、一个日志文件或一个简单脚本的形式稳定运行。低技术形态更容易检查，也更容易在出错时回滚。
-
-当这个流程连续运行三次都能产生可复查结果，再考虑把它抽成模板、skill 或自动化任务。这个顺序很重要：先证明工作流值得复用，再把它产品化。
-
-如果你在这一步发现说明写不清，通常不是文档问题，而是流程边界还没想清楚。回到决策清单，把输入、权限、输出和 owner 写到足够具体，再继续下一天。
-
-真正适合上线的流程，应该让新成员也能在十分钟内看懂：它为什么存在、从哪里拿输入、会碰哪些权限、失败后找谁、结果如何被复查。只要这五个问题还有一个答不清，就先把流程留在手动或半自动阶段。
-
-最后再做一次反向检查：如果 Hermes 给出错误建议，你能否在不依赖模型解释的情况下，从日志、产物和审批记录里还原问题。能还原，才说明流程开始具备运营价值。
-
-### 需要写下来的决策
-
-- 哪些 skill 是只读的，可以日常使用？
-- 哪些工具会修改数据或联系外部人员？
-- 工具调用日志保存在哪里？
-- 每个 MCP server 或外部集成由谁负责？
-
-### 复查演练
-
-1. 运行一个只读 skill，检查输入和输出契约。
-2. 触发一次权限拒绝，确认错误信息清楚。
-3. 加入一个需要审批的动作，但默认保持关闭。
-4. 复查工具清单，移除没有 owner 的工具。
-
-### 衡量指标
-
-- 有多少重复任务已经被 skill 覆盖。
-- 有多少工具写清了权限范围。
-- 从工具调用失败到定位原因需要多久。
-
-## 验收清单
-
-- 每个工具都有书面契约。
-- 只读工具先跑通，再开放写工具。
-- Hermes 会记录工具名、参数和结果。
+不要一上来追求“自动生成 Skill”。你先手写一个，才知道什么叫好 Skill。
 
 ## 常见坑
 
-- 还没明确工作流，就一口气装一大包工具。
-- 为了一个窄任务给出宽泛服务账号权限。
-- 工具调用失败后，让模型用自信的自然语言糊过去。
+- 把 Skill 写成一段情绪化 prompt，没有输入输出。
+- 安装一堆社区 Skill，却不知道哪个工作流需要它们。
+- 工具权限给得太宽，一个读文件任务拿到了写权限。
+- 工具失败后，让模型靠猜继续回答。
+
+## 今天交付什么
+
+留下 `hermes-day-5-skill.md`：
+
+```yaml
+skill_name: "meeting-action-extractor"
+trigger: "meeting notes -> action items"
+inputs:
+  - notes.md
+outputs:
+  - output/tasks.json
+permissions:
+  - read raw files
+  - write output folder
+approval_required:
+  - send tasks to chat
+  - create external tickets
+test_cases: 3
+```
+
+明天讲自动化。只有当 Skill 连续几次稳定产出，你才应该把它放进定时任务里。
 
 ## 下一步
 
-- **[Day 6：自动化引擎](/zh/tutorials/bootcamp/day-6-automation)** - 让有用工具按计划运行。
-- **[10 个最强 Hermes 技能](/zh/guides/resources/best-skills)** - 有选择地安装第一批技能。
+- **[Day 6：把稳定流程交给时间](/zh/tutorials/bootcamp/day-6-automation)** - 从手动触发到定时运行。
+- **[10 个最强 Hermes 技能](/zh/guides/resources/best-skills)** - 选择第一批低风险技能。
 
----
+## 站在用户那边再做一遍
 
-*最后更新：2026 年 4 月 18 日 · Hermes Agent v0.8 内容路线*
+第 5 天会出现一个转折：用户不想再每次从头解释同一件事。真正的进阶不是写更长 prompt，而是把重复流程变成可调用、可改进、可下线的技能。
+
+很多教程会把这一步写成“照着命令跑完”。但用户真正需要的不是命令清单，而是一个能复用的判断过程。你要能说清楚为什么现在做这一步，失败时看哪个信号，成功后留下什么证据。糟糕的 Skill 通常像一篇励志文章：听起来有道理，但没有输入要求、没有失败处理、没有输出样例，也不知道什么时候不该用。
+
+### 现场判断
+
+- 用户是否能不看聊天记录独立复现这一步？
+- 输出是否有文件、日志、截图或配置片段可检查？
+- 失败时是否知道先停在哪里，而不是继续叠更多配置？
+- 是否把敏感信息、写权限和对外发送分开处理？
+- 明天换一个人接手时，是否能沿着同一份产物继续做？
+
+### 产品经理视角
+
+把 Skill 当成小型操作手册。它应该写清楚触发条件、需要的材料、不能碰的边界、输出格式和验收标准。
+
+从产品角度看，Bootcamp 每一天都不应该只是“学一个功能”。它应该让用户把一个真实摩擦点降级：从不知道怎么开始，变成知道下一步怎么判断；从依赖灵感，变成依赖流程；从一次性成功，变成可以让别人复查。这一天要检查的不是 Skill 数量，而是一个新会话能否根据 Skill 复现同样质量。
+
+真正有价值的训练营内容，应该能让用户在失败时也赚到东西。即使当天没有跑通，用户也应该更清楚自己卡在环境、权限、输入、模型、工具还是协作边界上。这样第二次尝试就不是重复碰运气，而是在缩小问题范围。
+
+### 明天带走什么
+
+带走一份 Skill 候选卡：触发场景、输入清单、步骤、输出样例、权限等级和退役条件。
+
+不要把这份产物写得像汇报材料。它应该像交接班纸条：短、具体、能执行。明天打开它，你应该立刻知道输入在哪里、权限到哪里、结果放哪里、哪些事情还不能自动化。
+
+再补一条停机线：当 Hermes 的建议开始依赖你没给过的事实、要求更大权限、或者准备把结果发到外部系统时，先停下来复查输入和边界。训练营不是为了让用户少思考，而是把思考放在更关键的位置。

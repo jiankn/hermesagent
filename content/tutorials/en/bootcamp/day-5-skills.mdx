@@ -1,130 +1,154 @@
 ---
-title: "Day 5: Tool Calling & MCP Integration"
-titleZh: "Day 5: 装备技能 - 安装社区超能力"
+title: "Day 5: Turn Repeat Work Into a Skill"
+titleZh: "Day 5：把重复流程沉淀成 Skill"
 slug: "day-5-skills"
-description: "Add practical skills and MCP-style tool contracts without turning Hermes into an uncontrolled shell."
-descriptionZh: "给 Hermes 增加实用技能和 MCP 工具契约，同时避免变成失控 Shell。"
+description: "Use Skills and MCP as a productized workflow layer: when to create a Skill, how to define contracts, and how to avoid tool sprawl."
+descriptionZh: "把 Skills 和 MCP 当成工作流产品化层：什么时候该沉淀、如何定义契约、如何避免工具泛滥。"
 author: "HermesAgent Community"
 publishedAt: "2026-04-18"
 updatedAt: "2026-04-18"
 category: "bootcamp"
-tags: ["skills", "mcp", "tools", "integrations", "intermediate"]
+tags: ["skills", "mcp", "tools", "workflow", "contracts"]
 difficulty: "intermediate"
 readingTime: 14
 series: "7-day-bootcamp"
 seriesOrder: 5
-featured: true
+featured: false
 ---
-## Tools are power only when the contract is visible
+## A Skill is not a fancy prompt
 
-A raw model can reason, draft, and summarize. A tool-using agent can fetch a pull request, search a knowledge base, read a calendar, and prepare a deployment checklist.
+Many articles describe Hermes Skills as self-improving abilities that grow from experience. That is useful, but beginners need a simpler product idea first: a Skill productizes a repeated workflow.
 
-The difference between useful and dangerous is the contract: what the tool does, which arguments it accepts, what permission it needs, and when Hermes must stop for approval.
+If you ask Hermes to do the same class of task every week, such as preparing a weekly report, reviewing a PR, processing feedback, or drafting a public article, you should not rewrite the prompt each time. Capture the process, inputs, outputs, constraints, and acceptance criteria.
 
 ![Diagram of Hermes Agent skills, tool calling, and MCP permissions](/images/bootcamp/day-5-skills.svg)
 
-## What you will have working today
+## What deserves to become a Skill
 
-- A shortlist of two or three high-value skills to install first.
-- A tool contract template for MCP or local integrations.
-- A safe test where Hermes calls a read-only tool and explains the result.
+Ask three questions:
 
-## Why this step matters
+1. Does this task repeat?
+2. Do inputs look similar each time?
+3. Does the output have a stable acceptance standard?
 
-Tool sprawl kills trust. If Hermes can call anything at any time, every answer becomes harder to audit.
+If all three are yes, consider a Skill.
 
-Start with read-only tools because they create immediate value without risking external side effects. Then add write actions behind explicit approval.
+The Day 4 meeting-notes workflow is a good candidate. The input is meeting notes. The output is a JSON or Markdown task list. Acceptance criteria are clear.
 
-## Hands-on workflow
+Do not make a Skill for:
 
-1. Pick one information tool, one formatting tool, and one workflow tool.
-2. Document each tool with inputs, outputs, permission level, and failure modes.
-3. Install or expose the tool through the narrowest interface available.
-4. Run a read-only test and inspect the arguments Hermes sent.
-5. Add approval gates before enabling write actions.
+- one-off exploration;
+- goals the user has not clarified;
+- high-risk actions that depend heavily on judgment;
+- anything created only to look advanced.
 
-## Copy-ready commands or config
+## What a Skill file should contain
 
-```json
-{
-  "tool": "github_fetch_pr",
-  "permission": "read-only",
-  "inputs": ["repo_full_name", "pr_number"],
-  "outputs": ["title", "status", "changed_files"],
-  "approvalRequired": false
-}
+A good Skill can be simple, but it must be concrete:
+
+```md
+# meeting-action-extractor
+
+When to use:
+Use this when the user provides meeting notes and wants tasks, owners, deadlines, and review flags.
+
+Inputs:
+- Markdown, transcript, or plain text meeting notes.
+
+Output:
+- A task list with owner, deadline, source quote, confidence, and needs_review.
+
+Rules:
+- Do not invent missing owners.
+- Keep source_quote short.
+- Mark uncertain fields as unknown.
+- Ask before sending tasks to external tools.
 ```
 
-## Implementation notes
+This is not creative writing. It is an SOP Hermes can reuse instead of guessing.
 
-A skill is not just a clever prompt. In a reliable Hermes workflow, a skill is a small contract: what input it accepts, what permission it needs, what output it returns, and what it must never do. The contract is what makes tool use reviewable.
+## MCP is a boundary, not a magic socket
 
-Install read-only skills before write-capable skills. Search, summarize, inspect repository, fetch issue, and read calendar are good early choices because the worst failure is usually noise. Sending messages, changing files, creating tickets, or spending money should arrive later with approval gates.
+MCP matters because it gives models a consistent way to call external tools. A useful three-layer mental model is:
 
-MCP servers are powerful because they standardize tool access, but they also widen the boundary of the assistant. Keep a short inventory of every server, token, permission scope, and owner. If nobody owns a tool, Hermes should not depend on it for production work.
+- Perception: read files, messages, web pages, RSS, and issues.
+- Decision: classify the task and choose a Skill or tool.
+- Action: write files, call APIs, send messages, or generate reports.
 
-### Handoff artifact
+The more tools you add, the more important the boundary becomes. Start read-only: search, repository inspection, web fetch, calendar read, issue read. Write actions come later and require approval.
 
-Before leaving this lesson, keep a handoff artifact that another teammate could understand without reading the chat transcript. It does not need to be long, but it must connect Read-only first, MCP server, Tool call log, Rollback rule. If any part exists only in your memory, the workflow is still fragile.
+## Build one minimal Skill today
 
-The value of the artifact is lower restart cost. When you return tomorrow, you should not have to ask what was configured yesterday. You should open the note and see the inputs, boundaries, commands, logs, and review items immediately.
+Turn Day 4’s data workflow into a Skill:
 
-Treat the artifact as the input to later lessons. Day 2 reads the permission boundary from day 1, day 6 depends on the tool and data contracts from earlier days, and day 7 uses these small artifacts as handoff material for specialist agents.
+1. Create a Skill folder.
+2. Write `SKILL.md`.
+3. Define when it should trigger.
+4. Define inputs and outputs.
+5. List forbidden behavior.
+6. Test with three samples.
+7. Record failure cases.
+
+Do not start with automatic Skill generation. Hand-write one first so you learn what a good Skill looks like.
+
+## Common mistakes
+
+- Writing a Skill as a vague inspirational prompt.
+- Installing many community Skills without a workflow that needs them.
+- Granting write permissions for a read-only task.
+- Letting the model guess after a tool call fails.
+
+## Ship this artifact
+
+Create `hermes-day-5-skill.md`:
 
 ```yaml
-lesson: "day-5-skills"
-owner: "your name or team"
-inputs: ["files, messages, or APIs used in this lesson"]
-permissions: ["read-only", "approval-required writes"]
-outputs: ["saved note, log, config, or result file"]
-review: ["items to check before the next lesson"]
+skill_name: "meeting-action-extractor"
+trigger: "meeting notes -> action items"
+inputs:
+  - notes.md
+outputs:
+  - output/tasks.json
+permissions:
+  - read raw files
+  - write output folder
+approval_required:
+  - send tasks to chat
+  - create external tickets
+test_cases: 3
 ```
 
-### Upgrade path
-
-Do not rush to turn this lesson into platform code. First make it stable as a Markdown note, JSON file, log entry, or small script. A low-tech artifact is easier to inspect, easier to share, and easier to roll back when the workflow is still young.
-
-After the workflow produces reviewable results three times in a row, promote it into a template, skill, or scheduled job. The order matters: prove the workflow deserves reuse before productizing the mechanism around it.
-
-If the artifact is hard to write, the problem is usually not documentation. It usually means the boundary is still fuzzy. Return to the decision list and make the input, permission, output, and owner concrete before moving to the next day.
-
-### Decisions to write down
-
-- Which skills are read-only and safe for daily use?
-- Which tools can mutate data or contact people?
-- Where are tool call logs stored?
-- Who owns each MCP server or external integration?
-
-### Review drill
-
-1. Run one read-only skill and inspect the input/output contract.
-2. Trigger a permission-denied case and confirm the error is clear.
-3. Add one approval-required action but keep it disabled by default.
-4. Review the tool inventory and remove anything without an owner.
-
-### What to measure
-
-- Number of useful repeated tasks covered by skills.
-- Number of tools with explicit permission scopes.
-- Time from failed tool call to understandable diagnosis.
-
-## Acceptance checklist
-
-- Every installed tool has a written contract.
-- Read-only tools work before write tools are enabled.
-- Hermes logs tool name, arguments, and outcome.
-
-## Common failure modes
-
-- Installing a large bundle of tools without knowing which workflow needs them.
-- Granting broad service-account permissions for one narrow task.
-- Letting tool failures turn into confident natural-language guesses.
+Tomorrow is automation. Only a workflow that has produced stable results manually deserves a schedule.
 
 ## Next step
 
-- **[Day 6: Scheduled Workflows](/en/tutorials/bootcamp/day-6-automation)** - run useful tool workflows on a schedule.
-- **[Top 10 Hermes Skills](/en/guides/resources/best-skills)** - pick the first skills deliberately.
+- **[Day 6: Give stable workflows a schedule](/en/tutorials/bootcamp/day-6-automation)** - move from manual trigger to timed execution.
+- **[Top 10 Hermes Skills](/en/guides/resources/best-skills)** - choose the first low-risk skills.
 
----
+## Run It Again From The User Side
 
-*Last updated: April 18, 2026 · Hermes Agent v0.8 content track*
+Day 5 is the turning point where users stop wanting to explain the same process from scratch. The upgrade is not a longer prompt. The upgrade is turning repeat work into a callable, improvable, and removable skill.
+
+Many tutorials frame this step as “follow these commands.” Real users need more than commands. They need a repeatable judgment process: why this step matters, what signal to watch when it fails, and what evidence proves it worked. A weak skill reads like motivational prose: it sounds right, but it has no input requirements, no failure handling, no output example, and no rule for when it should not run.
+
+### Field Checks
+
+- Can a user repeat this step without rereading the chat transcript?
+- Is there a file, log, screenshot, config fragment, or artifact to inspect?
+- When the step fails, does the user know where to stop instead of adding more configuration?
+- Are sensitive data, write permissions, and external delivery handled separately?
+- Could another person continue tomorrow from the artifact you leave today?
+
+### Product Manager Lens
+
+Treat a skill as a small operating manual. It should define trigger conditions, required materials, boundaries, output format, and acceptance criteria.
+
+From a product perspective, each bootcamp day should reduce a real source of friction. The user should move from guessing to judging, from inspiration to process, and from one-off success to reviewable operation. The review is not how many skills exist. It is whether a fresh session can use the skill and reproduce the same quality of work.
+
+Good training material should still be useful when the user fails. Even if the workflow does not fully run, the user should know whether they are stuck on environment, permissions, inputs, model behavior, tool access, or collaboration boundaries. That turns the second attempt into a narrower investigation instead of another round of luck.
+
+### What Carries Into Tomorrow
+
+Leave with a skill candidate card: trigger scenario, input checklist, steps, output sample, permission level, and retirement condition.
+
+Do not make this artifact feel like a status report. It should feel like a shift handoff: short, specific, and executable. Tomorrow, it should show where the input lives, how far the permissions go, where the result belongs, and which actions are still too risky to automate.

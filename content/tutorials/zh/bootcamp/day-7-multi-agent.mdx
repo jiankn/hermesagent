@@ -1,133 +1,149 @@
 ---
-title: "Day 7: Multi-Agent Orchestration (Swarm)"
-titleZh: "Day 7: 终极形态 - 组建你的 AI 团队"
+title: "Day 7: Multi-Agent Is Division of Labor, Not Group Chat"
+titleZh: "Day 7：多 Agent 不是群聊，是分工"
 slug: "day-7-multi-agent"
-description: "Coordinate specialist Hermes agents for research, drafting, review, and delivery without losing control of the final decision."
-descriptionZh: "协调研究、写作、复核和交付型 Hermes Agent，同时保留最终决策权。"
+description: "Use multi-agent orchestration only when responsibilities are independent: researcher, operator, reviewer, and final owner."
+descriptionZh: "只在职责真的独立时使用多 Agent：研究、执行、复核和最终负责人必须清楚。"
 author: "HermesAgent Community"
 publishedAt: "2026-04-18"
 updatedAt: "2026-04-18"
 category: "bootcamp"
-tags: ["multi-agent", "orchestration", "swarm", "advanced"]
+tags: ["multi-agent", "subagent", "orchestration", "handoff", "advanced"]
 difficulty: "advanced"
-readingTime: 15
+readingTime: 14
 series: "7-day-bootcamp"
 seriesOrder: 7
-featured: true
+featured: false
 ---
-## Agent 团队需要经理，不需要扩音器
+## 不要为了酷而多 Agent
 
-多 Agent 不是为了让五个模型同时聊天，看起来热闹。它的价值在于拆分职责：每个 worker 有窄任务、有限上下文和清晰交接。
+多 Agent 是最容易写得像科幻的部分：研究员、写手、审稿人、执行者，一群智能体同时开工。听起来很强，但从产品角度看，第一性原理只有一个：多 Agent 是否降低了用户完成任务的总成本？
 
-人类仍然是结果负责人。Hermes 可以委派研究、写作、测试和复核，但最终合并必须显式完成。
+如果没有，它就是把一个混乱问题拆成多个混乱问题。
 
 ![Hermes Agent 第 7 天多 Agent 交接和最终综合示意图](/images/bootcamp/day-7-multi-agent.svg)
 
-## 今天你会做成什么
+## 什么时候值得拆
 
-- 一份简单的多 Agent 计划：研究员、写手、复核者、执行者。
-- 一个交接契约，让不同输出可以比较。
-- 一个最终复核步骤：host agent 做综合，而不是机械拼接。
+值得拆的任务有三个特征：
 
-## 为什么这一步重要
+1. 子任务相互独立，可以并行。
+2. 每个子任务有清楚输入和输出。
+3. 最终需要一个负责人综合，而不是简单拼接。
 
-只有任务真正独立时，并行才有帮助。把下一个阻塞步骤外包出去，只会制造等待、混乱和重复工作。
+适合：
 
-好的编排从 ownership 开始：谁读资料、谁写草稿、谁查风险、谁把结果整理成最终产物。
+- 竞品分析：一个 Agent 查资料，一个整理功能，一个评估风险。
+- 代码审查：一个读 diff，一个跑测试，一个查安全问题。
+- 内容生产：一个搜素材，一个写初稿，一个检查事实和语气。
+- 运维排查：一个看日志，一个查部署，一个整理时间线。
 
-## 实操流程
+不适合：
 
-1. 生成子 Agent 前先定义结果和判断标准。
-2. 按职责拆任务，不要按文件数量随意拆。
-3. 给每个 worker 一份短契约：输入、输出形状、约束和截止时间。
-4. 收集输出后，让 host agent 比较冲突点。
-5. 发布或执行高影响动作前，由人类手动批准最终产物。
+- 目标还没说清楚。
+- 下一步依赖上一步结果。
+- 每个 Agent 都在做同一件事。
+- 没有人负责最终判断。
 
-## 可直接复制的命令或配置
+## Host Agent 的职责
 
-```json
-{
-  "goal": "准备一份竞品分析简报",
-  "agents": ["researcher", "writer", "risk-reviewer"],
-  "handoff": "带来源、假设和未决问题的要点",
-  "finalOwner": "human"
-}
-```
+Host 不是把输出粘在一起。Host 要做四件事：
 
-## 落地细节
+- 分任务：谁查资料，谁执行，谁复核。
+- 给契约：每个 Agent 输出格式一致。
+- 比冲突：不同结论要摆出来。
+- 做综合：决定采用、拒绝或继续追问。
 
-多 Agent 只有在任务真的能拆开时才有帮助。如果两个 worker 读同样材料、回答同样问题、输出格式还不一致，Host 反而制造了更多协调成本。应该按职责拆分：研究、起草、测试、复核或执行。
+用户仍然是最终 owner。尤其是发消息、改文件、部署、花钱这些动作，不能让子 Agent 直接完成闭环。
 
-Host 仍然对最终结果负责。子 Agent 可以搜索、总结、写作和验证，但不应该直接发布或执行高影响动作。最终综合步骤要比较冲突、列出假设，并在需要时请求人工确认。
-
-好的交接契约应该很短。给每个 worker 输入、输出格式、约束和截止时间，并要求写出假设和未决问题。这样输出才可比较，最终答案也不会变成一堆互不相关笔记的拼贴。
-
-### 交接产物
-
-离开这一课之前，最好留下一份别人能读懂的交接产物。它不需要很长，但必须把 Plan、Delegate、Compare、Synthesize 串起来。只要其中任何一项只存在于聊天记录或你的记忆里，这个流程就还不够稳。
-
-交接产物的价值在于减少下一次启动成本。明天你回来时，不应该重新问“昨天到底配置了什么”。你应该打开这份记录，直接知道输入、边界、命令、日志和待复查事项。
-
-把这份产物当成后续课程的输入。第 2 天会读取第 1 天的权限边界，第 6 天会依赖前面几天的工具和数据契约，第 7 天的多 Agent 编排也需要这些小产物作为交接材料。
+## 一个可用的三 Agent 模板
 
 ```yaml
-lesson: "day-7-multi-agent"
-owner: "你的名字或团队"
-inputs: ["本课用到的文件、消息或 API"]
-permissions: ["只读", "需要审批的写操作"]
-outputs: ["保存的笔记、日志、配置或结果文件"]
-review: ["下一天开始前必须检查的事项"]
+goal: "评估 HermesAgent 101 的 Day 1 教程是否适合新手"
+agents:
+  researcher:
+    job: "阅读教程和素材，列出用户疑惑"
+    output: "bullets with evidence"
+  operator:
+    job: "按教程执行命令，记录卡点"
+    output: "steps passed / failed"
+  reviewer:
+    job: "检查隐私、权限、死链和误导性表达"
+    output: "risks with severity"
+host:
+  job: "合并冲突，给出最终修改清单"
+human_approval:
+  - publish
+  - delete files
+  - push changes
 ```
 
-### 升级路径
+这个模板有一个关键点：每个 Agent 的职责不同，输出也可比较。
 
-不要急着把本课流程做成平台功能。先让它以一份 Markdown、一个 JSON、一个日志文件或一个简单脚本的形式稳定运行。低技术形态更容易检查，也更容易在出错时回滚。
+## 多 Agent 的常见失败
 
-当这个流程连续运行三次都能产生可复查结果，再考虑把它抽成模板、skill 或自动化任务。这个顺序很重要：先证明工作流值得复用，再把它产品化。
+- 把同一个问题复制给三个 Agent，得到三份重复答案。
+- 不要求来源和假设，最后无法判断谁对。
+- 让子 Agent 直接执行高风险动作。
+- Host 不做判断，只做拼接。
+- 为了并行，反而增加等待和沟通成本。
 
-如果你在这一步发现说明写不清，通常不是文档问题，而是流程边界还没想清楚。回到决策清单，把输入、权限、输出和 owner 写到足够具体，再继续下一天。
+## 今天交付什么
 
-真正适合上线的流程，应该让新成员也能在十分钟内看懂：它为什么存在、从哪里拿输入、会碰哪些权限、失败后找谁、结果如何被复查。只要这五个问题还有一个答不清，就先把流程留在手动或半自动阶段。
+留下 `hermes-day-7-orchestration.md`：
 
-最后再做一次反向检查：如果 Hermes 给出错误建议，你能否在不依赖模型解释的情况下，从日志、产物和审批记录里还原问题。能还原，才说明流程开始具备运营价值。
+```yaml
+task: "your real multi-step task"
+split_reason: "parallel research / independent checks / separate expertise"
+roles:
+  - researcher
+  - operator
+  - reviewer
+handoff_format:
+  - findings
+  - evidence
+  - assumptions
+  - open_questions
+final_owner: "human"
+do_not_delegate:
+  - publish
+  - spend money
+  - delete files
+```
 
-### 需要写下来的决策
-
-- 任务中哪些部分真的相互独立？
-- 所有子 Agent 必须使用什么输出格式？
-- 哪个 Agent 负责解决冲突？
-- 最后哪些动作仍然只能由人执行？
-
-### 复查演练
-
-1. 为一个真实但低风险的任务设计三 Agent 计划。
-2. 给每个 Agent 不同职责，但要求相同输出形状。
-3. 对比输出里的冲突和缺失假设。
-4. 写最终综合，明确采纳、拒绝或合并每条建议。
-
-### 衡量指标
-
-- 在不降低复查质量的前提下节省的总耗时。
-- 子 Agent 之间重复发现的数量。
-- 最终批准前暴露出的冲突数量。
-
-## 验收清单
-
-- 每个子 Agent 都有不同职责。
-- 输出包含假设和未决问题。
-- 最终答案会解决冲突，而不是把冲突藏起来。
-
-## 常见坑
-
-- 目标还没清楚就开始 spawn agents。
-- 委派重叠工作，最后被迫合并重复内容。
-- 让子 Agent 不经 host 复核直接发布。
+到这里，7 天实战营的产品逻辑就闭环了：先跑起来，再记住你，再进入聊天，再处理资料，再沉淀技能，再定时运行，最后用多 Agent 承接复杂工作。
 
 ## 下一步
 
-- **[10 个最强 Hermes 技能](/zh/guides/resources/best-skills)** - 用可复用技能扩展团队能力。
-- **[Hermes vs OpenClaw](/zh/guides/comparisons/hermes-vs-openclaw)** - 查看本站的竞品定位。
+- **[10 个最强 Hermes 技能](/zh/guides/resources/best-skills)** - 从低风险 Skill 开始扩展。
+- **[Hermes vs OpenClaw](/zh/guides/comparisons/hermes-vs-openclaw)** - 看 Hermes 的定位差异。
 
----
+## 站在用户那边再做一遍
 
-*最后更新：2026 年 4 月 18 日 · Hermes Agent v0.8 内容路线*
+第 7 天很容易被“多 Agent”这个词带偏。用户真正需要的不是一群助手同时说话，而是把复杂工作拆给不同职责的人，再由一个负责人合并判断。
+
+很多教程会把这一步写成“照着命令跑完”。但用户真正需要的不是命令清单，而是一个能复用的判断过程。你要能说清楚为什么现在做这一步，失败时看哪个信号，成功后留下什么证据。失败信号是大家都在做分析、没人拥有结论；每个 Agent 都能改东西、没人知道冲突怎么解决；输出看起来很多，但没有一个可交付结果。
+
+### 现场判断
+
+- 用户是否能不看聊天记录独立复现这一步？
+- 输出是否有文件、日志、截图或配置片段可检查？
+- 失败时是否知道先停在哪里，而不是继续叠更多配置？
+- 是否把敏感信息、写权限和对外发送分开处理？
+- 明天换一个人接手时，是否能沿着同一份产物继续做？
+
+### 产品经理视角
+
+先按职责拆分，而不是按模型数量拆分。一个 Agent 负责搜集，一个负责执行，一个负责质检，一个负责人做取舍和最终表达。
+
+从产品角度看，Bootcamp 每一天都不应该只是“学一个功能”。它应该让用户把一个真实摩擦点降级：从不知道怎么开始，变成知道下一步怎么判断；从依赖灵感，变成依赖流程；从一次性成功，变成可以让别人复查。这一天的核心是交接质量。每个子任务都要有输入、边界、产物和退出条件，否则并行只会制造更多上下文。
+
+真正有价值的训练营内容，应该能让用户在失败时也赚到东西。即使当天没有跑通，用户也应该更清楚自己卡在环境、权限、输入、模型、工具还是协作边界上。这样第二次尝试就不是重复碰运气，而是在缩小问题范围。
+
+### 明天带走什么
+
+带走一份编排蓝图：角色、输入、禁止动作、交付物、汇总顺序和人工决策点。
+
+不要把这份产物写得像汇报材料。它应该像交接班纸条：短、具体、能执行。明天打开它，你应该立刻知道输入在哪里、权限到哪里、结果放哪里、哪些事情还不能自动化。
+
+再补一条停机线：当 Hermes 的建议开始依赖你没给过的事实、要求更大权限、或者准备把结果发到外部系统时，先停下来复查输入和边界。训练营不是为了让用户少思考，而是把思考放在更关键的位置。
