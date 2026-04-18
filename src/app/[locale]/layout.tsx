@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
+import { setRequestLocale } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import Navbar from '@/components/layout/Navbar/Navbar';
 import Footer from '@/components/layout/Footer/Footer';
@@ -32,9 +33,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function LocaleLayout({ children, params }: Props) {
-  // In output:'export' mode, locale is always valid (determined by generateStaticParams)
   const { locale } = await params;
   const validLocale = routing.locales.includes(locale as 'en' | 'zh') ? locale : 'en';
+  setRequestLocale(validLocale);
 
   let messages;
   try {

@@ -1,3 +1,4 @@
+import { setRequestLocale } from 'next-intl/server';
 import Link from 'next/link';
 import { getArticleBySlug, getAllSlugs } from '@/lib/content';
 import { routing } from '@/i18n/routing';
@@ -60,6 +61,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function TutorialArticlePage({ params }: Props) {
   const { locale, slug } = await params;
+  setRequestLocale(locale);
   const article = getArticleBySlug('tutorials', slug, locale);
 
   if (!article) return <div>Article not found</div>;

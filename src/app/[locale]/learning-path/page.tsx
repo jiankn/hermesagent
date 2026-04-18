@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { setRequestLocale } from 'next-intl/server';
 import Link from 'next/link';
 import { buildPageMetadata } from '@/lib/seo/metadata';
 import styles from './page.module.css';
@@ -31,6 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function LearningPathPage({ params }: Props) {
   const { locale } = await params;
+  setRequestLocale(locale);
   const isZh = locale === 'zh';
 
   return (

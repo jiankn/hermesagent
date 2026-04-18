@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { setRequestLocale } from 'next-intl/server';
 import { createTranslator } from '@/lib/translations';
 import Link from 'next/link';
 import FAQAccordion from '@/components/ui/FAQAccordion/FAQAccordion';
@@ -26,6 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;
+  setRequestLocale(locale);
   const t = createTranslator(locale);
   const isZh = locale === 'zh';
 

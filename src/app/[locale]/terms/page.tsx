@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { setRequestLocale } from 'next-intl/server';
 import { buildPageMetadata } from '@/lib/seo/metadata';
 import styles from '../static.module.css';
 
@@ -18,7 +19,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-export default function TermsPage() {
+export default async function TermsPage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   return (
     <div className={styles.page}>
       <h1 className={styles.pageTitle}>Terms of Service</h1>

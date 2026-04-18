@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { setRequestLocale } from 'next-intl/server';
 import TutorialCard from '@/components/cards/TutorialCard/TutorialCard';
 import { getArticles, type ArticleMeta } from '@/lib/content';
 import { buildPageMetadata } from '@/lib/seo/metadata';
@@ -38,6 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function GuidesPage({ params }: Props) {
   const { locale } = await params;
+  setRequestLocale(locale);
   const isZh = locale === 'zh';
   const guides = getArticles('guides', locale).sort(sortGuides);
 

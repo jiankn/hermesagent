@@ -1,3 +1,4 @@
+import { setRequestLocale } from 'next-intl/server';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import DifficultyBadge from '@/components/ui/DifficultyBadge/DifficultyBadge';
@@ -60,6 +61,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogArticlePage({ params }: Props) {
   const { locale, slug } = await params;
+  setRequestLocale(locale);
   const article = getArticleBySlug('blog', slug, locale);
 
   if (!article) return <div>Article not found</div>;
