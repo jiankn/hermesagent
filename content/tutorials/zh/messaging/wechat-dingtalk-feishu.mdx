@@ -1,0 +1,410 @@
+---
+title: "Hermes Agent 接入微信、钉钉、飞书：国内平台集成完整指南"
+titleZh: "Hermes Agent 接入微信、钉钉、飞书：国内平台集成完整指南"
+slug: "wechat-dingtalk-feishu"
+description: "手把手教你将 Hermes Agent 接入企业微信、钉钉机器人和飞书机器人，打造国内平台可用的 AI 助手。附完整代码和排错指南。"
+descriptionZh: "手把手教你将 Hermes Agent 接入企业微信、钉钉机器人和飞书机器人，打造国内平台可用的 AI 助手。附完整代码和排错指南。"
+author: "HermesAgent Community"
+publishedAt: "2026-04-18"
+updatedAt: "2026-04-18"
+category: "messaging"
+tags: ["微信", "企业微信", "钉钉", "飞书", "国内平台", "集成"]
+difficulty: "intermediate"
+readingTime: 16
+series: "messaging"
+seriesOrder: 6
+featured: true
+---
+
+## 这篇教程能帮你做什么？
+
+读完这篇文章，你可以让 Hermes Agent 在**企业微信、钉钉、飞书**上接收消息并自动回复——你的同事在群里 @机器人 就能得到 AI 回答，就像有了一个 7×24 在线的智能助理。
+
+> **为什么不是个人微信？** 个人微信没有官方 API，第三方方案（如 itchat）违反微信使用协议，存在封号风险。**企业微信是官方支持、稳定可靠的选择**，而且企业微信可以和个人微信互通消息。
+
+## 三大平台对比：选哪个？
+
+| 对比维度 | 企业微信 | 钉钉 | 飞书 |
+|---------|:---:|:---:|:---:|
+| **使用人数** | 2.5 亿+ | 7 亿+ | 8000 万+ |
+| **机器人 API** | ✅ 完善 | ✅ 完善 | ✅ 完善 |
+| **个人微信互通** | ✅ 可互通 | ❌ | ❌ |
+| **Webhook（最简方案）** | ✅ 群机器人 | ✅ 自定义机器人 | ✅ 自定义机器人 |
+| **应用开发（完整方案）** | ✅ 自建应用 | ✅ 企业内部应用 | ✅ 自建应用 |
+| **接入难度** | 🟡 中等 | 🟢 最简单 | 🟡 中等 |
+| **适合场景** | 对外客服 + 内部协作 | 内部协作为主 | 技术团队协作 |
+| **免费额度** | 企业认证后免费 | 免费 | 免费 |
+
+**我们的建议：**
+- 想和微信客户互通 → **企业微信**
+- 团队内部快速上手 → **钉钉**（最简单）
+- 技术团队 / 已用飞书 → **飞书**
+
+## 方案 1：钉钉机器人（最快上手 ⚡）
+
+钉钉是最容易集成的平台——10 分钟就能让 Hermes Agent 在钉钉群里回复消息。
+
+### 方式 A：Webhook 群机器人（5 分钟，单向推送）
+
+这是最简单的方案，适合 Hermes 主动推送消息到群里（比如定时日报、告警通知），但**不能接收群消息**。
+
+#### 第 1 步：创建群机器人
+
+1. 打开钉钉群 → 设置 → 智能群助手 → 添加机器人
+2. 选择「自定义」机器人
+3. 设置安全方式：选「加签」，记下 **Webhook URL** 和 **密钥（Secret）**
+
+#### 第 2 步：配置 Hermes
+
+```yaml
+# ~/.hermes/connectors/dingtalk-webhook.yaml
+connector:
+  type: dingtalk-webhook
+  webhook_url: "https://oapi.dingtalk.com/robot/send?access_token=YOUR_TOKEN"
+  secret: "SECxxxxxxxxxxxxxxxx"
+
+settings:
+  # 消息格式
+  message_type: "markdown"     # 支持 text, markdown, actionCard
+  at_all: false                # 是否 @所有人
+```
+
+#### 第 3 步：测试推送
+
+```bash
+hermes "发一条测试消息到钉钉群"
+```
+
+钉钉群里会收到 Hermes 的回复。✅
+
+### 方式 B：企业内部应用（完整双向交互）
+
+这是正式方案——用户在钉钉群里 @机器人 提问，Hermes 自动回复。
+
+#### 第 1 步：创建钉钉应用
+
+1. 登录 [钉钉开放平台](https://open.dingtalk.com)
+2. 应用开发 → 企业内部应用 → 创建应用
+3. 在「机器人与消息推送」中开启机器人功能
+4. 记下 **AppKey** 和 **AppSecret**
+5. 设置消息接收地址（你的服务器公网 URL）
+
+#### 第 2 步：配置 Hermes 钉钉连接器
+
+```yaml
+# ~/.hermes/connectors/dingtalk.yaml
+connector:
+  type: dingtalk
+  app_key: "YOUR_APP_KEY"
+  app_secret: "YOUR_APP_SECRET"
+  webhook_port: 3002
+
+settings:
+  reply_to_groups: true          # 在群里回复
+  reply_to_private: true         # 私聊也回复
+  at_trigger_only: true          # 只回复 @机器人 的消息
+  max_message_length: 20000      # 钉钉单条消息上限
+  typing_delay: 500              # 模拟打字延迟（毫秒）
+```
+
+#### 第 3 步：配置消息接收地址
+
+如果你的服务器有公网 IP：
+
+```bash
+# 启动连接器
+hermes connect dingtalk
+```
+
+如果在本地开发，用内网穿透：
+
+```bash
+# 方案 1：使用 ngrok
+ngrok http 3002
+
+# 方案 2：使用 natapp（国内更快）
+natapp -authtoken YOUR_TOKEN
+
+# 方案 3：使用 cpolar
+cpolar http 3002
+```
+
+将穿透后的公网 URL 填入钉钉开放平台的「消息接收地址」：
+`https://your-domain.com/webhook/dingtalk`
+
+#### 第 4 步：验证
+
+在钉钉群里 @你的机器人 并发送一条消息：
+
+```
+@HermesBot 帮我查一下最近三天的 GitHub Issues 摘要
+```
+
+Hermes 会自动分析请求，执行任务，然后在群里回复结果。🎉
+
+## 方案 2：企业微信集成
+
+企业微信是对外沟通的最佳选择——因为它可以和个人微信互通。你的客户在微信上发消息，Hermes 在企业微信后台自动回复。
+
+### 第 1 步：注册企业微信并创建应用
+
+1. 访问 [企业微信管理后台](https://work.weixin.qq.com)
+2. 应用管理 → 自建 → 创建应用
+3. 记下 **企业 ID（CorpID）**、**应用 ID（AgentId）** 和 **应用 Secret**
+4. 在 API 接收消息中，配置接收消息的 URL 和 Token
+
+#### 设置接收消息服务器
+
+企业微信要求验证服务器，格式为：
+
+- **URL:** `https://your-domain.com/webhook/wecom`
+- **Token:** 你自己设定（如 `hermes-wecom-token`）
+- **EncodingAESKey:** 企业微信自动生成，记下来
+
+### 第 2 步：配置 Hermes 企业微信连接器
+
+```yaml
+# ~/.hermes/connectors/wecom.yaml
+connector:
+  type: wecom
+  corp_id: "YOUR_CORP_ID"
+  agent_id: YOUR_AGENT_ID
+  secret: "YOUR_APP_SECRET"
+  token: "hermes-wecom-token"
+  encoding_aes_key: "YOUR_ENCODING_AES_KEY"
+  webhook_port: 3003
+
+settings:
+  reply_to_external: true        # 回复外部联系人（微信用户）
+  reply_to_internal: true        # 回复内部员工
+  reply_to_groups: true          # 回复群消息
+  welcome_message: "你好！我是 AI 助手，有什么可以帮你的？"
+  max_message_length: 2048
+```
+
+### 第 3 步：启动并测试
+
+```bash
+hermes connect wecom
+```
+
+预期输出：
+
+```
+✅ 企业微信连接器已启动
+🏢 企业ID: YOUR_CORP_ID
+📱 应用: HermesBot (AgentId: 1000002)
+🔗 回调地址: http://localhost:3003/webhook/wecom
+```
+
+### 第 4 步：开启客户联系（可选但推荐）
+
+如果要让外部微信用户也能和 Hermes 对话：
+
+1. 企业微信管理后台 → 客户联系 → 权限配置
+2. 启用「客户联系」功能
+3. 将 Hermes 应用添加到可见范围
+
+现在，外部微信用户通过企业微信添加为联系人后，发消息就能得到 AI 回复。
+
+### 企业微信注意事项
+
+> **⚠️ 重要提醒：**
+> - 企业微信 API 调用有频率限制（单应用 600 次/分钟）
+> - 被动回复必须在 5 秒内响应，超时无法回复（如果 AI 响应慢，需要先回复「正在思考...」然后异步发送结果）
+> - 如果使用本地 Ollama 模型，注意响应时间可能超过 5 秒限制
+
+处理 5 秒超时的推荐方案：
+
+```yaml
+# wecom.yaml 中添加
+settings:
+  async_reply: true              # 启用异步回复
+  thinking_message: "🤔 正在思考中，请稍等..."  # 先发占位消息
+  thinking_timeout: 5000         # 5秒未完成就先发占位
+```
+
+## 方案 3：飞书机器人集成
+
+飞书的 API 设计最规范，文档最好，技术团队用起来最舒服。
+
+### 第 1 步：创建飞书应用
+
+1. 登录 [飞书开放平台](https://open.feishu.cn)
+2. 创建企业自建应用
+3. 添加「机器人」能力
+4. 记下 **App ID** 和 **App Secret**
+5. 在「事件订阅」中配置请求地址
+
+### 第 2 步：配置权限
+
+在飞书开放平台 → 权限管理，申请以下权限：
+
+- `im:message` — 获取与发送消息
+- `im:message.group_at_msg` — 接收群组中 @机器人的消息
+- `im:chat` — 获取群组信息
+- `contact:user.base` — 获取用户基本信息
+
+### 第 3 步：配置 Hermes 飞书连接器
+
+```yaml
+# ~/.hermes/connectors/feishu.yaml
+connector:
+  type: feishu
+  app_id: "YOUR_APP_ID"
+  app_secret: "YOUR_APP_SECRET"
+  verification_token: "YOUR_VERIFICATION_TOKEN"
+  encrypt_key: "YOUR_ENCRYPT_KEY"         # 可选，但推荐启用
+  webhook_port: 3004
+
+settings:
+  reply_to_groups: true
+  reply_to_private: true
+  at_trigger_only: true           # 群里只回复 @机器人 的消息
+  reply_in_thread: true           # 在消息话题中回复（保持群消息整洁）
+  card_reply: true                # 使用卡片格式回复（更美观）
+  max_message_length: 30000
+```
+
+### 第 4 步：启动连接器
+
+```bash
+hermes connect feishu
+```
+
+预期输出：
+
+```
+✅ 飞书连接器已启动
+🐦 应用: HermesBot
+🔗 事件回调: http://localhost:3004/webhook/feishu
+📢 等待被添加到群组...
+```
+
+### 飞书卡片消息（推荐）
+
+飞书支持富文本卡片消息，比纯文本好看得多：
+
+```yaml
+# 在 feishu.yaml 中启用
+settings:
+  card_reply: true
+  card_template:
+    header_color: "orange"        # 匹配 Hermes 品牌色
+    header_title: "🤖 Hermes Agent"
+```
+
+Hermes 的回复会以卡片形式展示，包含标题、正文、代码块等富文本元素。
+
+## 同时接入多个平台
+
+Hermes 支持同时连接所有平台，共享对话上下文：
+
+```bash
+# 一键启动所有国内平台连接器
+hermes connect dingtalk wecom feishu
+```
+
+或者在主配置文件中设置：
+
+```yaml
+# ~/.hermes/config.yaml
+connectors:
+  - dingtalk
+  - wecom
+  - feishu
+  - telegram    # 也可以同时接国际平台
+```
+
+> **注意：** Hermes 的记忆系统是跨平台的。在钉钉上的对话上下文，在飞书上也能继续。
+
+## 内网穿透方案对比
+
+三个平台都需要一个公网 URL 来接收回调消息。以下是国内常用的内网穿透工具：
+
+| 工具 | 免费额度 | 速度 | 稳定性 | 推荐场景 |
+|------|---------|------|--------|---------|
+| **natapp** | 免费隧道 | ⭐⭐⭐⭐ | ⭐⭐⭐ | 开发测试 |
+| **cpolar** | 免费计划 | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | 开发测试 |
+| **ngrok** | 免费计划 | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | 国外服务器 |
+| **frp（自建）** | 完全免费 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | 生产环境 |
+
+**生产环境推荐：** 使用自建的 frp 或者直接部署在有公网 IP 的服务器上（参考 [VPS 部署指南](/zh/guides/deployment/vps-setup)）。
+
+## 常见问题排查
+
+### 回调验证失败
+
+**Q: 配置回调地址后，平台验证不通过？**
+
+A: 最常见的原因：
+
+1. **URL 不是 HTTPS** — 三个平台都要求 HTTPS
+2. **Token 不匹配** — 仔细检查 Token 和 EncodingAESKey
+3. **防火墙拦截** — 确保端口（3002/3003/3004）已开放
+4. **内网穿透不稳定** — 换一个穿透工具试试
+
+```bash
+# 快速检查你的回调地址是否可达
+curl -I https://your-domain.com/webhook/dingtalk
+# 应该返回 200 OK
+```
+
+### 机器人不回复
+
+**Q: 在群里 @了机器人但没反应？**
+
+检查清单：
+
+1. Hermes 连接器是否在运行？`hermes status`
+2. 是否开启了 `at_trigger_only`？确保你 @了机器人
+3. 查看日志：`tail -f ~/.hermes/logs/connector.log`
+4. 检查平台后台的消息推送记录
+
+### 企业微信 5 秒超时
+
+**Q: 收到「该消息无法回复」的提示？**
+
+A: 企业微信被动回复有 5 秒超时限制。确保配置了异步回复：
+
+```yaml
+settings:
+  async_reply: true
+  thinking_message: "🤔 正在思考..."
+```
+
+### 消息乱码
+
+**Q: 收到的回复是乱码或 HTML 标签？**
+
+A: 检查消息格式设置：
+
+```yaml
+settings:
+  message_type: "text"     # 改为 text 试试
+  # 或者确保 markdown 格式被正确支持
+```
+
+## 安全建议
+
+在公司环境中使用 AI 机器人，安全不可忽视：
+
+1. **权限最小化** — 只申请必要的 API 权限
+2. **IP 白名单** — 在平台后台设置回调 IP 白名单
+3. **消息加密** — 启用 EncodingAESKey / EncryptKey
+4. **日志审计** — 定期检查 `~/.hermes/logs/` 中的对话记录
+5. **敏感信息过滤** — 配置 Hermes 不处理包含密码、密钥等敏感内容的消息
+
+> 完整安全方案请参考 [安全加固清单](/zh/guides/security/hardening-checklist)。
+
+## 下一步
+
+你的 AI 助手现在已经可以在国内主流办公平台上使用了！继续探索：
+
+- **[10 分钟搞定 Telegram AI 助手](/zh/tutorials/messaging/telegram-bot-setup)** — 同时接入国际平台
+- **[定时任务：让 AI 每天自动发日报](/zh/tutorials/automation/daily-report-system)** — 搭配钉钉/飞书自动推送
+- **[多平台网关架构详解](/zh/tutorials/messaging/multi-platform-gateway)** — 一套系统管理所有平台
+
+---
+
+*最后更新：2026年4月18日 · 测试环境：Hermes Agent v0.8 + 企业微信 API v2 + 钉钉开放平台 v2 + 飞书开放平台 v6*

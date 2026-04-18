@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { setRequestLocale } from 'next-intl/server';
 import { buildPageMetadata } from '@/lib/seo/metadata';
 import styles from '../static.module.css';
 
@@ -21,7 +20,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function AboutPage({ params }: Props) {
   const { locale } = await params;
-  setRequestLocale(locale);
   const isZh = locale === 'zh';
 
   return (

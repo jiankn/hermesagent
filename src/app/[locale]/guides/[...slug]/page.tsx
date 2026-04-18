@@ -1,4 +1,3 @@
-import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import DifficultyBadge from '@/components/ui/DifficultyBadge/DifficultyBadge';
@@ -63,7 +62,7 @@ export default async function GuideArticlePage({ params }: Props) {
   const { locale, slug } = await params;
   const article = getArticleBySlug('guides', slug, locale);
 
-  if (!article) notFound();
+  if (!article) return <div>Article not found</div>;
 
   const isZh = locale === 'zh';
   const title = isZh ? article.meta.titleZh : article.meta.title;

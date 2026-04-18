@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
-import { setRequestLocale } from 'next-intl/server';
-import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import Navbar from '@/components/layout/Navbar/Navbar';
 import Footer from '@/components/layout/Footer/Footer';
@@ -34,25 +32,21 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 export default async function LocaleLayout({ children, params }: Props) {
+  // In output:'export' mode, locale is always valid (determined by generateStaticParams)
   const { locale } = await params;
-
-  if (!routing.locales.includes(locale as 'en' | 'zh')) {
-    notFound();
-  }
-
-  setRequestLocale(locale);
+  const validLocale = routing.locales.includes(locale as 'en' | 'zh') ? locale : 'en';
 
   let messages;
   try {
-    messages = (await import(`../../../messages/${locale}.json`)).default;
+    messages = (await import(`../../../messages/${validLocale}.json`)).default;
   } catch {
-    notFound();
+    messages = (await import(`../../../messages/en.json`)).default;
   }
 
   return (
-    <html lang={locale}>
+    <html lang={validLocale}>
       <body>
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider locale={validLocale} messages={messages}>
           <Navbar />
           <main style={{ paddingTop: 'var(--navbar-height)' }}>
             {children}
@@ -63,3 +57,4 @@ export default async function LocaleLayout({ children, params }: Props) {
     </html>
   );
 }
+
