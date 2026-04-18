@@ -6,7 +6,7 @@ const root = process.cwd();
 const baseUrl = 'https://hermesagent.sbs';
 const locales = ['en', 'zh'];
 const contentTypes = ['tutorials', 'guides', 'blog'];
-const staticPages = ['', '/tutorials', '/guides', '/blog', '/learning-path', '/faq', '/about', '/contact', '/privacy', '/terms'];
+const staticPages = ['', '/tutorials', '/guides', '/resources', '/blog', '/learning-path', '/faq', '/about', '/contact', '/privacy', '/terms'];
 
 function xmlEscape(value) {
   return String(value)

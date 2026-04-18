@@ -1,0 +1,124 @@
+---
+title: "Day 6: Scheduled Workflows (Cron & CI/CD)"
+titleZh: "Day 6: 自动化引擎 - 让它在你睡觉时工作"
+slug: "day-6-automation"
+description: "Turn one repeated task into a scheduled Hermes workflow with retry, review, and delivery rules."
+descriptionZh: "把一个重复任务变成可调度的 Hermes 工作流，带重试、复查和投递规则。"
+author: "HermesAgent Community"
+publishedAt: "2026-04-18"
+updatedAt: "2026-04-18"
+category: "bootcamp"
+tags: ["automation", "cron", "ci-cd", "scheduling", "intermediate"]
+difficulty: "intermediate"
+readingTime: 15
+series: "7-day-bootcamp"
+seriesOrder: 6
+featured: true
+---
+## Automation starts when the second run is cheaper than the first
+
+A scheduled agent workflow should not be a prompt taped to cron. It needs inputs, retries, logs, and a delivery rule that says where the final artifact goes.
+
+Today you turn one repeated job into a dependable workflow: collect signals, summarize the useful changes, and deliver the result without waking you up.
+
+![Diagram of a Hermes Agent scheduled workflow with retries and logs](/images/bootcamp/day-6-automation.svg)
+
+## What you will have working today
+
+- One cron-ready workflow with a clear trigger and output artifact.
+- A retry policy that does not duplicate external actions.
+- A morning digest or maintenance report delivered to a chosen channel.
+
+## Why this step matters
+
+Automation saves time only when failures are boring. If every failed run requires detective work, the workflow becomes another thing to babysit.
+
+The clean pattern is collect first, summarize second, deliver last. That separation lets you retry delivery without re-querying every source or regenerating a different answer.
+
+## Hands-on workflow
+
+1. Choose one repeated task that is frequent, low-risk, and easy to review.
+2. Define the input window and write raw collected data to a stable artifact.
+3. Ask Hermes to summarize from that artifact, not from live systems directly.
+4. Deliver the final output to chat, email, or a file.
+5. Log success, failure, duration, and the artifact path.
+
+## Copy-ready commands or config
+
+```cron
+0 8 * * 1-5 cd /opt/hermes-workflows && npm run daily-digest >> logs/daily-digest.log 2>&1
+```
+
+## Implementation notes
+
+Automation should make the second run cheaper than the first. If every scheduled job requires manual cleanup, it has not become automation; it has become a calendar reminder with extra steps. Start with workflows that are frequent, low-risk, and easy to review.
+
+Separate collection, reasoning, and delivery. Collection writes a raw artifact. Reasoning reads that artifact and creates a summary. Delivery sends or stores the final output. This separation lets you retry a failed delivery without collecting different data or generating a different answer.
+
+Every scheduled workflow needs a boring failure mode. The log should say when it ran, what input window it used, where artifacts were written, how long it took, and whether delivery succeeded. The goal is not zero failures; the goal is failures that are obvious.
+
+### Handoff artifact
+
+Before leaving this lesson, keep a handoff artifact that another teammate could understand without reading the chat transcript. It does not need to be long, but it must connect Trigger, Input artifact, Retry policy, Delivery. If any part exists only in your memory, the workflow is still fragile.
+
+The value of the artifact is lower restart cost. When you return tomorrow, you should not have to ask what was configured yesterday. You should open the note and see the inputs, boundaries, commands, logs, and review items immediately.
+
+Treat the artifact as the input to later lessons. Day 2 reads the permission boundary from day 1, day 6 depends on the tool and data contracts from earlier days, and day 7 uses these small artifacts as handoff material for specialist agents.
+
+```yaml
+lesson: "day-6-automation"
+owner: "your name or team"
+inputs: ["files, messages, or APIs used in this lesson"]
+permissions: ["read-only", "approval-required writes"]
+outputs: ["saved note, log, config, or result file"]
+review: ["items to check before the next lesson"]
+```
+
+### Upgrade path
+
+Do not rush to turn this lesson into platform code. First make it stable as a Markdown note, JSON file, log entry, or small script. A low-tech artifact is easier to inspect, easier to share, and easier to roll back when the workflow is still young.
+
+After the workflow produces reviewable results three times in a row, promote it into a template, skill, or scheduled job. The order matters: prove the workflow deserves reuse before productizing the mechanism around it.
+
+If the artifact is hard to write, the problem is usually not documentation. It usually means the boundary is still fuzzy. Return to the decision list and make the input, permission, output, and owner concrete before moving to the next day.
+
+### Decisions to write down
+
+- What trigger starts the workflow?
+- Where is the raw input artifact stored?
+- Which steps are safe to retry automatically?
+- Who receives the output and who owns failures?
+
+### Review drill
+
+1. Run the workflow manually with a narrow input window.
+2. Force a delivery failure and confirm no duplicate external message is sent.
+3. Rerun from the saved artifact instead of collecting fresh data.
+4. Read the log and confirm a teammate could debug it.
+
+### What to measure
+
+- Manual minutes saved after reviewing the output.
+- Number of successful reruns from saved artifacts.
+- Failure rate and average time to understand the failure.
+
+## Acceptance checklist
+
+- The workflow can be rerun without sending duplicate messages.
+- Raw input and final output are both saved.
+- Failures are visible in logs with enough context to debug.
+
+## Common failure modes
+
+- Letting the send step regenerate the summary after a delivery failure.
+- Scheduling high-risk write actions before the manual version is trusted.
+- Using “every minute” schedules for workflows that humans review once a day.
+
+## Next step
+
+- **[Day 7: Multi-Agent Orchestration](/en/tutorials/bootcamp/day-7-multi-agent)** - split bigger work across agents.
+- **[5 AI Workflow Automation Recipes](/en/guides/resources/automation-recipes)** - choose your next automated workflow.
+
+---
+
+*Last updated: April 18, 2026 · Hermes Agent v0.8 content track*

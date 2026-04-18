@@ -35,6 +35,10 @@ export function renderMarkdown(content: string): string {
     return `<h2 id="${id}">${text}</h2>`;
   });
 
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (_, alt, src) => {
+    const safeAlt = String(alt).replace(/"/g, '&quot;');
+    return `<figure class="article-figure"><img src="${src}" alt="${safeAlt}" loading="lazy" decoding="async"><figcaption>${alt}</figcaption></figure>`;
+  });
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
   html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
   html = html.replace(/`([^`]+)`/g, '<code>$1</code>');

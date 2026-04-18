@@ -26,7 +26,7 @@ export default function Footer() {
           <h4>{t('nav.tutorials')}</h4>
           <ul>
             <li><Link href={`/${locale}/tutorials`}>{t('nav.tutorials')}</Link></li>
-            <li><Link href={`/${locale}/guides`}>{t('nav.guides')}</Link></li>
+            <li><Link href={`/${locale}/resources`}>{t('nav.resources')}</Link></li>
             <li><Link href={`/${locale}/blog`}>{t('nav.blog')}</Link></li>
             <li><Link href={`/${locale}/learning-path`}>{t('nav.learningPath')}</Link></li>
           </ul>

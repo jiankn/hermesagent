@@ -123,6 +123,29 @@
 
 .articleContent strong { color: var(--text-primary); }
 
+.articleContent :global(.article-figure) {
+  margin: var(--space-xl) 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #fff;
+  box-shadow: var(--shadow-card);
+}
+
+.articleContent :global(.article-figure img) {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.articleContent :global(.article-figure figcaption) {
+  padding: var(--space-sm) var(--space-md);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
 /* Sidebar */
 .sidebar {
   position: sticky;

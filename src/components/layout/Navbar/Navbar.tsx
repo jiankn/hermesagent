@@ -28,7 +28,7 @@ export default function Navbar() {
 
   const navItems = [
     { href: `/${locale}/tutorials`, label: t('tutorials') },
-    { href: `/${locale}/guides`, label: t('guides') },
+    { href: `/${locale}/resources`, label: t('resources') },
     { href: `/${locale}/blog`, label: t('blog') },
     { href: `/${locale}/learning-path`, label: t('learningPath') },
   ];

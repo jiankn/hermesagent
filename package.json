@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "eslint",
     "pages:build": "npm run build",
+    "generate:prd-content": "node scripts/generate-prd-content.mjs",
     "audit:content": "node scripts/audit-content.mjs",
     "check:indexing": "node scripts/check-indexing.mjs"
   },

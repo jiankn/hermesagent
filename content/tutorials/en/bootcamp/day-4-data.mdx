@@ -1,0 +1,129 @@
+---
+title: "Day 4: Data Processing (API & JSON)"
+titleZh: "Day 4: 赋予双手 - 处理文件与数据"
+slug: "day-4-data"
+description: "Let Hermes process files, JSON, and CSV data with explicit input contracts and reviewable output artifacts."
+descriptionZh: "让 Hermes 处理文件、JSON 和 CSV，同时用输入契约和可复查产物控制质量。"
+author: "HermesAgent Community"
+publishedAt: "2026-04-18"
+updatedAt: "2026-04-18"
+category: "bootcamp"
+tags: ["data", "csv", "json", "files", "intermediate"]
+difficulty: "intermediate"
+readingTime: 14
+series: "7-day-bootcamp"
+seriesOrder: 4
+featured: true
+---
+## Useful agents turn messy inputs into reviewable artifacts
+
+Chat is only the beginning. The moment Hermes can inspect a file, normalize rows, call an API, and hand you back a clean artifact, it starts feeling like a worker instead of a chatbot.
+
+The rule for day four is simple: never ask an agent to “handle the data” without first defining what the input is, what output shape you expect, and how you will review it.
+
+![Diagram of the Hermes Agent data processing workspace](/images/bootcamp/day-4-data.svg)
+
+## What you will have working today
+
+- A small data workspace with raw input, normalized output, and notes.
+- A JSON contract that tells Hermes exactly what to produce.
+- A review step where you compare the final artifact against the original input.
+
+## Why this step matters
+
+Data tasks fail quietly when the output format is vague. A polished paragraph can hide missing rows, changed units, or invented fields.
+
+Structured output gives you leverage. You can diff it, validate it, feed it into another tool, and ask Hermes to explain only the rows that changed.
+
+## Hands-on workflow
+
+1. Put raw files in a dedicated input folder and keep originals untouched.
+2. Define the output schema before asking Hermes to transform anything.
+3. Run the transformation on a small sample first.
+4. Validate counts, column names, and suspicious values.
+5. Save the final artifact with a timestamp and short explanation.
+
+## Copy-ready commands or config
+
+```json
+{
+  "source": "leads.csv",
+  "output": "qualified-leads.json",
+  "fields": ["company", "contact", "priority", "reason"],
+  "rules": ["do not invent missing emails", "mark uncertain rows"]
+}
+```
+
+## Implementation notes
+
+Data work is where agents become useful and dangerous at the same time. A fluent summary can hide missing rows, changed units, or invented fields. The antidote is a workspace that preserves raw input, declares the output schema, and keeps review artifacts next to the result.
+
+Do not start with the largest file. Pick a representative sample that includes normal rows, missing values, odd formatting, and at least one edge case. A sample run lets you fix the prompt, schema, and validation rules before the full batch creates noise.
+
+Hermes should explain uncertainty as data, not as an apology. Add fields such as confidence, reason, and needs_review when the transformation involves judgment. That turns ambiguity into something you can sort, filter, and audit.
+
+### Handoff artifact
+
+Before leaving this lesson, keep a handoff artifact that another teammate could understand without reading the chat transcript. It does not need to be long, but it must connect Raw input, Schema, Transform, Review artifact. If any part exists only in your memory, the workflow is still fragile.
+
+The value of the artifact is lower restart cost. When you return tomorrow, you should not have to ask what was configured yesterday. You should open the note and see the inputs, boundaries, commands, logs, and review items immediately.
+
+Treat the artifact as the input to later lessons. Day 2 reads the permission boundary from day 1, day 6 depends on the tool and data contracts from earlier days, and day 7 uses these small artifacts as handoff material for specialist agents.
+
+```yaml
+lesson: "day-4-data"
+owner: "your name or team"
+inputs: ["files, messages, or APIs used in this lesson"]
+permissions: ["read-only", "approval-required writes"]
+outputs: ["saved note, log, config, or result file"]
+review: ["items to check before the next lesson"]
+```
+
+### Upgrade path
+
+Do not rush to turn this lesson into platform code. First make it stable as a Markdown note, JSON file, log entry, or small script. A low-tech artifact is easier to inspect, easier to share, and easier to roll back when the workflow is still young.
+
+After the workflow produces reviewable results three times in a row, promote it into a template, skill, or scheduled job. The order matters: prove the workflow deserves reuse before productizing the mechanism around it.
+
+If the artifact is hard to write, the problem is usually not documentation. It usually means the boundary is still fuzzy. Return to the decision list and make the input, permission, output, and owner concrete before moving to the next day.
+
+### Decisions to write down
+
+- What is the immutable raw input location?
+- Which fields are allowed in the output schema?
+- What validation should run before a result is trusted?
+- Which rows require human review before downstream use?
+
+### Review drill
+
+1. Run the transformation on five rows with known expected output.
+2. Compare row counts, required fields, and suspicious values.
+3. Ask Hermes to explain only the uncertain rows.
+4. Save raw input, output, validation notes, and prompt version together.
+
+### What to measure
+
+- Row count difference between input and output.
+- Number of records flagged for review.
+- Time saved after validation, not before validation.
+
+## Acceptance checklist
+
+- Raw files remain unchanged.
+- Output has a declared schema and can be validated.
+- Hermes explains uncertainty instead of hiding it.
+
+## Common failure modes
+
+- Letting the agent overwrite the only copy of a file.
+- Requesting a prose summary when you actually need structured data.
+- Skipping sample runs and discovering format errors after a full batch.
+
+## Next step
+
+- **[Day 5: Tool Calling & MCP](/en/tutorials/bootcamp/day-5-skills)** - connect data work to external tools.
+- **[Automation Recipes](/en/guides/resources/automation-recipes)** - reuse this pattern in repeatable workflows.
+
+---
+
+*Last updated: April 18, 2026 · Hermes Agent v0.8 content track*

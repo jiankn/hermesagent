@@ -7,13 +7,13 @@ import styles from './page.module.css';
 type Props = { params: Promise<{ locale: string }> };
 
 const days = [
-  { day: 1, titleEn: 'Meet Hermes', titleZh: '认识 Hermes', descEn: 'Install Hermes Agent, choose your AI model, and have your first conversation.', descZh: '安装 Hermes Agent，选择 AI 模型，进行你的第一次对话。', link: '/tutorials/getting-started/installation' },
-  { day: 2, titleEn: 'Efficient Dialogues', titleZh: '高效对话', descEn: 'Master slash commands, session management, and context compression.', descZh: '掌握斜杠命令、会话管理和上下文压缩。', link: '/tutorials/getting-started/cli-essentials' },
-  { day: 3, titleEn: 'Files & Code', titleZh: '文件与代码', descEn: 'Read/write files, run scripts, and generate code with Hermes.', descZh: '用 Hermes 读写文件、运行脚本和生成代码。', link: '/tutorials/getting-started/first-conversation' },
-  { day: 4, titleEn: 'Go Mobile', titleZh: '移动端接入', descEn: 'Set up the Telegram gateway for anywhere, anytime conversations.', descZh: '配置 Telegram 网关，随时随地对话。', link: '/tutorials/messaging/telegram-bot-setup' },
-  { day: 5, titleEn: 'Skills Mastery', titleZh: '技能精通', descEn: 'Browse, install, and create your own custom skills.', descZh: '浏览、安装和创建你的自定义技能。', link: '/tutorials/skills/install-community-skills' },
-  { day: 6, titleEn: 'Automation', titleZh: '自动化', descEn: 'Set up cron tasks, automated daily reports, and monitoring alerts.', descZh: '设置 Cron 任务、自动日报和监控告警。', link: '/tutorials/automation/cron-scheduling' },
-  { day: 7, titleEn: 'Multi-Agent', titleZh: '多 Agent 协作', descEn: 'Multiple profiles, bot-to-bot orchestration, and host scheduling.', descZh: '多 Profile、Agent 间协作和 Host 调度。', link: '/tutorials/advanced/multi-agent-orchestration' },
+  { day: 1, titleEn: 'Local Setup & Privacy', titleZh: '极简安装与隐私', descEn: 'Install Hermes Agent, choose a local-first setup, and complete the first useful conversation.', descZh: '跑起 Hermes Agent，选择本地优先配置，并完成第一次真正有用的对话。', link: '/tutorials/bootcamp/day-1-setup' },
+  { day: 2, titleEn: 'Context & Memory', titleZh: '上下文与记忆', descEn: 'Create an assistant profile, memory rules, and approval boundaries that survive restarts.', descZh: '建立助理档案、记忆规则和重启后仍然有效的审批边界。', link: '/tutorials/bootcamp/day-2-memory' },
+  { day: 3, titleEn: 'Team Integration', titleZh: '团队消息集成', descEn: 'Connect Hermes to a messaging channel with safe command boundaries.', descZh: '把 Hermes 接入消息渠道，同时保留清晰的命令和审批边界。', link: '/tutorials/bootcamp/day-3-integration' },
+  { day: 4, titleEn: 'Data Processing', titleZh: '文件与数据处理', descEn: 'Transform messy inputs into structured, reviewable artifacts.', descZh: '把杂乱输入变成可校验、可复查的结构化产物。', link: '/tutorials/bootcamp/day-4-data' },
+  { day: 5, titleEn: 'Tool Calling & MCP', titleZh: 'Tool Calling 与 MCP', descEn: 'Connect external tools through explicit contracts and safe permissions.', descZh: '通过清晰契约和安全权限接入外部工具。', link: '/tutorials/bootcamp/day-5-skills' },
+  { day: 6, titleEn: 'Scheduled Workflows', titleZh: '定时工作流', descEn: 'Turn repeated work into cron-ready workflows with inputs, retries, and logs.', descZh: '把重复任务变成带输入、重试和日志的定时工作流。', link: '/tutorials/bootcamp/day-6-automation' },
+  { day: 7, titleEn: 'Multi-Agent Orchestration', titleZh: '多 Agent 编排', descEn: 'Split larger work across specialist agents while keeping final review explicit.', descZh: '把大型任务拆给专门 Agent，同时保留明确的最终复核。', link: '/tutorials/bootcamp/day-7-multi-agent' },
 ];
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {

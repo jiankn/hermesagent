@@ -1,0 +1,130 @@
+---
+title: "Day 5: Tool Calling & MCP Integration"
+titleZh: "Day 5: 装备技能 - 安装社区超能力"
+slug: "day-5-skills"
+description: "Add practical skills and MCP-style tool contracts without turning Hermes into an uncontrolled shell."
+descriptionZh: "给 Hermes 增加实用技能和 MCP 工具契约，同时避免变成失控 Shell。"
+author: "HermesAgent Community"
+publishedAt: "2026-04-18"
+updatedAt: "2026-04-18"
+category: "bootcamp"
+tags: ["skills", "mcp", "tools", "integrations", "intermediate"]
+difficulty: "intermediate"
+readingTime: 14
+series: "7-day-bootcamp"
+seriesOrder: 5
+featured: true
+---
+## Tools are power only when the contract is visible
+
+A raw model can reason, draft, and summarize. A tool-using agent can fetch a pull request, search a knowledge base, read a calendar, and prepare a deployment checklist.
+
+The difference between useful and dangerous is the contract: what the tool does, which arguments it accepts, what permission it needs, and when Hermes must stop for approval.
+
+![Diagram of Hermes Agent skills, tool calling, and MCP permissions](/images/bootcamp/day-5-skills.svg)
+
+## What you will have working today
+
+- A shortlist of two or three high-value skills to install first.
+- A tool contract template for MCP or local integrations.
+- A safe test where Hermes calls a read-only tool and explains the result.
+
+## Why this step matters
+
+Tool sprawl kills trust. If Hermes can call anything at any time, every answer becomes harder to audit.
+
+Start with read-only tools because they create immediate value without risking external side effects. Then add write actions behind explicit approval.
+
+## Hands-on workflow
+
+1. Pick one information tool, one formatting tool, and one workflow tool.
+2. Document each tool with inputs, outputs, permission level, and failure modes.
+3. Install or expose the tool through the narrowest interface available.
+4. Run a read-only test and inspect the arguments Hermes sent.
+5. Add approval gates before enabling write actions.
+
+## Copy-ready commands or config
+
+```json
+{
+  "tool": "github_fetch_pr",
+  "permission": "read-only",
+  "inputs": ["repo_full_name", "pr_number"],
+  "outputs": ["title", "status", "changed_files"],
+  "approvalRequired": false
+}
+```
+
+## Implementation notes
+
+A skill is not just a clever prompt. In a reliable Hermes workflow, a skill is a small contract: what input it accepts, what permission it needs, what output it returns, and what it must never do. The contract is what makes tool use reviewable.
+
+Install read-only skills before write-capable skills. Search, summarize, inspect repository, fetch issue, and read calendar are good early choices because the worst failure is usually noise. Sending messages, changing files, creating tickets, or spending money should arrive later with approval gates.
+
+MCP servers are powerful because they standardize tool access, but they also widen the boundary of the assistant. Keep a short inventory of every server, token, permission scope, and owner. If nobody owns a tool, Hermes should not depend on it for production work.
+
+### Handoff artifact
+
+Before leaving this lesson, keep a handoff artifact that another teammate could understand without reading the chat transcript. It does not need to be long, but it must connect Read-only first, MCP server, Tool call log, Rollback rule. If any part exists only in your memory, the workflow is still fragile.
+
+The value of the artifact is lower restart cost. When you return tomorrow, you should not have to ask what was configured yesterday. You should open the note and see the inputs, boundaries, commands, logs, and review items immediately.
+
+Treat the artifact as the input to later lessons. Day 2 reads the permission boundary from day 1, day 6 depends on the tool and data contracts from earlier days, and day 7 uses these small artifacts as handoff material for specialist agents.
+
+```yaml
+lesson: "day-5-skills"
+owner: "your name or team"
+inputs: ["files, messages, or APIs used in this lesson"]
+permissions: ["read-only", "approval-required writes"]
+outputs: ["saved note, log, config, or result file"]
+review: ["items to check before the next lesson"]
+```
+
+### Upgrade path
+
+Do not rush to turn this lesson into platform code. First make it stable as a Markdown note, JSON file, log entry, or small script. A low-tech artifact is easier to inspect, easier to share, and easier to roll back when the workflow is still young.
+
+After the workflow produces reviewable results three times in a row, promote it into a template, skill, or scheduled job. The order matters: prove the workflow deserves reuse before productizing the mechanism around it.
+
+If the artifact is hard to write, the problem is usually not documentation. It usually means the boundary is still fuzzy. Return to the decision list and make the input, permission, output, and owner concrete before moving to the next day.
+
+### Decisions to write down
+
+- Which skills are read-only and safe for daily use?
+- Which tools can mutate data or contact people?
+- Where are tool call logs stored?
+- Who owns each MCP server or external integration?
+
+### Review drill
+
+1. Run one read-only skill and inspect the input/output contract.
+2. Trigger a permission-denied case and confirm the error is clear.
+3. Add one approval-required action but keep it disabled by default.
+4. Review the tool inventory and remove anything without an owner.
+
+### What to measure
+
+- Number of useful repeated tasks covered by skills.
+- Number of tools with explicit permission scopes.
+- Time from failed tool call to understandable diagnosis.
+
+## Acceptance checklist
+
+- Every installed tool has a written contract.
+- Read-only tools work before write tools are enabled.
+- Hermes logs tool name, arguments, and outcome.
+
+## Common failure modes
+
+- Installing a large bundle of tools without knowing which workflow needs them.
+- Granting broad service-account permissions for one narrow task.
+- Letting tool failures turn into confident natural-language guesses.
+
+## Next step
+
+- **[Day 6: Scheduled Workflows](/en/tutorials/bootcamp/day-6-automation)** - run useful tool workflows on a schedule.
+- **[Top 10 Hermes Skills](/en/guides/resources/best-skills)** - pick the first skills deliberately.
+
+---
+
+*Last updated: April 18, 2026 · Hermes Agent v0.8 content track*

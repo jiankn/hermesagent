@@ -1,0 +1,71 @@
+---
+title: "5 AI Workflow Automation Recipes"
+titleZh: "5 个拿来就用的 AI 自动化脚本"
+slug: "automation-recipes"
+description: "Five repeatable Hermes automation recipes for reports, triage, content operations, dependency review, and customer feedback."
+descriptionZh: "五个可复用 Hermes 自动化方案，覆盖报告、分诊、内容运营、依赖审查和用户反馈。"
+author: "HermesAgent Community"
+publishedAt: "2026-04-18"
+updatedAt: "2026-04-18"
+category: "resources"
+tags: ["automation", "recipes", "workflows", "resources"]
+difficulty: "intermediate"
+readingTime: 13
+featured: true
+---
+## 方案比灵感可靠，因为它能重复运行
+
+一个好的自动化方案必须有触发器、输入契约、输出产物、owner 和回滚路径。缺少这些，它就只是一句你希望明天还管用的 prompt。
+
+下面五个方案适合小团队直接复制，再逐步演化成更完整的自动化平台。
+
+## 今天你会做成什么
+
+- 五个具备生产形态的工作流模板。
+- 一套统一契约：触发器、输入、审批和输出。
+- 一条判断实验何时可以晋升为日常流程的规则。
+
+## 为什么这一步重要
+
+大多数团队缺的不是自动化灵感，而是把重复工作变成可复查、可衡量流程的安全形状。
+
+Hermes 最适合放在采集和投递之间：基于准备好的输入推理，产出人类可以检查的制品。
+
+## 实操流程
+
+1. 自动晨报：采集 issue、日历、指标，生成一屏读完的早报。
+2. 事故分诊：合并日志和部署历史，判断严重级别，建议第一条 runbook。
+3. 内容运营：把笔记变成大纲、草稿、SEO 元数据和发布清单。
+4. 依赖审查：总结包升级、changelog、风险和测试命令。
+5. 反馈聚类：按主题归类用户评论，并输出下一步建议。
+
+## 可直接复制的命令或配置
+
+```yaml
+trigger: "weekday 08:00"
+input: "collected-signals.json"
+output: "daily-digest.md"
+approval: "required before external send"
+owner: "ops"
+```
+
+## 验收清单
+
+- 每个方案都保存总结前输入。
+- 所有对外动作都有审批。
+- 成功指标看节省时间和复查质量，而不只看执行次数。
+
+## 常见坑
+
+- 自动化一个没人手动跑通过的流程。
+- 在同一步里既改数据又通知外部人员。
+- 产物噪音变高后还不下线方案。
+
+## 下一步
+
+- **[Day 6：自动化引擎](/zh/tutorials/bootcamp/day-6-automation)** - 安全调度一个方案。
+- **[第 7 天：多 Agent 编排](/zh/tutorials/bootcamp/day-7-multi-agent)** - 把事故处理拆给专门的 Agent。
+
+---
+
+*最后更新：2026 年 4 月 18 日 · Hermes Agent v0.8 内容路线*

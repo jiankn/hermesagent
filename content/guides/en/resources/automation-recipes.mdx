@@ -1,0 +1,71 @@
+---
+title: "5 AI Workflow Automation Recipes"
+titleZh: "5 个拿来就用的 AI 自动化脚本"
+slug: "automation-recipes"
+description: "Five repeatable Hermes automation recipes for reports, triage, content operations, dependency review, and customer feedback."
+descriptionZh: "五个可复用 Hermes 自动化方案，覆盖报告、分诊、内容运营、依赖审查和用户反馈。"
+author: "HermesAgent Community"
+publishedAt: "2026-04-18"
+updatedAt: "2026-04-18"
+category: "resources"
+tags: ["automation", "recipes", "workflows", "resources"]
+difficulty: "intermediate"
+readingTime: 13
+featured: true
+---
+## Recipes beat inspiration because they can be rerun
+
+A good automation recipe has a trigger, input contract, output artifact, owner, and rollback path. Without those pieces, the workflow is just a prompt you hope will behave tomorrow.
+
+These five recipes are designed to be copied in small teams before you build a larger automation platform.
+
+## What you will have working today
+
+- Five production-shaped workflows you can adapt.
+- A common contract for triggers, inputs, approvals, and outputs.
+- A way to decide which workflow should graduate from experiment to routine.
+
+## Why this step matters
+
+Most teams do not need more automation ideas. They need safer shapes for turning repeated work into reviewable, measurable routines.
+
+Hermes is strongest when it sits between collection and delivery: it reasons over prepared inputs and produces an artifact a human can inspect.
+
+## Hands-on workflow
+
+1. Daily digest: collect issues, calendar events, and metrics, then send a one-screen morning brief.
+2. Incident triage: merge logs and deploy history, classify severity, and suggest the first runbook.
+3. Content operations: turn notes into outline, draft, SEO metadata, and publishing checklist.
+4. Dependency review: summarize package updates, changelogs, risk, and test commands.
+5. Feedback clustering: group customer comments by theme and produce next-action recommendations.
+
+## Copy-ready commands or config
+
+```yaml
+trigger: "weekday 08:00"
+input: "collected-signals.json"
+output: "daily-digest.md"
+approval: "required before external send"
+owner: "ops"
+```
+
+## Acceptance checklist
+
+- Every recipe stores pre-summary input.
+- Anything external-facing has an approval step.
+- Success is measured by time saved and review quality, not execution count alone.
+
+## Common failure modes
+
+- Automating a workflow nobody has run manually.
+- Letting one recipe mutate data and notify people in the same step.
+- Failing to retire recipes that produce noisy output.
+
+## Next step
+
+- **[Day 6: Scheduled Workflows](/en/tutorials/bootcamp/day-6-automation)** - schedule one recipe safely.
+- **[Day 7: Multi-Agent Orchestration](/en/tutorials/bootcamp/day-7-multi-agent)** - assign incident work to specialist agents.
+
+---
+
+*Last updated: April 18, 2026 · Hermes Agent v0.8 content track*

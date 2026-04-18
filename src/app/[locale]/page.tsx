@@ -76,6 +76,33 @@ export default async function HomePage({ params }: Props) {
       readingTime: 12,
       tags: ['bootcamp', 'data'],
     },
+    {
+      href: `/${locale}/tutorials/bootcamp/day-5-skills`,
+      icon: '🧩',
+      title: isZh ? 'Day 5: 装备技能 —— Tool Calling 与 MCP' : 'Day 5: Tool Calling & MCP',
+      description: isZh ? '用清晰的工具契约，把 Hermes 接到搜索、仓库、日历和外部系统。' : 'Connect Hermes to tools, MCP servers, and reusable skills with visible contracts.',
+      difficulty: 'intermediate' as const,
+      readingTime: 13,
+      tags: ['bootcamp', 'skills'],
+    },
+    {
+      href: `/${locale}/tutorials/bootcamp/day-6-automation`,
+      icon: '⏱️',
+      title: isZh ? 'Day 6: 自动化引擎 —— 定时工作流' : 'Day 6: Scheduled Workflows',
+      description: isZh ? '把一次性任务变成可重跑、可审计、失败也容易排查的自动化流程。' : 'Turn repeated work into scheduled workflows with inputs, retries, logs, and delivery rules.',
+      difficulty: 'advanced' as const,
+      readingTime: 14,
+      tags: ['bootcamp', 'automation'],
+    },
+    {
+      href: `/${locale}/tutorials/bootcamp/day-7-multi-agent`,
+      icon: '🧭',
+      title: isZh ? 'Day 7: 终极形态 —— 多 Agent 编排' : 'Day 7: Multi-Agent Orchestration',
+      description: isZh ? '把研究、写作、测试和复核拆给不同 Agent，由主控完成最终合并。' : 'Split bigger work across specialist agents while keeping the final decision explicit.',
+      difficulty: 'advanced' as const,
+      readingTime: 15,
+      tags: ['bootcamp', 'multi-agent'],
+    },
   ];
 
   return (
@@ -93,7 +120,7 @@ export default async function HomePage({ params }: Props) {
           <Link href={`/${locale}/tutorials`} className={styles.btnPrimary}>
             ⚡ {t('hero.ctaPrimary')}
           </Link>
-          <Link href={`/${locale}/learning-path`} className={styles.btnSecondary}>
+          <Link href={`/${locale}/resources`} className={styles.btnSecondary}>
             📚 {t('hero.ctaSecondary')}
           </Link>
         </div>

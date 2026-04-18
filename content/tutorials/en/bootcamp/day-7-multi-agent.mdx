@@ -1,0 +1,129 @@
+---
+title: "Day 7: Multi-Agent Orchestration (Swarm)"
+titleZh: "Day 7: 终极形态 - 组建你的 AI 团队"
+slug: "day-7-multi-agent"
+description: "Coordinate specialist Hermes agents for research, drafting, review, and delivery without losing control of the final decision."
+descriptionZh: "协调研究、写作、复核和交付型 Hermes Agent，同时保留最终决策权。"
+author: "HermesAgent Community"
+publishedAt: "2026-04-18"
+updatedAt: "2026-04-18"
+category: "bootcamp"
+tags: ["multi-agent", "orchestration", "swarm", "advanced"]
+difficulty: "advanced"
+readingTime: 15
+series: "7-day-bootcamp"
+seriesOrder: 7
+featured: true
+---
+## A team of agents needs a manager, not a megaphone
+
+Multi-agent work is not about making five models talk at once for spectacle. It is about splitting responsibility so each worker has a narrow job, bounded context, and a clear handoff.
+
+The human remains the owner of the outcome. Hermes can delegate research, drafting, testing, and review, but the final merge should be explicit.
+
+![Diagram of Hermes Agent multi-agent handoffs and final synthesis](/images/bootcamp/day-7-multi-agent.svg)
+
+## What you will have working today
+
+- A simple multi-agent plan with researcher, writer, reviewer, and operator roles.
+- A handoff contract that keeps outputs comparable.
+- A final review step where the host agent synthesizes instead of blindly concatenating.
+
+## Why this step matters
+
+Parallelism helps only when tasks are genuinely independent. Delegating the next blocking step creates waiting, confusion, and duplicated work.
+
+Good orchestration starts with ownership: who reads sources, who drafts, who checks risk, and who turns the work into one final artifact.
+
+## Hands-on workflow
+
+1. Define the outcome and the decision criteria before spawning agents.
+2. Split work by responsibility, not by arbitrary file count.
+3. Give each worker a short contract: inputs, output shape, constraints, and deadline.
+4. Collect outputs and ask the host agent to compare conflicts.
+5. Approve the final artifact manually before publishing or executing high-impact changes.
+
+## Copy-ready commands or config
+
+```json
+{
+  "goal": "prepare a competitive analysis brief",
+  "agents": ["researcher", "writer", "risk-reviewer"],
+  "handoff": "bullets with sources, assumptions, and open questions",
+  "finalOwner": "human"
+}
+```
+
+## Implementation notes
+
+Multi-agent work only helps when the split is real. If two workers read the same sources, answer the same question, and produce incompatible formats, the host agent has created more coordination work. Split by responsibility: research, draft, test, review, or operate.
+
+The host remains accountable for the final result. Sub-agents can search, summarize, write, and verify, but they should not publish or execute high-impact changes directly. The final synthesis step should compare conflicts, name assumptions, and ask for human approval when needed.
+
+A good handoff contract is short. Give each worker the input, the output shape, the constraints, and the deadline. Require assumptions and open questions. This makes the outputs comparable and prevents the final answer from becoming a pasted stack of unrelated notes.
+
+### Handoff artifact
+
+Before leaving this lesson, keep a handoff artifact that another teammate could understand without reading the chat transcript. It does not need to be long, but it must connect Plan, Delegate, Compare, Synthesize. If any part exists only in your memory, the workflow is still fragile.
+
+The value of the artifact is lower restart cost. When you return tomorrow, you should not have to ask what was configured yesterday. You should open the note and see the inputs, boundaries, commands, logs, and review items immediately.
+
+Treat the artifact as the input to later lessons. Day 2 reads the permission boundary from day 1, day 6 depends on the tool and data contracts from earlier days, and day 7 uses these small artifacts as handoff material for specialist agents.
+
+```yaml
+lesson: "day-7-multi-agent"
+owner: "your name or team"
+inputs: ["files, messages, or APIs used in this lesson"]
+permissions: ["read-only", "approval-required writes"]
+outputs: ["saved note, log, config, or result file"]
+review: ["items to check before the next lesson"]
+```
+
+### Upgrade path
+
+Do not rush to turn this lesson into platform code. First make it stable as a Markdown note, JSON file, log entry, or small script. A low-tech artifact is easier to inspect, easier to share, and easier to roll back when the workflow is still young.
+
+After the workflow produces reviewable results three times in a row, promote it into a template, skill, or scheduled job. The order matters: prove the workflow deserves reuse before productizing the mechanism around it.
+
+If the artifact is hard to write, the problem is usually not documentation. It usually means the boundary is still fuzzy. Return to the decision list and make the input, permission, output, and owner concrete before moving to the next day.
+
+### Decisions to write down
+
+- Which parts of the task are genuinely independent?
+- What output format must every sub-agent use?
+- Which agent owns conflict resolution?
+- What actions remain human-only at the end?
+
+### Review drill
+
+1. Create a three-agent plan for one real but low-risk task.
+2. Give each agent a different responsibility and the same output shape.
+3. Compare the outputs for conflicts and missing assumptions.
+4. Write a final synthesis that chooses, rejects, or merges each recommendation.
+
+### What to measure
+
+- Wall-clock time saved without lowering review quality.
+- Number of duplicated findings across sub-agents.
+- Number of conflicts surfaced before final approval.
+
+## Acceptance checklist
+
+- Every sub-agent has a distinct responsibility.
+- Outputs include assumptions and open questions.
+- The final answer resolves conflicts instead of hiding them.
+
+## Common failure modes
+
+- Spawning agents before the goal is clear.
+- Delegating overlapping work and then trying to merge duplicates.
+- Letting a sub-agent publish directly without host review.
+
+## Next step
+
+- **[Top 10 Hermes Skills](/en/guides/resources/best-skills)** - extend the team with reusable skills.
+- **[Hermes vs OpenClaw](/en/guides/comparisons/hermes-vs-openclaw)** - see the strategic positioning.
+
+---
+
+*Last updated: April 18, 2026 · Hermes Agent v0.8 content track*

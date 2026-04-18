@@ -1,0 +1,127 @@
+---
+title: "Day 3: Team Integration (Slack & Discord)"
+titleZh: "Day 3: 触手可及 - 把它装进你的手机"
+slug: "day-3-integration"
+description: "Connect Hermes to a messaging channel, define safe command boundaries, and make the assistant available away from the terminal."
+descriptionZh: "把 Hermes 接入消息渠道，定义安全命令边界，让助理离开终端也能工作。"
+author: "HermesAgent Community"
+publishedAt: "2026-04-18"
+updatedAt: "2026-04-18"
+category: "bootcamp"
+tags: ["telegram", "slack", "discord", "messaging", "beginner"]
+difficulty: "beginner"
+readingTime: 12
+series: "7-day-bootcamp"
+seriesOrder: 3
+featured: true
+---
+## An assistant is useful when it lives where requests happen
+
+The terminal is great for setup, but most real requests arrive in chat: a quick question from your phone, a teammate dropping context into Slack, or a reminder you want handled later.
+
+Today you connect Hermes to a message channel while keeping the first integration intentionally narrow. Read-only and approval-based commands come first.
+
+![Diagram of a safe Hermes Agent messaging integration](/images/bootcamp/day-3-integration.svg)
+
+## What you will have working today
+
+- A messaging channel that can send a task to Hermes.
+- A command policy that separates safe requests from approval-required actions.
+- A mobile test where Hermes receives a message and replies with a useful summary.
+
+## Why this step matters
+
+Moving from terminal to chat changes the risk model. Chat is faster and more convenient, which also means accidental commands become easier to send.
+
+The right pattern is to expose a small set of clear intents: summarize, draft, search, queue, and ask for approval before anything mutates data or talks to external people.
+
+## Hands-on workflow
+
+1. Create a bot or webhook in the channel your team already uses.
+2. Store tokens in environment variables, never inside prompts or Markdown notes.
+3. Map incoming messages to a small set of allowed intents.
+4. Test a read-only request from your phone.
+5. Add an approval phrase for actions such as send, delete, deploy, or purchase.
+
+## Copy-ready commands or config
+
+```env
+HERMES_CHANNEL=telegram
+HERMES_BOT_TOKEN=replace-with-secret
+HERMES_ALLOWED_INTENTS=summarize,draft,search,queue
+HERMES_REQUIRE_APPROVAL=send,delete,deploy,purchase
+```
+
+## Implementation notes
+
+A chat integration should begin as a narrow gateway. It is tempting to make every message executable, but the first version should recognize only a few intents: summarize, draft, search, queue, and ask for approval. Narrow intent mapping makes the system easier to explain to teammates.
+
+The security model changes when Hermes leaves the terminal. Chat tools are convenient, public channels are noisy, and mobile keyboards make accidental commands more likely. Write a visible command policy before inviting other people into the channel.
+
+Logging is part of the user experience. When a teammate asks why Hermes replied a certain way, you need the incoming message, mapped intent, model response, and approval state. Without that trail, the bot feels magical until the first failure.
+
+### Handoff artifact
+
+Before leaving this lesson, keep a handoff artifact that another teammate could understand without reading the chat transcript. It does not need to be long, but it must connect Webhook, Intent map, Approval phrase, Audit log. If any part exists only in your memory, the workflow is still fragile.
+
+The value of the artifact is lower restart cost. When you return tomorrow, you should not have to ask what was configured yesterday. You should open the note and see the inputs, boundaries, commands, logs, and review items immediately.
+
+Treat the artifact as the input to later lessons. Day 2 reads the permission boundary from day 1, day 6 depends on the tool and data contracts from earlier days, and day 7 uses these small artifacts as handoff material for specialist agents.
+
+```yaml
+lesson: "day-3-integration"
+owner: "your name or team"
+inputs: ["files, messages, or APIs used in this lesson"]
+permissions: ["read-only", "approval-required writes"]
+outputs: ["saved note, log, config, or result file"]
+review: ["items to check before the next lesson"]
+```
+
+### Upgrade path
+
+Do not rush to turn this lesson into platform code. First make it stable as a Markdown note, JSON file, log entry, or small script. A low-tech artifact is easier to inspect, easier to share, and easier to roll back when the workflow is still young.
+
+After the workflow produces reviewable results three times in a row, promote it into a template, skill, or scheduled job. The order matters: prove the workflow deserves reuse before productizing the mechanism around it.
+
+If the artifact is hard to write, the problem is usually not documentation. It usually means the boundary is still fuzzy. Return to the decision list and make the input, permission, output, and owner concrete before moving to the next day.
+
+### Decisions to write down
+
+- Which channel is the source of truth for requests?
+- Which intents are allowed without approval?
+- Which phrases or buttons confirm external actions?
+- Where do message logs live and who can inspect them?
+
+### Review drill
+
+1. Send a read-only request from a phone.
+2. Send an unknown command and confirm Hermes refuses gracefully.
+3. Send an approval-required action and confirm it queues instead of executing.
+4. Inspect the log and verify the intent mapping is visible.
+
+### What to measure
+
+- Percentage of requests that map to known intents.
+- Number of rejected or approval-required commands.
+- Average time from chat request to useful response.
+
+## Acceptance checklist
+
+- Secrets are stored outside the repo.
+- Hermes rejects unknown commands instead of guessing.
+- A phone-originated message produces a traceable response.
+
+## Common failure modes
+
+- Letting a public group chat trigger privileged actions.
+- Treating every message as a fully trusted instruction.
+- Skipping logs because the bot “just works” during the demo.
+
+## Next step
+
+- **[Day 4: Data Processing](/en/tutorials/bootcamp/day-4-data)** - give Hermes structured work to do.
+- **[Automation Recipes](/en/guides/resources/automation-recipes)** - reuse the channel pattern in scheduled workflows.
+
+---
+
+*Last updated: April 18, 2026 · Hermes Agent v0.8 content track*

@@ -4,6 +4,7 @@ import { setRequestLocale } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 import Navbar from '@/components/layout/Navbar/Navbar';
 import Footer from '@/components/layout/Footer/Footer';
+import CookieConsent from '@/components/ui/CookieConsent/CookieConsent';
 import { SITE_URL } from '@/lib/seo/metadata';
 import '../globals.css';
 
@@ -53,9 +54,9 @@ export default async function LocaleLayout({ children, params }: Props) {
             {children}
           </main>
           <Footer />
+          <CookieConsent />
         </NextIntlClientProvider>
       </body>
     </html>
   );
 }
-

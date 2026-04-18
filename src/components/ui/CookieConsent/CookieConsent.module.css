@@ -1,0 +1,103 @@
+.banner {
+  position: fixed;
+  right: var(--space-lg);
+  bottom: var(--space-lg);
+  z-index: 1000;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-lg);
+  width: min(720px, calc(100vw - var(--space-lg) * 2));
+  padding: var(--space-lg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.16);
+}
+
+.copy {
+  min-width: 0;
+}
+
+.copy strong {
+  display: block;
+  margin-bottom: var(--space-xs);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.copy p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.privacyLink {
+  display: inline-flex;
+  margin-top: var(--space-sm);
+  color: var(--color-link);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.privacyLink:hover {
+  color: var(--accent);
+}
+
+.actions {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-sm);
+}
+
+.acceptButton,
+.rejectButton {
+  min-width: 88px;
+  padding: 0.7rem 1rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+}
+
+.acceptButton {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+
+.acceptButton:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.rejectButton {
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text-main);
+}
+
+.rejectButton:hover {
+  border-color: var(--border-hover);
+  background: var(--bg-secondary);
+}
+
+@media (max-width: 640px) {
+  .banner {
+    left: var(--space-md);
+    right: var(--space-md);
+    bottom: var(--space-md);
+    grid-template-columns: 1fr;
+    width: auto;
+  }
+
+  .actions {
+    justify-content: stretch;
+  }
+
+  .acceptButton,
+  .rejectButton {
+    flex: 1;
+  }
+}

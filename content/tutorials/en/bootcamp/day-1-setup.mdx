@@ -1,0 +1,132 @@
+---
+title: "Day 1: Local Setup & Privacy (Ollama + Docker)"
+titleZh: "Day 1: 唤醒助理 - 极简安装与第一声问候"
+slug: "day-1-setup"
+description: "Install Hermes Agent with the least moving parts, choose a private local-first setup, and complete the first useful conversation."
+descriptionZh: "用最少的配置跑起 Hermes Agent，理解本地优先的隐私边界，并完成第一次真正有用的对话。"
+author: "HermesAgent Community"
+publishedAt: "2026-04-18"
+updatedAt: "2026-04-18"
+category: "bootcamp"
+tags: ["setup", "privacy", "ollama", "docker", "beginner"]
+difficulty: "beginner"
+readingTime: 12
+series: "7-day-bootcamp"
+seriesOrder: 1
+featured: true
+---
+## Start with a working assistant, not a perfect lab
+
+The first day is about momentum. A new AI agent project becomes real only when you can talk to it, give it a tiny job, and see it answer from your own environment.
+
+This bootcamp uses a local-first mental model: keep your workspace under your control, understand which model endpoint receives prompts, and avoid granting broad file access before you need it.
+
+![Diagram of the Day 1 local setup path for Hermes Agent](/images/bootcamp/day-1-setup.svg)
+
+## What you will have working today
+
+- A Hermes Agent workspace that starts from the terminal.
+- A clear decision between local model, hosted API, or hybrid mode.
+- A first conversation where Hermes introduces itself and explains what it can safely do.
+
+## Why this step matters
+
+Most failed installs are not caused by one hard command. They fail because users mix model setup, shell setup, permissions, and expectations into one foggy step. Separate those pieces and the whole system becomes easier to trust.
+
+Privacy also starts here. Local execution does not automatically mean private if you send prompts to a hosted model, and hosted models are not automatically bad if you know what data leaves your machine.
+
+## Hands-on workflow
+
+1. Create a clean project folder and confirm Node, Git, and your package manager work before touching Hermes.
+2. Choose your model path: Ollama for local experimentation, a hosted OpenAI-compatible endpoint for speed, or a hybrid setup for day-to-day work.
+3. Install dependencies and start Hermes with the smallest set of environment variables.
+4. Ask Hermes to describe the current workspace, then ask it to make one harmless local observation.
+5. Write down which directories and external APIs Hermes is allowed to use during the rest of the bootcamp.
+
+## Copy-ready commands or config
+
+```bash
+node --version
+git --version
+npm --version
+
+# Example local model check
+ollama list
+
+# Start with the repo command documented by your Hermes install
+npm run dev
+```
+
+## Implementation notes
+
+Treat the first install as an operations exercise, not a feature tour. The useful question is not how many plugins Hermes can run on day one; it is whether you can start it, stop it, explain the model endpoint, and reproduce the same result tomorrow.
+
+Create a small setup note beside the project. Record the shell, Node version, model provider, and the exact command that starts Hermes. When something breaks later, this note becomes the baseline instead of forcing you to reconstruct the environment from memory.
+
+For privacy, write a one-line data policy before your first real prompt. A good first policy is simple: private documents stay out of prompts unless explicitly selected, secrets live only in environment variables, and file access starts read-only until the workflow needs more.
+
+### Handoff artifact
+
+Before leaving this lesson, keep a handoff artifact that another teammate could understand without reading the chat transcript. It does not need to be long, but it must connect Environment, Model endpoint, Permission boundary, First prompt. If any part exists only in your memory, the workflow is still fragile.
+
+The value of the artifact is lower restart cost. When you return tomorrow, you should not have to ask what was configured yesterday. You should open the note and see the inputs, boundaries, commands, logs, and review items immediately.
+
+Treat the artifact as the input to later lessons. Day 2 reads the permission boundary from day 1, day 6 depends on the tool and data contracts from earlier days, and day 7 uses these small artifacts as handoff material for specialist agents.
+
+```yaml
+lesson: "day-1-setup"
+owner: "your name or team"
+inputs: ["files, messages, or APIs used in this lesson"]
+permissions: ["read-only", "approval-required writes"]
+outputs: ["saved note, log, config, or result file"]
+review: ["items to check before the next lesson"]
+```
+
+### Upgrade path
+
+Do not rush to turn this lesson into platform code. First make it stable as a Markdown note, JSON file, log entry, or small script. A low-tech artifact is easier to inspect, easier to share, and easier to roll back when the workflow is still young.
+
+After the workflow produces reviewable results three times in a row, promote it into a template, skill, or scheduled job. The order matters: prove the workflow deserves reuse before productizing the mechanism around it.
+
+If the artifact is hard to write, the problem is usually not documentation. It usually means the boundary is still fuzzy. Return to the decision list and make the input, permission, output, and owner concrete before moving to the next day.
+
+### Decisions to write down
+
+- Which model endpoint will handle normal learning tasks?
+- Which folders may Hermes inspect during this bootcamp?
+- Which actions require manual approval even if Hermes suggests them?
+- Where will you keep setup notes, logs, and small test artifacts?
+
+### Review drill
+
+1. Restart the terminal and start Hermes from the documented command.
+2. Ask Hermes to summarize the workspace without opening sensitive files.
+3. Switch to a second harmless prompt and confirm the answer still references the current environment.
+4. Close the session, reopen it, and confirm you can reproduce the same start sequence.
+
+### What to measure
+
+- Time from new terminal to first useful answer.
+- Number of manual steps that are not yet documented.
+- Whether the model endpoint and privacy boundary are obvious to another user.
+
+## Acceptance checklist
+
+- You can start and stop Hermes without changing unrelated system settings.
+- You know whether prompts are staying local or going to a remote model API.
+- Your first prompt produces a useful answer instead of a generic model greeting.
+
+## Common failure modes
+
+- Installing every optional integration on day one.
+- Granting whole-disk file access before understanding the permission model.
+- Debugging model quality before confirming the shell and environment are stable.
+
+## Next step
+
+- **[Day 2: Context & Memory](/en/tutorials/bootcamp/day-2-memory)** - teach Hermes who it is working for.
+- **[Privacy Policy](/en/privacy)** - review how this learning site handles analytics and cookies.
+
+---
+
+*Last updated: April 18, 2026 · Hermes Agent v0.8 content track*
