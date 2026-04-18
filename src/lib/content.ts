@@ -74,3 +74,22 @@ export function getAllSlugs(
     return (article.meta.urlPath ?? '').split('/').filter(Boolean);
   });
 }
+
+export function getStaticArticleParams(
+  type: ContentType,
+  locales: readonly string[]
+): { locale: string; slug: string[] }[] {
+  return locales.flatMap((locale) =>
+    getAllSlugs(type, locale).map((slug) => ({ locale, slug }))
+  );
+}
+
+export function getOptionalStaticArticleParams(
+  type: ContentType,
+  locales: readonly string[]
+): { locale: string; slug: string[] }[] {
+  return locales.flatMap((locale) => [
+    { locale, slug: [] },
+    ...getAllSlugs(type, locale).map((slug) => ({ locale, slug })),
+  ]);
+}

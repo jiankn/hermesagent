@@ -1,8 +1,9 @@
 import { setRequestLocale } from 'next-intl/server';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import DifficultyBadge from '@/components/ui/DifficultyBadge/DifficultyBadge';
-import { getArticleBySlug, getAllSlugs } from '@/lib/content';
+import { getArticleBySlug, getStaticArticleParams } from '@/lib/content';
 import { routing } from '@/i18n/routing';
 import { buildArticleJsonLd, buildBreadcrumbJsonLd, serializeJsonLd } from '@/lib/seo/schema';
 import { extractHeadings, renderMarkdown } from '@/lib/article-render';
@@ -16,15 +17,7 @@ type Props = {
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  const params: { locale: string; slug: string[] }[] = [];
-
-  for (const locale of routing.locales) {
-    const slugs = getAllSlugs('guides', locale);
-    for (const slug of slugs) {
-      params.push({ locale, slug });
-    }
-  }
-  return params;
+  return getStaticArticleParams('guides', routing.locales);
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -65,7 +58,7 @@ export default async function GuideArticlePage({ params }: Props) {
   setRequestLocale(locale);
   const article = getArticleBySlug('guides', slug, locale);
 
-  if (!article) return <div>Article not found</div>;
+  if (!article) notFound();
 
   const isZh = locale === 'zh';
   const title = isZh ? article.meta.titleZh : article.meta.title;
