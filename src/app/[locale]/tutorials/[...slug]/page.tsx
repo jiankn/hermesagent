@@ -109,7 +109,7 @@ export default async function TutorialArticlePage({ params }: Props) {
       <nav className={styles.breadcrumb} aria-label="Breadcrumb">
         <Link href={`/${locale}`}>{isZh ? '首页' : 'Home'}</Link>
         <span className={styles.breadcrumbSep}>/</span>
-        <Link href={`/${locale}/tutorials`}>{isZh ? '教程' : 'Tutorials'}</Link>
+        <Link href={`/${locale}/tutorials`}>{isZh ? '7天实战营' : '7-Day Bootcamp'}</Link>
         <span className={styles.breadcrumbSep}>/</span>
         <span className={styles.breadcrumbCurrent}>{title}</span>
       </nav>

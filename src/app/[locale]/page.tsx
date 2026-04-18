@@ -41,40 +41,40 @@ export default async function HomePage({ params }: Props) {
 
   const sampleTutorials = [
     {
-      href: `/${locale}/tutorials/getting-started/installation`,
+      href: `/${locale}/tutorials/bootcamp/day-1-setup`,
       icon: '🚀',
-      title: isZh ? 'Hermes Agent 完整安装指南' : 'How to Install Hermes Agent: Complete Guide',
-      description: isZh ? '支持 Linux、macOS、WSL2 和 Android Termux 的全平台安装教程。' : 'Step-by-step installation guide for Linux, macOS, WSL2, and Android Termux.',
+      title: isZh ? 'Day 1: 唤醒助理 —— 极简安装与第一声问候' : 'Day 1: Local Setup & Privacy (Ollama + Docker)',
+      description: isZh ? '避开复杂配置，5分钟让你的 AI 助理跑起来并完成自我介绍。' : 'Get your AI worker running locally in 5 minutes with zero privacy leaks.',
       difficulty: 'beginner' as const,
       readingTime: 8,
-      tags: ['installation', 'setup'],
+      tags: ['bootcamp', 'setup'],
     },
     {
-      href: `/${locale}/tutorials/getting-started/first-conversation`,
-      icon: '💬',
-      title: isZh ? '与 Hermes Agent 的第一次对话' : 'Your First Conversation with Hermes Agent',
-      description: isZh ? '学会如何和你的 AI Agent 有效对话、创建会话和管理上下文。' : 'Learn how to effectively chat with your AI Agent, create sessions, and manage context.',
+      href: `/${locale}/tutorials/bootcamp/day-2-memory`,
+      icon: '🧠',
+      title: isZh ? 'Day 2: 赋予记忆 —— 让它真正“懂你”' : 'Day 2: Context & Memory (System Prompts)',
+      description: isZh ? '配置长期记忆，教你写一份完美的“助理使用说明书”。' : 'Configure long-term memory and craft the perfect system prompt for your worker.',
       difficulty: 'beginner' as const,
       readingTime: 6,
-      tags: ['beginner', 'chat'],
+      tags: ['bootcamp', 'memory'],
     },
     {
-      href: `/${locale}/tutorials/getting-started/choosing-a-model`,
-      icon: '🤖',
-      title: isZh ? '如何选择合适的 AI 模型' : 'How to Choose the Right AI Model',
-      description: isZh ? '对比 GPT-4o、Claude 3.5、Llama 3 等 200+ 模型，找到最适合你的方案。' : 'Compare GPT-4o, Claude 3.5, Llama 3, and 200+ models to find your perfect fit.',
-      difficulty: 'beginner' as const,
-      readingTime: 10,
-      tags: ['models', 'openrouter'],
-    },
-    {
-      href: `/${locale}/tutorials/messaging/telegram-bot-setup`,
+      href: `/${locale}/tutorials/bootcamp/day-3-integration`,
       icon: '📱',
-      title: isZh ? '在 Telegram 上配置 Hermes Agent' : 'Set Up Hermes Agent on Telegram',
-      description: isZh ? '把你的 AI Agent 部署到 Telegram，随时随地通过手机对话。' : 'Deploy your AI Agent to Telegram for 24/7 mobile conversations.',
+      title: isZh ? 'Day 3: 触手可及 —— 把它装进你的手机' : 'Day 3: Team Integration (Slack & Discord)',
+      description: isZh ? '手把手教你接入 Telegram 或微信，随时随地使唤它。' : 'Connect your worker to Slack or Discord to collaborate with your team.',
+      difficulty: 'intermediate' as const,
+      readingTime: 10,
+      tags: ['bootcamp', 'integration'],
+    },
+    {
+      href: `/${locale}/tutorials/bootcamp/day-4-data`,
+      icon: '📊',
+      title: isZh ? 'Day 4: 赋予双手 —— 处理文件与数据' : 'Day 4: Data Processing (API & JSON)',
+      description: isZh ? '开启本地文件权限，让它帮你秒读长文档、清洗 Excel 数据。' : 'Enable file access to let your worker process CSVs, JSONs, and long PDFs.',
       difficulty: 'intermediate' as const,
       readingTime: 12,
-      tags: ['telegram', 'messaging'],
+      tags: ['bootcamp', 'data'],
     },
   ];
 
@@ -159,9 +159,9 @@ export default async function HomePage({ params }: Props) {
 
       <section className={styles.tutorials}>
         <div className={styles.tutorialsHeader}>
-          <h2 className={styles.sectionTitle}>{t('latestTutorials.title')}</h2>
+          <h2 className={styles.sectionTitle}>{isZh ? '7天实战营 (7-Day Bootcamp)' : '7-Day Bootcamp'}</h2>
           <Link href={`/${locale}/tutorials`} className={styles.viewAllLink}>
-            {t('latestTutorials.viewAll')}
+            {isZh ? '查看完整路径 →' : 'View Full Path →'}
           </Link>
         </div>
         <div className={styles.tutorialsGrid}>

@@ -1,25 +1,26 @@
 {
   "site": {
-    "title": "Hermes Agent Community",
-    "description": "The definitive learning hub for Hermes Agent — from first install to multi-agent orchestration.",
-    "tagline": "From Zero to AI Automation Expert"
+    "title": "HermesAgent 101 | The Ultimate Automation Hub",
+    "description": "Build Your Autonomous AI Worker in 7 Days | The Definitive Hermes Agent Hub",
+    "tagline": "Build Your Autonomous AI Worker in 7 Days"
   },
   "nav": {
-    "tutorials": "Tutorials",
-    "guides": "Guides",
+    "tutorials": "7-Day Bootcamp",
+    "guides": "Deep Guides",
+    "resources": "Resource Hub",
     "blog": "Blog",
     "learningPath": "Learning Path",
     "faq": "FAQ",
-    "about": "About",
+    "about": "About Us",
     "search": "Search",
     "language": "Language"
   },
   "hero": {
-    "title": "Master Hermes Agent",
-    "subtitle": "From Zero to AI Automation Expert",
-    "description": "The definitive learning community for Hermes Agent — the self-improving AI agent with 74.9k+ GitHub stars.",
-    "ctaPrimary": "Start Learning",
-    "ctaSecondary": "Browse Tutorials"
+    "title": "Build Your Autonomous AI Worker",
+    "subtitle": "Master Hermes Agent in 7 Days",
+    "description": "The definitive Hermes Agent resource hub. Skip the boring docs—learn how to automate workflows, save time, and boost ROI.",
+    "ctaPrimary": "🚀 Start 7-Day Bootcamp",
+    "ctaSecondary": "Browse Resources"
   },
   "features": {
     "title": "Why Hermes Agent?",

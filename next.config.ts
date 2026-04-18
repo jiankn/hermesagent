@@ -6,9 +6,11 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 const nextConfig: NextConfig = {
   output: 'export',
   experimental: {
-    // Workaround for Next.js workStore race condition
-    // during concurrent static page generation
-    staticGenerationRetryCount: 5,
+    // Serialize static generation to prevent Next.js workStore race condition.
+    // Without this, concurrent page renders fight over the internal store,
+    // causing "Expected workStore to be initialized" build failures.
+    staticGenerationMaxConcurrency: 1,
+    staticGenerationRetryCount: 3,
   },
 };
 

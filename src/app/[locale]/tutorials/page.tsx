@@ -8,33 +8,14 @@ import styles from './page.module.css';
 
 type Props = { params: Promise<{ locale: string }> };
 
-const categoryOrder: Record<string, number> = {
-  'getting-started': 1,
-  messaging: 2,
-  skills: 3,
-  automation: 4,
-  advanced: 5,
-};
-
 const categoryIcons: Record<string, string> = {
-  'getting-started': '🚀',
-  messaging: '📱',
-  skills: '🧩',
-  automation: '⏰',
-  advanced: '🔗',
+  bootcamp: '🚀',
 };
 
 function sortTutorials(a: ArticleMeta, b: ArticleMeta) {
-  const categoryDelta = (categoryOrder[a.category] ?? 99) - (categoryOrder[b.category] ?? 99);
-  if (categoryDelta !== 0) {
-    return categoryDelta;
+  if (a.seriesOrder !== undefined && b.seriesOrder !== undefined) {
+    return a.seriesOrder - b.seriesOrder;
   }
-
-  const orderDelta = (a.seriesOrder ?? 999) - (b.seriesOrder ?? 999);
-  if (orderDelta !== 0) {
-    return orderDelta;
-  }
-
   return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
 }
 
@@ -45,10 +26,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildPageMetadata({
     locale,
     pathname: '/tutorials',
-    title: isZh ? 'Hermes Agent 教程' : 'Hermes Agent Tutorials',
+    title: isZh ? '7天实战营 | HermesAgent 101' : '7-Day Bootcamp | HermesAgent 101',
     description: isZh
-      ? '从安装、对话到自动化与多 Agent 协作的系统教程。'
-      : 'Step-by-step Hermes Agent tutorials covering setup, workflows, automation, and multi-agent orchestration.',
+      ? '从零开始，每天一个主题，7天掌握你的 AI 私人助理。'
+      : 'From zero to AI automation expert. One topic per day, master Hermes Agent in 7 days.',
   });
 }
 
@@ -64,8 +45,8 @@ export default async function TutorialsPage({ params }: Props) {
       <h1 className={styles.pageTitle}>{t('nav.tutorials')}</h1>
       <p className={styles.pageDesc}>
         {isZh
-          ? '从入门到进阶，系统化学习 Hermes Agent 的每一个功能。'
-          : 'From beginner to advanced, systematically learn every feature of Hermes Agent.'}
+          ? '从零开始，每天一个主题，7天掌握你的 AI 私人助理。'
+          : 'From zero to AI automation expert. One topic per day, master Hermes Agent in 7 days.'}
       </p>
 
       <div className={styles.grid}>

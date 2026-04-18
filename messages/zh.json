@@ -1,25 +1,26 @@
 {
   "site": {
-    "title": "Hermes Agent 学习社区",
-    "description": "Hermes Agent 一站式学习社区 — 从安装到多 Agent 协作的完整知识库。",
-    "tagline": "从零基础到 AI 自动化专家"
+    "title": "HermesAgent 101 | 全网资源聚合站",
+    "description": "从零开始，7天打造你的最强 AI 私人助理 | Hermes Agent 全网资源聚合站",
+    "tagline": "从零开始，7天掌握你的AI私人助理"
   },
   "nav": {
-    "tutorials": "教程",
-    "guides": "指南",
+    "tutorials": "7天实战营",
+    "guides": "深度指南",
+    "resources": "资源聚合",
     "blog": "博客",
     "learningPath": "学习路径",
     "faq": "常见问题",
-    "about": "关于",
+    "about": "关于我们",
     "search": "搜索",
     "language": "语言"
   },
   "hero": {
-    "title": "掌握 Hermes Agent",
-    "subtitle": "从零基础到 AI 自动化专家",
-    "description": "Hermes Agent 一站式学习社区 — GitHub 74.9k+ ⭐ 的自进化 AI Agent 完整知识库",
-    "ctaPrimary": "开始学习",
-    "ctaSecondary": "浏览教程"
+    "title": "7天打造你的 AI 私人助理",
+    "subtitle": "从零开始，掌握 Hermes Agent",
+    "description": "全网最全的 Hermes Agent 资源聚合站。不讲枯燥原理，只教你如何让 AI 帮你干活、省时间、赚钱。",
+    "ctaPrimary": "🚀 开启 7 天挑战",
+    "ctaSecondary": "浏览精选资源"
   },
   "features": {
     "title": "为什么选择 Hermes Agent？",

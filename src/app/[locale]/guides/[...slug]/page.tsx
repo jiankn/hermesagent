@@ -17,6 +17,7 @@ export const dynamicParams = false;
 
 export function generateStaticParams() {
   const params: { locale: string; slug: string[] }[] = [];
+
   for (const locale of routing.locales) {
     const slugs = getAllSlugs('guides', locale);
     for (const slug of slugs) {

@@ -1,0 +1,488 @@
+# UI UX Pro Max
+
+<p align="center">
+  <a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/releases"><img src="https://img.shields.io/github/v/release/nextlevelbuilder/ui-ux-pro-max-skill?style=for-the-badge&color=blue" alt="GitHub Release"></a>
+  <img src="https://img.shields.io/badge/reasoning_rules-100-green?style=for-the-badge" alt="100 Reasoning Rules">
+  <img src="https://img.shields.io/badge/UI_styles-67-purple?style=for-the-badge" alt="67 UI Styles">
+  <img src="https://img.shields.io/badge/python-3.x-yellow?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.x">
+  <a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/blob/main/LICENSE"><img src="https://img.shields.io/github/license/nextlevelbuilder/ui-ux-pro-max-skill?style=for-the-badge&color=green" alt="License"></a>
+</p>
+
+<p align="center">
+  <a href="https://www.npmjs.com/package/uipro-cli"><img src="https://img.shields.io/npm/v/uipro-cli?style=flat-square&logo=npm&label=CLI" alt="npm"></a>
+  <a href="https://www.npmjs.com/package/uipro-cli"><img src="https://img.shields.io/npm/dm/uipro-cli?style=flat-square&label=downloads" alt="npm downloads"></a>
+  <a href="https://github.com/nextlevelbuilder/ui-ux-pro-max-skill/stargazers"><img src="https://img.shields.io/github/stars/nextlevelbuilder/ui-ux-pro-max-skill?style=flat-square&logo=github" alt="GitHub stars"></a>
+  <a href="https://paypal.me/uiuxpromax"><img src="https://img.shields.io/badge/PayPal-Support%20Development-00457C?style=flat-square&logo=paypal&logoColor=white" alt="PayPal"></a>
+</p>
+
+一个 AI 技能，为跨多个平台和框架构建专业 UI/UX 提供设计智能。
+
+<p align="center">
+  <img src="screenshots/website.png" alt="UI UX Pro Max" width="800">
+</p>
+
+<p align="center">
+  <b>如果你觉得这有用，考虑支持这个项目：</b><br><br>
+  <a href="https://paypal.me/uiuxpromax"><img src="https://img.shields.io/badge/PayPal-Donate-00457C?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal Donate"></a>
+</p>
+
+## v2.0 新功能
+
+### 智能设计系统生成
+
+v2.0 的旗舰功能是 **设计系统生成器** —— 一个由 AI 驱动的推理引擎，可以在几秒钟内分析你的项目需求并生成完整的定制设计系统。
+
+```
++----------------------------------------------------------------------------------------+
+|  目标：宁静水疗中心 - 推荐设计系统                                                       |
++----------------------------------------------------------------------------------------+
+|                                                                                        |
+|  模式：英雄区为中心 + 社交证明                                                          |
+|     转化：情感驱动，带有信任元素                                                         |
+|     行动号召（CTA）：首屏展示，在用户评价后重复展示                                         |
+|     章节：                                                                              |
+|       1. 英雄区                                                                         |
+|       2. 服务                                                                           |
+|       3. 用户评价                                                                       |
+|       4. 预约                                                                           |
+|       5. 联系方式                                                                       |
+|                                                                                        |
+|  风格：柔和 UI 演变                                                                     |
+|     关键词：柔和阴影、微妙深度、平静、高级感、有机形状                                     |
+|     最适合：健康、美容、生活方式品牌、高级服务                                             |
+|     性能：优秀 | 可访问性：WCAG AA                                                      |
+|                                                                                        |
+|  颜色：                                                                                 |
+|     主色：    #E8B4B8 (柔和粉色)                                                       |
+|     辅色：  #A8D5BA (鼠尾草绿)                                                         |
+|     CTA：        #D4AF37 (金色)                                                         |
+|     背景： #FFF5F5 (暖白色)                                                             |
+|     文本：       #2D3436 (炭黑色)                                                       |
+|     备注：带有金色点缀的平静调色板，营造奢华感                                             |
+|                                                                                        |
+|  排版：Cormorant Garamond / Montserrat                                               |
+|     氛围：优雅、平静、精致                                                              |
+|     最适合：奢侈品牌、健康、美容、社论                                                   |
+|     Google Fonts：https://fonts.google.com/share?selection.family=...                  |
+|                                                                                        |
+|  关键效果：                                                                            |
+|     柔和阴影 + 平滑过渡 (200-300ms) + 温和悬停状态                                       |
+|                                                                                        |
+|  避免（反模式）：                                                                      |
+|     明亮的霓虹色 + 刺眼的动画 + 深色模式 + AI 紫色/粉色渐变                              |
+|                                                                                        |
+|  交付前检查清单：                                                                       |
+|     [ ] 不使用表情符号作为图标（使用 SVG：Heroicons/Lucide）                              |
+|     [ ] 所有可点击元素上都有 cursor-pointer                                             |
+|     [ ] 悬停状态带有平滑过渡 (150-300ms)                                               |
+|     [ ] 浅色模式：文本对比度最低 4.5:1                                                   |
+|     [ ] 键盘导航的焦点状态可见                                                          |
+|     [ ] 尊重 prefers-reduced-motion                                                     |
+|     [ ] 响应式：375px、768px、1024px、1440px                                             |
+|                                                                                        |
++----------------------------------------------------------------------------------------+
+```
+
+### 设计系统生成如何工作
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  1. 用户请求                                                      │
+│     "为我的美容水疗中心构建一个着陆页"                               |
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  2. 多领域搜索（5 个并行搜索）                                      |
+│     • 产品类型匹配（100 个类别）                                     |
+│     • 风格推荐（67 种风格）                                          |
+│     • 调色板选择（96 个调色板）                                       |
+│     • 着陆页模式（24 种模式）                                         |
+│     • 排版配对（57 种字体组合）                                       |
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  3. 推理引擎                                                      │
+│     • 匹配产品 → UI 类别规则                                         |
+│     • 应用风格优先级（BM25 排名）                                      |
+│     • 过滤行业的反模式                                               |
+│     • 处理决策规则（JSON 条件）                                        |
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  4. 完整设计系统输出                                               |
+│     模式 + 风格 + 颜色 + 排版 + 效果                                  |
+│     + 要避免的反模式 + 交付前检查清单                                  |
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 100 条行业特定推理规则
+
+推理引擎包含针对以下领域的专业规则：
+
+| 类别 | 示例 |
+|------|------|
+| **科技与 SaaS** | SaaS、微 SaaS、B2B 企业、开发者工具、AI/聊天机器人平台 |
+| **金融** | 金融科技、银行、加密货币、保险、交易仪表板 |
+| **医疗健康** | 医疗诊所、药房、牙科、兽医、心理健康 |
+| **电子商务** | 通用、奢侈品、市场、订阅盒 |
+| **服务** | 美容/水疗、餐厅、酒店、法律、咨询 |
+| **创意** | 作品集、机构、摄影、游戏、音乐流媒体 |
+| **新兴技术** | Web3/NFT、空间计算、量子计算、自主系统 |
+
+每条规则包括：
+- **推荐模式** - 着陆页结构
+- **风格优先级** - 最佳匹配的 UI 风格
+- **颜色氛围** - 适合行业的调色板
+- **排版氛围** - 字体个性匹配
+- **关键效果** - 动画和交互
+- **反模式** - 不要做什么（例如，银行业不要使用"AI 紫色/粉色渐变"）
+
+## 功能
+
+- **67 种 UI 风格** - 玻璃态、粘土态、极简主义、野兽派、新拟态、便当网格、深色模式、AI 原生 UI 等
+- **96 个调色板** - 针对 SaaS、电子商务、医疗健康、金融科技、美容等的行业特定调色板
+- **57 种字体配对** - 精选的排版组合，带有 Google Fonts 导入
+- **25 种图表类型** - 仪表板和分析的推荐
+- **13 种技术栈** - React、Next.js、Astro、Vue、Nuxt.js、Nuxt UI、Svelte、SwiftUI、React Native、Flutter、HTML+Tailwind、shadcn/ui、Jetpack Compose
+- **99 条 UX 指南** - 最佳实践、反模式和可访问性规则
+- **100 条推理规则** - 行业特定设计系统生成（v2.0 新功能）
+
+### 可用风格（67 种）
+
+<details>
+<summary><b>通用风格（49 种）</b></summary>
+
+| # | 风格 | 最适合 |
+|---|------|--------|
+| 1 | 极简主义与瑞士风格 | 企业应用、仪表板、文档 |
+| 2 | 新拟态 | 健康/保健应用、冥想平台 |
+| 3 | 玻璃态 | 现代 SaaS、金融仪表板 |
+| 4 | 野兽派 | 设计作品集、艺术项目 |
+| 5 | 3D 与超现实主义 | 游戏、产品展示、沉浸式 |
+| 6 | 充满活力与块级 | 初创公司、创意机构、游戏 |
+| 7 | 深色模式（OLED） | 夜间模式应用、编码平台 |
+| 8 | 可访问与道德 | 政府、医疗健康、教育 |
+| 9 | 粘土态 | 教育应用、儿童应用、SaaS |
+| 10 | 极光 UI | 现代 SaaS、创意机构 |
+| 11 | 复古未来主义 | 游戏、娱乐、音乐平台 |
+| 12 | 扁平设计 | Web 应用、移动应用、初创公司 MVP |
+| 13 | 拟物化 | 遗留应用、游戏、高级产品 |
+| 14 | 液态玻璃 | 高级 SaaS、高端电子商务 |
+| 15 | 动效驱动 | 作品集网站、讲故事平台 |
+| 16 | 微交互 | 移动应用、触摸屏 UI |
+| 17 | 包容性设计 | 公共服务、教育、医疗健康 |
+| 18 | 零界面 | 语音助手、AI 平台 |
+| 19 | 柔和 UI 演变 | 现代企业应用、SaaS |
+| 20 | 新野兽派 | Z 世代品牌、初创公司、Figma 风格 |
+| 21 | 便当盒网格 | 仪表板、产品页面、作品集 |
+| 22 | Y2K 美学 | 时尚品牌、音乐、Z 世代 |
+| 23 | 赛博朋克 UI | 游戏、科技产品、加密应用 |
+| 24 | 有机亲生物 | 健康应用、可持续性品牌 |
+| 25 | AI 原生 UI | AI 产品、聊天机器人、副驾驶 |
+| 26 | 孟菲斯设计 | 创意机构、音乐、青年品牌 |
+| 27 | 蒸汽波 | 音乐平台、游戏、作品集 |
+| 28 | 维度分层 | 仪表板、卡片布局、模态框 |
+| 29 | 夸张极简主义 | 时尚、建筑、作品集 |
+| 30 | 动态排版 | 英雄区、营销网站 |
+| 31 | 视差讲故事 | 品牌讲故事、产品发布 |
+| 32 | 瑞士现代主义 2.0 | 企业网站、建筑、社论 |
+| 33 | HUD / 科幻 FUI | 科幻游戏、太空科技、网络安全 |
+| 34 | 像素艺术 | 独立游戏、复古工具、创意 |
+| 35 | 便当网格 | 产品功能、仪表板、个人 |
+| 36 | 空间 UI（VisionOS） | 空间计算应用、VR/AR |
+| 37 | 电子墨水 / 纸张 | 阅读应用、数字报纸 |
+| 38 | Z 世代混沌 / 极繁主义 | Z 世代生活方式、音乐艺术家 |
+| 39 | 仿生 / 有机 2.0 | 可持续性科技、生物技术、健康 |
+| 40 | 反抛光 / 原始美学 | 创意作品集、艺术家网站 |
+| 41 | 触觉数字 / 可变形 UI | 现代移动应用、有趣品牌 |
+| 42 | 自然提炼 | 健康品牌、可持续产品 |
+| 43 | 交互式光标设计 | 创意作品集、交互式 |
+| 44 | 语音优先多模式 | 语音助手、可访问性应用 |
+| 45 | 3D 产品预览 | 电子商务、家具、时尚 |
+| 46 | 渐变网格 / 极光进化 | 英雄区、背景、创意 |
+| 47 | 社论网格 / 杂志 | 新闻网站、博客、杂志 |
+| 48 | 色差 / RGB 分离 | 音乐平台、游戏、科技 |
+| 49 | 复古模拟 / 复古电影 | 摄影、音乐/黑胶唱片品牌 |
+
+</details>
+
+<details>
+<summary><b>着陆页风格（8 种）</b></summary>
+
+| # | 风格 | 最适合 |
+|---|------|--------|
+| 1 | 英雄区为中心的设计 | 具有强烈视觉识别的产品 |
+| 2 | 转化优化 | 线索生成、销售页面 |
+| 3 | 功能丰富展示 | SaaS、复杂产品 |
+| 4 | 极简与直接 | 简单产品、应用 |
+| 5 | 社交证明聚焦 | 服务、B2C 产品 |
+| 6 | 交互式产品演示 | 软件、工具 |
+| 7 | 信任与权威 | B2B、企业、咨询 |
+| 8 | 讲故事驱动 | 品牌、机构、非营利组织 |
+
+</details>
+
+<details>
+<summary><b>BI/分析仪表板风格（10 种）</b></summary>
+
+| # | 风格 | 最适合 |
+|---|------|--------|
+| 1 | 数据密集型仪表板 | 复杂数据分析 |
+| 2 | 热力图与热图风格 | 地理/行为数据 |
+| 3 | 高管仪表板 | 高管摘要 |
+| 4 | 实时监控 | 运营、DevOps |
+| 5 | 下钻分析 | 详细探索 |
+| 6 | 比较分析仪表板 | 并排比较 |
+| 7 | 预测分析 | 预测、机器学习洞察 |
+| 8 | 用户行为分析 | UX 研究、产品分析 |
+| 9 | 金融仪表板 | 金融、会计 |
+| 10 | 销售智能仪表板 | 销售团队、CRM |
+
+</details>
+
+## 安装
+
+### 使用 Claude 应用商店（Claude Code）
+
+使用两个命令直接在 Claude Code 中安装：
+
+```
+/plugin marketplace add nextlevelbuilder/ui-ux-pro-max-skill
+/plugin install ui-ux-pro-max@ui-ux-pro-max-skill
+```
+
+### 使用 CLI（推荐）
+
+```bash
+# 全局安装 CLI
+npm install -g uipro-cli
+
+# 进入你的项目
+cd /path/to/your/project
+
+# 为你的 AI 助手安装
+uipro init --ai claude      # Claude Code
+uipro init --ai cursor      # Cursor
+uipro init --ai windsurf    # Windsurf
+uipro init --ai antigravity # Antigravity
+uipro init --ai copilot     # GitHub Copilot
+uipro init --ai kiro        # Kiro
+uipro init --ai codex       # Codex CLI
+uipro init --ai qoder       # Qoder
+uipro init --ai roocode     # Roo Code
+uipro init --ai gemini      # Gemini CLI
+uipro init --ai trae        # Trae
+uipro init --ai opencode    # OpenCode
+uipro init --ai continue    # Continue
+uipro init --ai codebuddy   # CodeBuddy
+uipro init --ai all         # 所有助手
+```
+
+### 其他 CLI 命令
+
+```bash
+uipro versions              # 列出可用版本
+uipro update                # 更新到最新版本
+uipro init --offline        # 跳过 GitHub 下载，使用捆绑资源
+```
+
+## 先决条件
+
+搜索脚本需要 Python 3.x。
+
+```bash
+# 检查是否安装了 Python
+python3 --version
+
+# macOS
+brew install python3
+
+# Ubuntu/Debian
+sudo apt update && sudo apt install python3
+
+# Windows
+winget install Python.Python.3.12
+```
+
+## 使用
+
+### 技能模式（自动激活）
+
+**支持：** Claude Code、Windsurf、Antigravity、Codex CLI、Continue、Gemini CLI、OpenCode、Qoder、CodeBuddy
+
+当你请求 UI/UX 工作时，技能会自动激活。只需自然地聊天：
+
+```
+为我的 SaaS 产品构建一个着陆页
+```
+
+> **Trae**：先切换到 **SOLO** 模式。技能将针对 UI/UX 请求激活。
+
+### 工作流模式（斜杠命令）
+
+**支持：** Cursor、Kiro、GitHub Copilot、Roo Code
+
+使用斜杠命令调用技能：
+
+```
+/ui-ux-pro-max 为我的 SaaS 产品构建一个着陆页
+```
+
+### 示例提示
+
+```
+为我的 SaaS 产品构建一个着陆页
+
+创建一个医疗健康分析仪表板
+
+设计一个带有深色模式的作品集网站
+
+为电子商务制作一个移动应用 UI
+
+构建一个带有深色主题的金融科技银行应用
+```
+
+### 工作原理
+
+1. **你提问** - 请求任何 UI/UX 任务（构建、设计、创建、实施、审查、修复、改进）
+2. **生成设计系统** - AI 使用推理引擎自动生成完整的设计系统
+3. **智能推荐** - 根据你的产品类型和需求，找到最佳匹配的风格、颜色和排版
+4. **代码生成** - 使用适当的颜色、字体、间距和最佳实践实施 UI
+5. **交付前检查** - 针对常见 UI/UX 反模式进行验证
+
+### 支持的技术栈
+
+该技能为以下技术栈提供特定指南：
+
+| 类别 | 技术栈 |
+|------|--------|
+| **Web (HTML)** | HTML + Tailwind（默认） |
+| **React 生态系统** | React、Next.js、shadcn/ui |
+| **Vue 生态系统** | Vue、Nuxt.js、Nuxt UI |
+| **其他 Web** | Svelte、Astro |
+| **iOS** | SwiftUI |
+| **Android** | Jetpack Compose |
+| **跨平台** | React Native、Flutter |
+
+只需在提示中提及你偏好的技术栈，或者让它默认为 HTML + Tailwind。
+
+## 设计系统命令（高级）
+
+要直接访问设计系统生成器：
+
+> 注意：如果你通过 Continue 安装，请在下面的命令中将 `.claude/skills/` 替换为 `.continue/skills/`。
+
+```bash
+# 使用 ASCII 输出生成设计系统
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "beauty spa wellness" --design-system -p "Serenity Spa"
+
+# 使用 Markdown 输出生成
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "fintech banking" --design-system -f markdown
+
+# 领域特定搜索
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "glassmorphism" --domain style
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "elegant serif" --domain typography
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "dashboard" --domain chart
+
+# 技术栈特定指南
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "form validation" --stack react
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "responsive layout" --stack html-tailwind
+```
+
+### 持久化设计系统（主文件 + 覆盖模式）
+
+将你的设计系统保存到文件中，以在会话之间进行**层次化检索**：
+
+```bash
+# 生成并持久化到 design-system/MASTER.md
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "SaaS dashboard" --design-system --persist -p "MyApp"
+
+# 还创建一个页面特定的覆盖文件
+python3 .claude/skills/ui-ux-pro-max/scripts/search.py "SaaS dashboard" --design-system --persist -p "MyApp" --page "dashboard"
+```
+
+这会创建一个 `design-system/` 文件夹结构：
+
+```
+design-system/
+├── MASTER.md           # 全局真实来源（颜色、排版、间距、组件）
+└── pages/
+    └── dashboard.md    # 页面特定覆盖（仅与主文件的偏差）
+```
+
+**层次化检索工作原理：**
+1. 当构建特定页面（例如"结账"）时，首先检查 `design-system/pages/checkout.md`
+2. 如果页面文件存在，其规则**覆盖**主文件
+3. 如果不存在，仅使用 `design-system/MASTER.md`
+
+**上下文感知检索提示：**
+```
+我正在构建 [页面名称] 页面。请阅读 design-system/MASTER.md。
+还检查是否存在 design-system/pages/[page-name].md。
+如果页面文件存在，优先考虑其规则。
+如果不存在，仅使用主文件规则。
+现在，生成代码...
+```
+
+## 架构与贡献
+
+### 对于用户
+
+代码库已重组为使用**基于模板的生成系统**。所有平台特定文件（`.cursor/`、`.windsurf/`、`.kiro/` 等）现在都由 CLI 动态生成。
+
+**始终使用 CLI 安装：**
+
+```bash
+npm install -g uipro-cli
+uipro init --ai <platform>
+```
+
+这确保你获得适用于你的 AI 助手的最新模板和正确文件结构。
+
+### 对于贡献者
+
+如果你想为这个项目做出贡献：
+
+```bash
+# 1. 克隆仓库
+git clone https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git
+cd ui-ux-pro-max-skill
+
+# 2. 了解结构
+src/ui-ux-pro-max/           # 真实来源（数据、脚本、模板）
+cli/                         # CLI 安装程序（从模板生成文件）
+.claude/                     # Claude Code 技能的本地开发/测试
+
+# 3. 在 src/ui-ux-pro-max/ 中进行更改
+# - data/*.csv              → 数据库文件
+# - scripts/*.py            → 搜索引擎和设计系统
+# - templates/              → 平台特定模板
+
+# 4. 同步到 CLI 并在本地测试
+cp -r src/ui-ux-pro-max/data/* cli/assets/data/
+cp -r src/ui-ux-pro-max/scripts/* cli/assets/scripts/
+cp -r src/ui-ux-pro-max/templates/* cli/assets/templates/
+
+# 5. 构建和测试 CLI
+cd cli && bun run build
+node dist/index.js init --ai claude --offline  # 在临时文件夹中测试
+
+# 6. 创建 PR（永远不要直接推送到 main）
+git checkout -b feat/your-feature
+git commit -m "feat: description"
+git push -u origin feat/your-feature
+gh pr create
+```
+
+有关详细的开发指南，请参阅 [CLAUDE.md](CLAUDE.md)。
+
+## 星标历史
+
+[![Star History Chart](https://api.star-history.com/svg?repos=nextlevelbuilder/ui-ux-pro-max-skill&type=Date)](https://star-history.com/#nextlevelbuilder/ui-ux-pro-max-skill&Date)
+
+## 许可证
+
+该项目使用 [MIT 许可证](LICENSE) 许可。
