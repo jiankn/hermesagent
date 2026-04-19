@@ -25,6 +25,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
+export function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'zh' }];
+}
+
 export default async function HomePage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
@@ -48,6 +52,7 @@ export default async function HomePage({ params }: Props) {
       difficulty: 'beginner' as const,
       readingTime: 8,
       tags: ['bootcamp', 'setup'],
+      image: '/images/bootcamp/day-1-setup.png',
     },
     {
       href: `/${locale}/tutorials/bootcamp/day-2-memory`,
@@ -57,6 +62,7 @@ export default async function HomePage({ params }: Props) {
       difficulty: 'beginner' as const,
       readingTime: 6,
       tags: ['bootcamp', 'memory'],
+      image: '/images/bootcamp/day-2-memory.png',
     },
     {
       href: `/${locale}/tutorials/bootcamp/day-3-integration`,
@@ -66,6 +72,7 @@ export default async function HomePage({ params }: Props) {
       difficulty: 'intermediate' as const,
       readingTime: 10,
       tags: ['bootcamp', 'integration'],
+      image: '/images/bootcamp/day-3-integration.png',
     },
     {
       href: `/${locale}/tutorials/bootcamp/day-4-data`,
@@ -75,6 +82,7 @@ export default async function HomePage({ params }: Props) {
       difficulty: 'intermediate' as const,
       readingTime: 12,
       tags: ['bootcamp', 'data'],
+      image: '/images/bootcamp/day-4-data.png',
     },
     {
       href: `/${locale}/tutorials/bootcamp/day-5-skills`,
@@ -84,6 +92,7 @@ export default async function HomePage({ params }: Props) {
       difficulty: 'intermediate' as const,
       readingTime: 13,
       tags: ['bootcamp', 'skills'],
+      image: '/images/bootcamp/day-5-skills.png',
     },
     {
       href: `/${locale}/tutorials/bootcamp/day-6-automation`,
@@ -93,6 +102,7 @@ export default async function HomePage({ params }: Props) {
       difficulty: 'advanced' as const,
       readingTime: 14,
       tags: ['bootcamp', 'automation'],
+      image: '/images/bootcamp/day-6-automation.png',
     },
     {
       href: `/${locale}/tutorials/bootcamp/day-7-multi-agent`,
@@ -102,6 +112,7 @@ export default async function HomePage({ params }: Props) {
       difficulty: 'advanced' as const,
       readingTime: 15,
       tags: ['bootcamp', 'multi-agent'],
+      image: '/images/bootcamp/day-7-multi-agent.png',
     },
   ];
 
@@ -197,6 +208,7 @@ export default async function HomePage({ params }: Props) {
               key={tut.href}
               href={tut.href}
               icon={tut.icon}
+              image={tut.image}
               title={tut.title}
               description={tut.description}
               difficulty={tut.difficulty}

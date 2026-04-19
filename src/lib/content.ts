@@ -4,17 +4,17 @@ export type ContentType = 'tutorials' | 'guides' | 'blog';
 
 export interface ArticleMeta {
   title: string;
-  titleZh: string;
-  slug: string;
+  titleZh?: string;
+  slug?: string;
   description: string;
-  descriptionZh: string;
+  descriptionZh?: string;
   author: string;
   publishedAt: string;
   updatedAt: string;
   category: string;
-  tags: string[];
+  tags?: string[];
   difficulty: 'beginner' | 'intermediate' | 'advanced';
-  readingTime: number;
+  readingTime?: number;
   series?: string;
   seriesOrder?: number;
   featured?: boolean;

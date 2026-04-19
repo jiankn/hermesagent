@@ -4,22 +4,29 @@ import styles from './TutorialCard.module.css';
 
 interface TutorialCardProps {
   href: string;
-  icon: string;
+  icon?: string;
+  image?: string;
   title: string;
   description: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced';
   difficultyLabel: string;
-  readingTime: number;
+  readingTime?: number | string;
   readingTimeUnit: string;
   tags?: string[];
 }
 
 export default function TutorialCard({
-  href, icon, title, description, difficulty, difficultyLabel, readingTime, readingTimeUnit, tags,
+  href, icon, image, title, description, difficulty, difficultyLabel, readingTime, readingTimeUnit, tags,
 }: TutorialCardProps) {
   return (
     <Link href={href} className={styles.card}>
-      <div className={styles.cardImage}>{icon}</div>
+      <div className={styles.cardImage}>
+        {image ? (
+          <img src={image} alt={title} className={styles.coverImage} loading="lazy" decoding="async" />
+        ) : (
+          icon
+        )}
+      </div>
       <div className={styles.cardBody}>
         <div className={styles.cardMeta}>
           <DifficultyBadge level={difficulty} label={difficultyLabel} />

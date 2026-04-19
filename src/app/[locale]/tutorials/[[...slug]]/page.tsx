@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import DifficultyBadge from '@/components/ui/DifficultyBadge/DifficultyBadge';
 import TutorialCard from '@/components/cards/TutorialCard/TutorialCard';
+import CopyButtonHandler from '@/components/ui/CopyButtonHandler/CopyButtonHandler';
 import { createTranslator } from '@/lib/translations';
 import {
   getArticleBySlug,
@@ -58,8 +59,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = getArticleBySlug('tutorials', slug, locale);
   if (!article) return {};
 
-  const title = isZh ? article.meta.titleZh : article.meta.title;
-  const description = isZh ? article.meta.descriptionZh : article.meta.description;
+  const title = isZh ? (article.meta.titleZh || article.meta.title) : article.meta.title;
+  const description = isZh ? (article.meta.descriptionZh || article.meta.description) : article.meta.description;
   const canonicalUrl = `https://hermesagent.sbs/${locale}/tutorials/${slug.join('/')}`;
 
   return {
@@ -105,11 +106,12 @@ function TutorialIndex({ locale }: { locale: string }) {
             key={tutorial.urlPath}
             href={`/${locale}/tutorials/${tutorial.urlPath ?? tutorial.slug}`}
             icon={categoryIcons[tutorial.category] ?? '📌'}
-            title={isZh ? tutorial.titleZh : tutorial.title}
-            description={isZh ? tutorial.descriptionZh : tutorial.description}
+            image={tutorial.category === 'bootcamp' ? `/images/${tutorial.urlPath ?? tutorial.slug}.png` : undefined}
+            title={isZh ? (tutorial.titleZh || tutorial.title) : tutorial.title}
+            description={isZh ? (tutorial.descriptionZh || tutorial.description) : tutorial.description}
             difficulty={tutorial.difficulty}
             difficultyLabel={t(`common.${tutorial.difficulty}`)}
-            readingTime={tutorial.readingTime}
+            readingTime={tutorial.readingTime ?? 5}
             readingTimeUnit={t('common.minutes')}
             tags={tutorial.tags}
           />
@@ -125,8 +127,8 @@ function TutorialArticle({ locale, slug }: { locale: string; slug: string[] }) {
   if (!article) notFound();
 
   const isZh = locale === 'zh';
-  const title = isZh ? article.meta.titleZh : article.meta.title;
-  const description = isZh ? article.meta.descriptionZh : article.meta.description;
+  const title = isZh ? (article.meta.titleZh || article.meta.title) : article.meta.title;
+  const description = isZh ? (article.meta.descriptionZh || article.meta.description) : article.meta.description;
   const headings = extractHeadings(article.content);
   const htmlContent = renderMarkdown(article.content);
   const urlPath = slug.join('/');
@@ -150,7 +152,7 @@ function TutorialArticle({ locale, slug }: { locale: string; slug: string[] }) {
       updatedAt: article.meta.updatedAt,
       author: article.meta.author,
       category: article.meta.category,
-      tags: article.meta.tags,
+      tags: article.meta.tags || [],
     }),
   ]);
 
@@ -191,6 +193,7 @@ function TutorialArticle({ locale, slug }: { locale: string; slug: string[] }) {
             className={articleStyles.articleContent}
             dangerouslySetInnerHTML={{ __html: htmlContent }}
           />
+          <CopyButtonHandler />
 
           <div className={articleStyles.seriesNav}>
             <Link href={`/${locale}/tutorials`} className={articleStyles.seriesLink}>

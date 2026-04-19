@@ -1,71 +1,190 @@
 ---
-title: "5 AI Workflow Automation Recipes"
-titleZh: "5 个拿来就用的 AI 自动化脚本"
+title: "5 High-ROI Automation Recipes for Your Hermes Agent"
+titleZh: "Hermes Agent 高阶玩法：5 个可以直接抄作业的自动化工作流 (Recipes)"
 slug: "automation-recipes"
-description: "Five repeatable Hermes automation recipes for reports, triage, content operations, dependency review, and customer feedback."
-descriptionZh: "五个可复用 Hermes 自动化方案，覆盖报告、分诊、内容运营、依赖审查和用户反馈。"
-author: "HermesAgent Community"
-publishedAt: "2026-04-18"
-updatedAt: "2026-04-18"
-category: "resources"
-tags: ["automation", "recipes", "workflows", "resources"]
-difficulty: "intermediate"
-readingTime: 13
+description: "Discover 5 high-ROI Hermes Agent automation recipes including Automated PR Reviewers, Ticket Triage, and Data Report Generators with copy-paste prompts."
+author: "Hermes Team"
+publishedAt: "2026-04-19"
+updatedAt: "2026-04-19"
+category: "Resources"
+tags: ["automation", "recipes", "workflow", "hermes agent", "ai agents"]
+difficulty: "Advanced"
+readingTime: "15 minutes"
 featured: true
 ---
-## Recipes beat inspiration because they can be rerun
 
-A good automation recipe has a trigger, input contract, output artifact, owner, and rollback path. Without those pieces, the workflow is just a prompt you hope will behave tomorrow.
+# 5 High-ROI Automation Recipes for Your Hermes Agent
 
-These five recipes are designed to be copied in small teams before you build a larger automation platform.
+Are you tired of performing the same repetitive, low-value tasks week after week? You are not alone. Engineering and operations teams spend countless hours reviewing pull requests, triaging support tickets, and compiling status reports. 
 
-## What you will have working today
+But what if you could hand off these repetitive chores to an intelligent assistant that runs reliably 24/7? 
 
-- Five production-shaped workflows you can adapt.
-- A common contract for triggers, inputs, approvals, and outputs.
-- A way to decide which workflow should graduate from experiment to routine.
+Hermes Agent was built exactly for this purpose. By combining intelligent reasoning with scheduled workflows and specialized skills, you can automate complex, multi-step processes securely. In this comprehensive guide, we will share **5 high-ROI automation recipes** that you can copy, paste, and deploy to your Hermes Agent today.
 
-## Why this step matters
+These practical AI agent workflows are designed to save you hours of manual work every week, allowing your team to focus on strategic, high-impact initiatives. 
 
-Most teams do not need more automation ideas. They need safer shapes for turning repeated work into reviewable, measurable routines.
+![Hermes Automation Recipes](/images/bootcamp/day-6-automation.png)
 
-Hermes is strongest when it sits between collection and delivery: it reasons over prepared inputs and produces an artifact a human can inspect.
+## Why Automate Workflows with Hermes Agent?
 
-## Hands-on workflow
+Before we dive into the recipes, it's crucial to understand why Hermes Agent excels at automation:
 
-1. Daily digest: collect issues, calendar events, and metrics, then send a one-screen morning brief.
-2. Incident triage: merge logs and deploy history, classify severity, and suggest the first runbook.
-3. Content operations: turn notes into outline, draft, SEO metadata, and publishing checklist.
-4. Dependency review: summarize package updates, changelogs, risk, and test commands.
-5. Feedback clustering: group customer comments by theme and produce next-action recommendations.
+- **Context-Aware:** Unlike simple rule-based bots, Hermes understands the nuances of human language and complex codebases.
+- **Skill Extensibility:** Hermes can interact with external APIs, read file systems, and execute code using isolated skills.
+- **Reliable Scheduling:** You can set workflows to run on precise cron schedules or trigger them via webhooks.
+- **Human-in-the-Loop:** Hermes can prepare outputs for human approval before sending external emails or merging code, ensuring safety.
 
-## Copy-ready commands or config
+Let's explore the top 5 automation recipes you can implement immediately.
 
-```yaml
-trigger: "weekday 08:00"
-input: "collected-signals.json"
-output: "daily-digest.md"
-approval: "required before external send"
-owner: "ops"
+## Recipe 1: The Automated PR Reviewer (Code Quality Guardian)
+
+Code reviews are essential but incredibly time-consuming. This recipe turns your Hermes Agent into a tireless code quality guardian that performs an initial review of every Pull Request, checking for styling issues, missing tests, and potential bugs.
+
+**The Goal:**
+Automatically analyze new Pull Requests, summarize the changes, identify potential security or performance issues, and leave inline comments for the author.
+
+**Required Skills:**
+- `github-integration`: To read PR diffs and post comments.
+- `code-analyzer`: To run static analysis and linting.
+
+**Setup / Cron Configuration:**
+Trigger this workflow via Webhook whenever a `pull_request` event (opened or synchronized) occurs in your GitHub repository.
+
+**Sample System Prompt:**
+```text
+You are an expert Senior Software Engineer acting as the first-pass Pull Request Reviewer.
+Your task is to review the provided PR diff.
+
+Follow these steps:
+1. Summarize the high-level changes in 2-3 sentences.
+2. Check for missing unit tests for any new functions.
+3. Identify potential performance bottlenecks or security vulnerabilities (e.g., SQL injection, unhandled promises).
+4. Verify that the code adheres to the project's styling guidelines.
+
+Output your review in markdown format. Be constructive and specific in your feedback. If the PR looks good, state clearly: "Initial automated checks passed."
 ```
 
-## Acceptance checklist
+## Recipe 2: Customer Support Ticket Triage (The First Responder)
 
-- Every recipe stores pre-summary input.
-- Anything external-facing has an approval step.
-- Success is measured by time saved and review quality, not execution count alone.
+A flooded support inbox can overwhelm your team. This workflow reads incoming tickets, categorizes them by intent, assesses urgency, and drafts an initial response or routes the ticket to the correct human agent.
 
-## Common failure modes
+**The Goal:**
+Reduce response times and ensure critical issues are flagged immediately by automating the initial categorization and routing of support tickets.
 
-- Automating a workflow nobody has run manually.
-- Letting one recipe mutate data and notify people in the same step.
-- Failing to retire recipes that produce noisy output.
+**Required Skills:**
+- `zendesk-connector` (or Jira/Intercom): To fetch new tickets and update their status.
+- `sentiment-analyzer`: To gauge customer frustration.
 
-## Next step
+**Setup / Cron Configuration:**
+Schedule via Cron to run every 15 minutes: `*/15 * * * *`
 
-- **[Day 6: Scheduled Workflows](/en/tutorials/bootcamp/day-6-automation)** - schedule one recipe safely.
-- **[Day 7: Multi-Agent Orchestration](/en/tutorials/bootcamp/day-7-multi-agent)** - assign incident work to specialist agents.
+**Sample System Prompt:**
+```text
+You are an empathetic Customer Support Triage Specialist.
+Analyze the following customer support ticket and provide a JSON response with the following keys:
+- "category": Choose from [Billing, Bug Report, Feature Request, How-To, Other].
+- "urgency": Choose from [Low, Medium, High, Critical]. (Set to Critical if the user mentions data loss, system down, or extreme frustration).
+- "suggested_routing": The team to assign this to (e.g., Engineering, Finance, Tier 1 Support).
+- "draft_response": A polite, empathetic 2-sentence acknowledgment letting the user know their specific issue is being looked into.
 
----
+Ensure your output is strictly valid JSON.
+```
 
-*Last updated: April 18, 2026 · Hermes Agent v0.8 content track*
+## Recipe 3: Daily Tech News Aggregator (The Industry Analyst)
+
+Staying updated with industry trends is hard. This recipe builds a personalized morning briefing by scraping top tech sites, Hacker News, and specific subreddits, summarizing the most relevant articles for your niche.
+
+**The Goal:**
+Deliver a concise, highly relevant daily newsletter to your team's Slack channel or email inbox every morning.
+
+**Required Skills:**
+- `web-scraper`: To read RSS feeds and article content.
+- `slack-notifier`: To broadcast the final digest.
+
+**Setup / Cron Configuration:**
+Schedule via Cron to run every weekday morning at 7:30 AM: `30 7 * * 1-5`
+
+**Sample System Prompt:**
+```text
+You are an expert Industry Analyst specializing in [Your Industry, e.g., AI and Cloud Computing].
+I have provided the raw text of the top 15 news articles from today. 
+
+Your task:
+1. Filter out articles that are not highly relevant to our industry.
+2. Select the top 5 most impactful stories.
+3. For each selected story, provide the Title, the URL, and a 2-bullet-point summary of why this matters to our engineering team.
+4. Format the output as a clean Slack message using markdown.
+```
+
+## Recipe 4: Social Media Auto-Poster (The Marketing Engine)
+
+Consistency is key for social media growth. This workflow takes your long-form blog posts or release notes and automatically repurposes them into engaging Twitter/X threads and LinkedIn posts.
+
+**The Goal:**
+Maximize content reach by automatically generating platform-specific social media posts whenever a new blog or changelog is published.
+
+**Required Skills:**
+- `markdown-reader`: To parse your blog content.
+- `twitter-api` / `linkedin-api`: To schedule or publish the posts.
+
+**Setup / Cron Configuration:**
+Triggered via Webhook from your CMS or CI/CD pipeline upon successful deployment of a new content file.
+
+**Sample System Prompt:**
+```text
+You are an expert Social Media Manager. I will provide the text of our latest blog post.
+
+Task 1: Twitter Thread
+Create a 4-part Twitter thread summarizing the core value of the post. 
+- Tweet 1: A strong hook that identifies a common pain point.
+- Tweet 2 & 3: Key takeaways or actionable advice.
+- Tweet 4: A call-to-action linking to the full post. 
+Keep each tweet under 280 characters and use 1-2 relevant hashtags.
+
+Task 2: LinkedIn Post
+Create a professional, engaging LinkedIn post (approx 150 words). Start with a bold statement, use bullet points for readability, and end with a question to drive engagement in the comments.
+```
+
+## Recipe 5: Weekly Data Report Generator (The Analytics Synthesizer)
+
+Stop manually pulling CSVs and pasting charts into docs. This recipe connects to your database or analytics tools, runs predefined queries, and synthesizes the raw data into a readable executive summary.
+
+**The Goal:**
+Automatically generate a weekly health report covering user signups, revenue metrics, and system uptime, complete with human-readable insights.
+
+**Required Skills:**
+- `sql-executor`: To query your read-replica database safely.
+- `email-sender`: To distribute the report.
+
+**Setup / Cron Configuration:**
+Schedule via Cron to run every Friday at 5:00 PM: `0 17 * * 5`
+
+**Sample System Prompt:**
+```text
+You are a brilliant Data Analyst. I have provided the raw weekly metrics data in JSON format, including signups, churn rate, API latency, and error rates.
+
+Please generate an "Executive Weekly Summary" report.
+1. Highlight the week-over-week changes (percentage increases/decreases).
+2. Identify any anomalies (e.g., "Error rates spiked on Tuesday").
+3. Provide a brief paragraph summarizing the overall health of the platform based on these numbers.
+4. Keep the tone professional, objective, and concise. Format as markdown.
+```
+
+## Best Practices for AI Automation Deployment
+
+When implementing these automation recipes, keep these safety and quality guidelines in mind:
+
+1. **Start with "Human-in-the-Loop":** For the first few weeks, have your Hermes Agent draft the output and send it to a private channel or draft folder for human review. Only enable direct external publishing once you trust the agent's consistency.
+2. **Limit Skill Scopes:** Ensure that the skills used by your automation (like `sql-executor`) have restricted permissions. Never give a workflow destructive access (like DROP TABLE or direct PR merging) unless absolutely necessary and heavily gated.
+3. **Monitor the Logs:** Regularly check your Hermes execution logs to ensure workflows are completing successfully and not silently failing due to API changes or context length limits.
+
+## Take the Next Step
+
+Automation is the true superpower of Hermes Agent. By implementing even one of these recipes, you will reclaim hours of your week and establish a more scalable workflow for your team.
+
+**Ready to master AI workflows and build your own custom recipes from scratch?** 
+
+Join our comprehensive training program to take your skills to the next level:
+👉 **[Enroll in the Hermes Agent Bootcamp Today](/en/tutorials/bootcamp/day-1-setup)** 
+
+Start building a system that works tirelessly for you!

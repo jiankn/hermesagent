@@ -26,8 +26,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!article) return {};
 
   const isZh = locale === 'zh';
-  const title = isZh ? article.meta.titleZh : article.meta.title;
-  const description = isZh ? article.meta.descriptionZh : article.meta.description;
+  const title = isZh ? (article.meta.titleZh || article.meta.title) : article.meta.title;
+  const description = isZh ? (article.meta.descriptionZh || article.meta.description) : article.meta.description;
   const canonicalUrl = `https://hermesagent.sbs/${locale}/guides/${slug.join('/')}`;
 
   return {
@@ -61,8 +61,8 @@ export default async function GuideArticlePage({ params }: Props) {
   if (!article) notFound();
 
   const isZh = locale === 'zh';
-  const title = isZh ? article.meta.titleZh : article.meta.title;
-  const description = isZh ? article.meta.descriptionZh : article.meta.description;
+  const title = isZh ? (article.meta.titleZh || article.meta.title) : article.meta.title;
+  const description = isZh ? (article.meta.descriptionZh || article.meta.description) : article.meta.description;
   const headings = extractHeadings(article.content);
   const htmlContent = renderMarkdown(article.content);
   const urlPath = slug.join('/');
@@ -86,7 +86,7 @@ export default async function GuideArticlePage({ params }: Props) {
       updatedAt: article.meta.updatedAt,
       author: article.meta.author,
       category: article.meta.category,
-      tags: article.meta.tags,
+      tags: article.meta.tags || [],
     }),
   ]);
 

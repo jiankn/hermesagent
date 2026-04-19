@@ -44,8 +44,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const article = getArticleBySlug('blog', slug, locale);
   if (!article) return {};
 
-  const title = isZh ? article.meta.titleZh : article.meta.title;
-  const description = isZh ? article.meta.descriptionZh : article.meta.description;
+  const title = isZh ? (article.meta.titleZh || article.meta.title) : article.meta.title;
+  const description = isZh ? (article.meta.descriptionZh || article.meta.description) : article.meta.description;
   const canonicalUrl = `https://hermesagent.sbs/${locale}/blog/${slug.join('/')}`;
 
   return {
@@ -92,11 +92,11 @@ function BlogIndex({ locale }: { locale: string }) {
             <time style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{post.publishedAt}</time>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-primary)', margin: '0.5rem 0' }}>
               <Link href={`/${locale}/blog/${post.urlPath}`} style={{ color: 'inherit', textDecoration: 'none' }}>
-                {isZh ? post.titleZh : post.title}
+                {isZh ? (post.titleZh || post.title) : post.title}
               </Link>
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem', marginBottom: 0 }}>
-              {isZh ? post.descriptionZh : post.description}
+              {isZh ? (post.descriptionZh || post.description) : post.description}
             </p>
           </article>
         ))}
@@ -111,8 +111,8 @@ function BlogArticle({ locale, slug }: { locale: string; slug: string[] }) {
   if (!article) notFound();
 
   const isZh = locale === 'zh';
-  const title = isZh ? article.meta.titleZh : article.meta.title;
-  const description = isZh ? article.meta.descriptionZh : article.meta.description;
+  const title = isZh ? (article.meta.titleZh || article.meta.title) : article.meta.title;
+  const description = isZh ? (article.meta.descriptionZh || article.meta.description) : article.meta.description;
   const headings = extractHeadings(article.content);
   const htmlContent = renderMarkdown(article.content);
   const urlPath = slug.join('/');
@@ -136,7 +136,7 @@ function BlogArticle({ locale, slug }: { locale: string; slug: string[] }) {
       updatedAt: article.meta.updatedAt,
       author: article.meta.author,
       category: article.meta.category,
-      tags: article.meta.tags,
+      tags: article.meta.tags || [],
     }),
   ]);
 

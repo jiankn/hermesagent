@@ -47,8 +47,8 @@ export default async function LearningPathPage({ params }: Props) {
           <div key={d.day} className={styles.day}>
             <div className={styles.dayDot} />
             <div className={styles.dayLabel}>Day {d.day}</div>
-            <h3 className={styles.dayTitle}>{isZh ? d.titleZh : d.titleEn}</h3>
-            <p className={styles.dayDesc}>{isZh ? d.descZh : d.descEn}</p>
+            <h3 className={styles.dayTitle}>{isZh ? (d.titleZh || d.titleEn) : d.titleEn}</h3>
+            <p className={styles.dayDesc}>{isZh ? (d.descZh || d.descEn) : d.descEn}</p>
             <Link href={`/${locale}${d.link}`} className={styles.dayLink}>
               {isZh ? '开始学习 →' : 'Start Learning →'}
             </Link>

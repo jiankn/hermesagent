@@ -57,11 +57,11 @@ export default async function ResourcesPage({ params }: Props) {
             key={resource.urlPath}
             href={`/${locale}/guides/${resource.urlPath ?? resource.slug}`}
             icon={categoryIcons[resource.category] ?? '📘'}
-            title={isZh ? resource.titleZh : resource.title}
-            description={isZh ? resource.descriptionZh : resource.description}
+            title={isZh ? (resource.titleZh || resource.title) : resource.title}
+            description={isZh ? (resource.descriptionZh || resource.description) : resource.description}
             difficulty={resource.difficulty}
             difficultyLabel={t(`common.${resource.difficulty}`)}
-            readingTime={resource.readingTime}
+            readingTime={resource.readingTime ?? 5}
             readingTimeUnit={t('common.minutes')}
             tags={resource.tags}
           />

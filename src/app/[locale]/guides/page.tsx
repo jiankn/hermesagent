@@ -53,11 +53,11 @@ export default async function GuidesPage({ params }: Props) {
             key={guide.urlPath}
             href={`/${locale}/guides/${guide.urlPath ?? guide.slug}`}
             icon={categoryIcons[guide.category] ?? '📘'}
-            title={isZh ? guide.titleZh : guide.title}
-            description={isZh ? guide.descriptionZh : guide.description}
+            title={isZh ? (guide.titleZh || guide.title) : guide.title}
+            description={isZh ? (guide.descriptionZh || guide.description) : guide.description}
             difficulty={guide.difficulty}
             difficultyLabel={t(`common.${guide.difficulty}`)}
-            readingTime={guide.readingTime}
+            readingTime={guide.readingTime ?? 5}
             readingTimeUnit={t('common.minutes')}
             tags={guide.tags}
           />
