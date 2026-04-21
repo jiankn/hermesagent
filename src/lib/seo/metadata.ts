@@ -39,7 +39,10 @@ function normalizePathname(pathname = ''): string {
 
 export function buildLocaleUrl(locale: string, pathname = ''): string {
   const normalizedLocale = normalizeLocale(locale);
-  return `${SITE_URL}/${normalizedLocale}${normalizePathname(pathname)}`;
+  const normalizedPath = normalizePathname(pathname);
+  // Ensure trailing slash for SEO compliance (except if it already has it)
+  const pathWithSlash = normalizedPath === '' ? '/' : normalizedPath.endsWith('/') ? normalizedPath : `${normalizedPath}/`;
+  return `${SITE_URL}/${normalizedLocale}${pathWithSlash}`;
 }
 
 export function buildPageMetadata({

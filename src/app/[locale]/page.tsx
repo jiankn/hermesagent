@@ -5,9 +5,9 @@ import Link from 'next/link';
 import FAQAccordion from '@/components/ui/FAQAccordion/FAQAccordion';
 import NewsletterForm from '@/components/ui/NewsletterForm/NewsletterForm';
 import TutorialCard from '@/components/cards/TutorialCard/TutorialCard';
-import { buildPageMetadata } from '@/lib/seo/metadata';
+import { buildPageMetadata, SITE_URL } from '@/lib/seo/metadata';
+import { buildFaqJsonLd, buildWebSiteJsonLd, serializeJsonLd } from '@/lib/seo/schema';
 import styles from './page.module.css';
-
 type Props = {
   params: Promise<{ locale: string }>;
 };
@@ -16,12 +16,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const isZh = locale === 'zh';
 
+  const currentMonth = new Date().toLocaleDateString(locale === 'zh' ? 'zh-CN' : 'en-US', { month: 'long', year: 'numeric' });
+
   return buildPageMetadata({
     locale,
-    title: isZh ? 'Hermes Agent 学习社区' : 'Hermes Agent Community',
+    title: isZh
+      ? `Hermes Agent 学习社区 (${currentMonth}) - 构建自主 AI 助理`
+      : `Hermes Agent Community (${currentMonth}) - Build Autonomous AI Workers`,
     description: isZh
-      ? 'Hermes Agent 一站式学习社区 — 从安装到多 Agent 协作的完整知识库。'
-      : 'The definitive learning hub for Hermes Agent — from first install to multi-agent orchestration.',
+      ? 'Hermes Agent 官方学习社区。提供从本地安装（Ollama + Docker），到多 Agent 编排的高阶指南与自动化脚本下载。立即开启 7 天 AI 助理实战营！'
+      : 'The definitive Hermes Agent learning hub. Master AI automation from local setups to advanced multi-agent orchestration. Start your 7-day bootcamp now!',
   });
 }
 
@@ -116,8 +120,15 @@ export default async function HomePage({ params }: Props) {
     },
   ];
 
+  const faqSchema = buildFaqJsonLd(faqItems);
+  const webSiteSchema = buildWebSiteJsonLd(SITE_URL, locale);
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: `[${serializeJsonLd(webSiteSchema)}, ${serializeJsonLd(faqSchema)}]` }}
+      />
       <section className={styles.hero}>
         <span className={styles.badge}>v0.8 Release is out</span>
         <h1 className={styles.title}>

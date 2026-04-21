@@ -108,6 +108,36 @@ export function buildArticleJsonLd({
   };
 }
 
+export function buildWebSiteJsonLd(baseUrl: string, locale: string) {
+  const name = locale === 'zh' ? 'Hermes Agent 学习社区' : 'Hermes Agent Community';
+  const description = locale === 'zh'
+    ? 'Hermes Agent 一站式学习社区'
+    : 'The definitive learning hub for Hermes Agent';
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name,
+    description,
+    url: `${baseUrl}/${locale}/`,
+  };
+}
+
+export function buildFaqJsonLd(faqs: { question: string; answer: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  };
+}
+
 export function serializeJsonLd(payload: unknown) {
   return JSON.stringify(payload).replace(/</g, '\\u003c');
 }

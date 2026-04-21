@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import DifficultyBadge from '@/components/ui/DifficultyBadge/DifficultyBadge';
 import styles from './TutorialCard.module.css';
 
@@ -22,7 +23,13 @@ export default function TutorialCard({
     <Link href={href} className={styles.card}>
       <div className={styles.cardImage}>
         {image ? (
-          <img src={image} alt={title} className={styles.coverImage} loading="lazy" decoding="async" />
+          <Image 
+            src={image} 
+            alt={title} 
+            fill
+            className={styles.coverImage} 
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
         ) : (
           icon
         )}
